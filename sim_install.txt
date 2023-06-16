@@ -33,11 +33,11 @@ donkey train --tub ./data --transfer=./models_ago/mypilot.h5 --model ./models/my
 
 ----------------------------------
 --tub		資料集位置
---transfer	遷移學習，模型在訓練
---model		輸出位置
-
+--transfer	遷移學習，模型再次訓練
+--model   模型輸出位置與名稱
+--type   模型結構類型
 --------------------------------
---type rnn抱錯
+--type rnn  報錯
 pip install numpy==1.19.5
 -------------------------
 
@@ -53,9 +53,25 @@ cd C:\Users\Student/mysim\
 ----------------------------------
 編輯您的 myconfig.py 以啟用 donkey gym 模擬器包裝器，替換<user-name>路徑的其他部分
 在檔案最上面直接貼上
-DONKEY_GYM = True
-DONKEY_SIM_PATH = "C:\workSpace_donkyCar_sim\DonkeySimWin\donkey_sim.exe"
-DONKEY_GYM_ENV_NAME = "donkey-generated-track-v0"
+import os
+
+DONKEY_GYM = True # 是否進遊樂場
+# "/home/tkramer/projects/sdsandbox/sdsim/build/DonkeySimLinux/donkey_sim.x86_64" when racing on virtual-race-league use "remote", or user "remote" when you want to start the sim manually first.
+DONKEY_SIM_PATH = "C:\workSpace_donkyCar_sim\DonkeySimWin\donkey_sim.exe" # 直接執行遊戲 玩家直接加入
+# DONKEY_SIM_PATH = "remote" # 先執行遊戲 玩家之後加入
+# ("donkey-generated-track-v0"|"donkey-generated-roads-v0"|"donkey-warehouse-v0"|"donkey-avc-sparkfun-v0")
+DONKEY_GYM_ENV_NAME = "donkey-generated-track-v0" # 比賽場地
+# SIM_HOST = "192.168.32.20" # 127.0.0.1 自己舉辦的比賽； 192.168.32.20 達人在 302 舉辦的比賽
+# SIM_HOST = "127.0.0.1"
+# 192.168.32.50
+# body style(donkey|bare|car01) body rgb 0-255
+GYM_CONF = {"body_style": "car01", "body_rgb": (
+    0, 0, 255), "car_name": "ohayowu", "font_size": 100}
+
+# which port to listen on when making a web controller
+WEB_CONTROL_PORT = int(os.getenv("WEB_CONTROL_PORT", 8887)) # 網頁控制器的 port
+# which control mode to start in. one of user|local_angle|local. Setting local will start in ai mode.
+WEB_INIT_MODE = "user" # user 由玩家控制 | local_angle 由AI控制轉向 玩家控制油門 | local 全由AI控制
 -----------------------------
 python manage.py drive
 http://localhost:8887/drive
