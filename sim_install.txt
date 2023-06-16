@@ -34,8 +34,8 @@ donkey train --tub ./data --transfer=./models_ago/mypilot.h5 --model ./models/my
 ----------------------------------
 --tub		資料集位置
 --transfer	遷移學習，模型再次訓練
---model   模型輸出位置與名稱
---type   模型結構類型
+--model     模型輸出位置與名稱
+--type      模型結構類型
 --------------------------------
 --type rnn  報錯
 pip install numpy==1.19.5
