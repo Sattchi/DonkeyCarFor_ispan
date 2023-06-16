@@ -1,0 +1,63 @@
+樹梅派影像辨識
+
+常用指令:
+cd C:\Users\Student\mysim
+conda activate donkey   
+python manage.py drive
+python manage.py drive --model C:\Users\Student\mysim\models\mypilot.h5 
+python manage.py drive --model C:\Users\Student\mysim\models\assit_mypilot.h5 
+python manage.py drive --model C:\Users\Student\mysim\models\sit_mypilot.h5 
+python manage.py drive --model C:\Users\Student\mysim\models\assit_red_mypilot.h5
+
+python manage.py drive --model C:\Users\Student\mysim\models\plus_mypilot.h5
+
+python manage.py drive --model C:\Users\Student\mysim\models\10_mypilot.h5 
+python manage.py drive --model  C:\Users\Student\mysim\models\rnn_mypilot.h5 --type=categorical --camera=single
+http://localhost:8887/drive
+選擇full auto
+donkey train --tub ./data --model ./models/assit_mypilot.h5
+
+donkey train --tub ./data --model ./models/plus_mypilot.h5
+
+donkey train --tub ./data --model ./models/assit_red_mypilot.h5
+
+donkey train --tub ./data --model ./models/sit_mypilot.h5
+
+donkey train --tub ./data --model ./models/mypilot.h5
+
+manage.py (drive) [--model=<model>] [--js] [--type=(linear|categorical)] [--camera=(single|stereo)] [--meta=<key:value> ...] [--myconfig=<filename>]
+
+donkey train --tub ./data,./data_b --model ./models/101_mypilot.h5
+
+donkey train --tub ./data --transfer=./models_ago/mypilot.h5 --model ./models/mypilot.h5
+
+----------------------------------
+--tub		資料集位置
+--transfer	遷移學習，模型在訓練
+--model		輸出位置
+
+--------------------------------
+--type rnn抱錯
+pip install numpy==1.19.5
+-------------------------
+
+
+cd C:\workSpace_donkyCar_sim
+git clone https://github.com/tawnkramer/gym-donkeycar
+cd gym-donkeycar
+conda activate donkey
+pip install -e .[gym-donkeycar]
+------------------------------------
+donkey createcar --path ~/mysim
+cd C:\Users\Student/mysim\
+----------------------------------
+編輯您的 myconfig.py 以啟用 donkey gym 模擬器包裝器，替換<user-name>路徑的其他部分
+在檔案最上面直接貼上
+DONKEY_GYM = True
+DONKEY_SIM_PATH = "C:\workSpace_donkyCar_sim\DonkeySimWin\donkey_sim.exe"
+DONKEY_GYM_ENV_NAME = "donkey-generated-track-v0"
+-----------------------------
+python manage.py drive
+http://localhost:8887/drive
+安裝完成
+http://docs.donkeycar.com/guide/deep_learning/simulator/
