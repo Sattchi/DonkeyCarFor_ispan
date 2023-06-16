@@ -31,7 +31,7 @@
    >This is note text.
 
 1. Do another step.
-[Adobe](https://www.adobe.com)
+[如何編輯這個介紹檔案](https://markdown.tw/)
 
  >[!IMPORTANT]
 >
