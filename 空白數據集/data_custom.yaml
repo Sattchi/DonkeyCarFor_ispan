@@ -1,0 +1,6 @@
+train: ./train
+val: ./val
+
+nc: 2
+
+names: ["glass" ,"face"]
