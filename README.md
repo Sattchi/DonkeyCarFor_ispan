@@ -31,10 +31,10 @@
    >This is note text.
 
 1. Do another step.
-[Adobe](https://www.adobe.com)
+[如何編輯這個介紹檔案](https://markdown.tw/)
 
  >[!IMPORTANT]
 >
->很重要.
->這很重要
- 
+>1.新增資料夾.<br>
+>1.再新增檔案的名稱上面加入/資料夾名稱/123.file.<br>
+>1.新增的時候必須要有檔案在資料夾內 <br>
