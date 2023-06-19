@@ -9,4 +9,4 @@ if __name__ == "__main__":
             time.sleep(1)
     except:
         print("程序停止!!")
-    # sys.exit(6)
+    sys.exit(0)

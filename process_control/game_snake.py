@@ -113,7 +113,7 @@ class Snake:
 
 
 class Game:
-    def __init__(self, h=480, w=640, r=20, background=None, noDie = False) -> None:
+    def __init__(self, h=480, w=640, r=20, background=None, noDie = False, fileName=None) -> None:
         self.h = h
         self.w = w
         self.r = r
@@ -133,6 +133,7 @@ class Game:
         self.new_apple()
         self.level = 0
         self.noDie = noDie  # True 不死 False 會死
+        self.fileName = fileName
         return
 
     def update(self):
@@ -171,6 +172,8 @@ class Game:
 
     def show(self, inImage=None):
         cv2.imshow("Result", self.draw(inImage))
+        if self.fileName:
+            cv2.imwrite(self.fileName, self.image)
         return
     
     def getLevelTime(self):
@@ -187,15 +190,17 @@ class Game:
                     (150, 200), font, 1, BLACK, 4)
         cv2.putText(self.image, "press Y or R", (150, 250), font, 1, BLACK, 4)
         cv2.imshow("Result", self.image)
+        if self.fileName:
+            cv2.imwrite(self.fileName, self.image)
         k = cv2.waitKey(0)
         if k == ord('y') or k == ord('r') or k == ord('Y') or k == ord('R'):
-            self.__init__(self.h, self.w, self.r, self.background, self.noDie)
+            self.__init__(self.h, self.w, self.r, self.background, self.noDie, self.fileName)
             return True
         return False
 
 
 if __name__ == "__main__":
-    game = Game(r=r)
+    game = Game(r=r, fileName="www/img/photo.jpg")
 
     while True:
         game.update()

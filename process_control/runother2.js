@@ -14,11 +14,17 @@ function dosomething() {
         console.error(`stderr: ${data}`);
     });
 
-    subprocess.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
+    subprocess.on('close', (code, signal) => {
+        console.log(`child process close with code ${code} and signal ${signal}`);
+    });
+    subprocess.on('exit', (code, signal) => {
+        console.log(`child process exited with code ${code} and signal ${signal}`);
     });
     setTimeout(function () {
+        // subprocess.kill();
         subprocess.kill('SIGINT');
+        // subprocess.kill('SIGTERM');
+        // subprocess.kill('SIGKILL');
         console.log("成功停止程序");
     }, 5000);
     // console.log(subprocess);

@@ -86,7 +86,7 @@ class Cell:
 
 
 class MazeGenerator:
-    def __init__(self, width=400, height=400, sideLen=10) -> None:
+    def __init__(self, width=600, height=400, sideLen=40) -> None:
         self.width = width
         self.height = height
         self.cols = width // sideLen
@@ -168,7 +168,7 @@ class MazeGenerator:
 
 
 class MazeGame:
-    def __init__(self, width=400, height=400, sideLen=10) -> None:
+    def __init__(self, width=600, height=400, sideLen=40, fileName=None) -> None:
         self.width = width
         self.height = height
         self.sideLen = sideLen
@@ -180,8 +180,9 @@ class MazeGame:
         self.current = self.grid[0]
         self.target = self.grid[-1]
         self.direct = "D"
+        self.fileName = fileName
         return
-    
+
     def setCurrentIJ(self, i, j):
         currentIndex = index(i, j, self.cols, self.rows)
         self.current = self.grid[currentIndex]
@@ -231,7 +232,7 @@ class MazeGame:
                 (height, width, 3), dtype=np.uint8) * 255
         else:
             background = np.array(image)
-        
+
         self.mazeGenerator.draw(background, None)
         self.start.highlight(background, self.sideLen, GREEN)
         self.target.highlight(background, self.sideLen, RED)
@@ -242,6 +243,8 @@ class MazeGame:
     def show(self, title="", image=None, width=None, height=None):
         self.draw(image, width, height)
         cv2.imshow(title, self.image)
+        if self.fileName:
+            cv2.imwrite(self.fileName, self.image)
         return self.image
 
     def checkWin(self):
@@ -262,6 +265,8 @@ class MazeGame:
                     (150, 200), font, 1, BLACK, 4)
         cv2.putText(self.image, "press Y or R", (150, 250), font, 1, BLACK, 4)
         cv2.imshow(title, self.image)
+        if self.fileName:
+            cv2.imwrite(self.fileName, self.image)
         k = cv2.waitKey(0)
         if k == ord('y') or k == ord('r') or k == ord('Y') or k == ord('R'):
             self.grid = self.mazeGenerator.generate()
@@ -274,7 +279,7 @@ class MazeGame:
 
 
 if __name__ == '__main__':
-    game = MazeGame(600, 400, 40)
+    game = MazeGame(600, 400, 40, fileName="www/img/photo.jpg")
     lineThickness = 3
     needRestart = True
     while True:
@@ -286,7 +291,7 @@ if __name__ == '__main__':
         if k != -1:
             game.changeDirect(k)
             game.update(needRestart)
-            
+
         if k == ord('n'):
             needRestart = not needRestart
 
