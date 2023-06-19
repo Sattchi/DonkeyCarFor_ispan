@@ -1,0 +1,16 @@
+cd workspace_nodejs/process_control
+node index.js
+ps -a
+
+npm install cookie-parser@1.4.4
+npm install debug@2.6.9
+npm install ejs@3.1.9
+npm install express@4.18.2
+npm install http-errors@1.6.3
+npm install mongodb@2.2.33
+npm install mongoose@4.1.0
+npm install morgan@1.9.1
+npm install pug@2.0.0-beta11
+npm install socket.io@2.4.0
+
+npm install node-ssh
