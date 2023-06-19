@@ -1,0 +1,16 @@
+https://courses.hexschool.com/courses/670034/lectures/11950547
+https://learn.ml5js.org/#/reference/object-detector
+
+package.json
+{
+  "devDependencies": {
+    "@types/node": "^20.1.0"
+  },
+  "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "ejs": "^3.1.9",
+    "ejs-locals": "^1.0.2",
+    "express": "^4.18.2",
+    "express-session": "^1.17.3"
+  }
+}
