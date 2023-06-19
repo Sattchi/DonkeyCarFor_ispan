@@ -1,1 +1,2 @@
 https://developer.mozilla.org/en-US/docs/Web/API/Media_Capture_and_Streams_API/Taking_still_photos
+var clock = setInterval(takepicture , 10); //自動呼叫函數 延遲10毫秒
