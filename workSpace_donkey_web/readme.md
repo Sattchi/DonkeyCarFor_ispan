@@ -1,5 +1,6 @@
 # Run
-node ejs00.js
+1. node ejs00.js
+2. open welcome.html
 
 # models
 npm install express --save
