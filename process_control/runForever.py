@@ -6,7 +6,7 @@ if __name__ == "__main__":
     try:
         while True:
             i += 1
-            print("永久跑動中...", i)
+            print("永久跑動中...", i*i)
             sys.stdout.flush()
             time.sleep(2)
     except:

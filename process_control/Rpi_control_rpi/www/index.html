@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        .btn {
+            font-family: "微軟正黑體", "黑體-繁", sans-serif;
+            padding: 10px 15px;
+            background: #4479BA;
+            color: #FFF;
+            border-radius: 4px;
+            border: solid 1px #20538D;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #356094;
+        }
+    </style>
+</head>
+
+<body>
+    <p><a class="btn" id="btn1">執行檔案1</a></p>
+    <p><a class="btn" id="btn2">執行檔案2</a></p>
+    <p><a class="btn" id="btnS">執行指定檔案</a>
+    <div id="ttt"></div>
+    </p>
+
+    <p><a class="btn" id="btn0">關閉所有程式</a></p>
+    <p><a class="btn" id="btn00">關閉網站</a></p>
+</body>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    console.log("html 000");
+    let socket = io();
+    let filee;
+    socket.on("file", function (file) {
+        filee = file;
+        let code = '<select name="plan" id="plan">';
+        for (let index = 0; index < file.length; index++) {
+            const element = file[index];
+            code += '<option value="' + element + '">' + element + '</option>';
+        }
+        code += '</select>'
+        $("#ttt").html(code);
+    });
+    $('#btn1').on('click', function () {
+        socket.emit("prc1");
+        // $('#btn1').hide();
+        console.log("html 111");
+    });
+    $('#btn2').on('click', function () {
+        socket.emit("prc2");
+        // $('#btn2').hide();
+        console.log("html 22");
+    });
+    $('#btnS').on('click', function () {
+        const index = $('#plan').val();
+        socket.emit("prcS", index);
+        // $('#btn2').hide();
+        console.log("html chooses " + index);
+    });
+    $('#btn0').on('click', function () {
+        socket.emit("stop");
+        // $('#btn2').hide();
+        console.log("html stop");
+    });
+    $('#btn00').on('click', function () {
+        socket.emit("exit");
+        // $('#btn2').hide();
+        console.log("html exit");
+    });
+</script>
+
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style type="text/css">
+        .btn {
+            font-family: "微軟正黑體", "黑體-繁", sans-serif;
+            padding: 10px 15px;
+            background: #4479BA;
+            color: #FFF;
+            border-radius: 4px;
+            border: solid 1px #20538D;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #356094;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="ttt"></div>
+
+    <p><a class="btn" id="btn0">關閉所有程式</a></p>
+    <p><a class="btn" id="btn00">關閉網站</a></p>
+</body>
+<script src="http://code.jquery.com/jquery.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    console.log("html 000");
+    let socket = io();
+    let fileNum;
+    socket.on("fileUpload", function (fileChin = ["str"]) {
+        fileNum = fileChin.length;
+        let code = '';
+        for (let index = 0; index < fileChin.length; index++) {
+            const element = fileChin[index];
+            code += '<p><a class="btn" id="btn' + index + '">執行程式 ' + element + '</a></p>';
+        }
+        $("#ttt").html(code);
+        for (let index = 0; index < fileNum; index++) {
+            $('#btn' + index).on('click', function () {
+                socket.emit('prc', index);
+                console.log('html 執行 ' + fileChin[index]);
+            });
+        }
+    });
+    $('#btn0').on('click', function () {
+        socket.emit("stop");
+        // $('#btn2').hide();
+        console.log("html stop");
+    });
+    $('#btn00').on('click', function () {
+        socket.emit("exit");
+        // $('#btn2').hide();
+        console.log("html exit");
+    });
+</script>
+
+</html>
