@@ -2,6 +2,9 @@
 1. node ejs00.js
 2. open welcome.html
 
+# edit
+views/control.ejs 控制台主頁
+
 # models
 npm install express --save
 npm install body-parser --save
