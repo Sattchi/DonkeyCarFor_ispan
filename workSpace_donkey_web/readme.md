@@ -1,3 +1,6 @@
+# Run
+node ejs00.js
+
 # models
 npm install express --save
 npm install body-parser --save
