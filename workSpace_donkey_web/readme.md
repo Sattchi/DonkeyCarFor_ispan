@@ -1,10 +1,9 @@
 # models
-let express = require('express');
-var fs = require("fs");
-let engine = require('ejs-locals');
-let app = express();
-var bodyParser = require("body-parser");
-var  cookieParser = require('cookie-parser');
+npm install express --save
+npm install body-parser --save
+npm install cookie-parser --save
+npm install ejs --save
+npm install ejs-locals --save
  
 # 介紹
 ![](figure/index.png)
