@@ -13,3 +13,4 @@ npm install ejs-locals --save
 ![](figure/index.png)
 ![](figure/login.png)
 ![](figure/register.png)
+![](figure/controll.jpg)
