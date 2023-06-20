@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./styles/main.css" rel="stylesheet" type="text/css"/>
+    <script src="./script/jquery-3.1.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        console.log("html 000");
+        var socket = io();
+    </script>
+    <title>
+        <%= title %>
+    </title>
+    <style type="text/css">
+        .btn {
+            font-family: "微軟正黑體", "黑體-繁", sans-serif;
+            padding: 10px 15px;
+            background: #4479BA;
+            color: #FFF;
+            border-radius: 4px;
+            border: solid 1px #20538D;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #356094;
+        }
+    </style>
+</head>
+
+<body>
+<div style="padding:1px 16px;height:1000px;">
+
+    <div class="card">
+        <h2><%= title %></h2>
+        <h5>Title description, Sep 2, 2017</h5>
+        <div class="fakeimg" style="height:200px;">Image</div>
+        <br>
+        <% for (let index = 0; index < fileChins.length; index++) { %>
+        <input type="button" id=<%= "mod" +index %> class="btn" value=<%= fileChins[index] %>>
+        <script>
+            $("<%- '#mod' + index %>").click(function () {
+                socket.emit('prc', <%= index %>);
+                console.log("<%- 'html 執行 ' + fileChins[index] %>");
+            });
+        </script>
+        <% } %>
+        <p><a class="btn" id="btn0">關閉所有程式</a></p>
+        <p><a class="btn" id="btn00">關閉網站</a></p>
+    </div>
+
+</div>
+
+
+</body>
+
+<script>
+    $('#btn0').on('click', function () {
+        socket.emit("stop");
+        // $('#btn2').hide();
+        console.log("html stop");
+    });
+    $('#btn00').on('click', function () {
+        socket.emit("exit");
+        // $('#btn2').hide();
+        console.log("html exit");
+    });
+</script>
+
+</html>
