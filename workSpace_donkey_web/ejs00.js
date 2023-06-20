@@ -62,6 +62,11 @@ res.render('resign',{
 'title': '註冊新人員'});
 })
 
+app.get('/control.html', function (req, res) {
+res.render('control',{
+'title': '控制台'});
+})
+
 app.get('/about.html', function (req, res) {
 res.render('about',{
 'title': '關於'});
