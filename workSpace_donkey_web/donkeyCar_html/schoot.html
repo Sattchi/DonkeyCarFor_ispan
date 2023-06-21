@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>html调用摄像头--拍照--上传</title>
+<meta charset="utf-8">
+<script src="axios.min.js"></script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td><video id="video" width="500px" autoplay="autoplay"></video></td>
+            <td><canvas id="canvas" width="500px" height="375px"></canvas></td>
+        </tr>
+        <tr>
+            <td align="right"><button onclick="takePhoto()">拍照</button></td>
+            <td align="right"><button onclick="fileUp()">上传</button></td>
+        </tr>
+    </table>
+</body>
+<script>
+//打开摄像头
+navigator.mediaDevices.getUserMedia({video:{width:500}}).then((stream)=> video.srcObject = stream);
+//拍照
+function takePhoto() {
+    canvas.getContext('2d').drawImage(video, 0, 0, 500, 375);
+}
+//上传
+function fileUp() {
+    canvas.toBlob((data)=>{
+        let formData = new FormData();
+        formData.append("file",data,"face.jpg");
+        post('/upload',formData,{'Content-type' : 'multipart/form-data' }).then(res=>{
+            console.log("上传成功!",res.data);
+            alert(res.data.message);
+        },err=>{
+            console.log("上传失败!");
+        });
+    },"image/jpeg",1);
+}
+</script>
+</html>
