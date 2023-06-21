@@ -7,6 +7,7 @@
     <link href="./styles/main.css" rel="stylesheet" type="text/css"/>
     <script src="./script/jquery-3.1.1.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
     <script>
         console.log("html 000");
         var socket = io();
@@ -23,6 +24,7 @@
             border-radius: 4px;
             border: solid 1px #20538D;
             text-decoration: none;
+            margin:2px;
         }
 
         .btn:hover {
@@ -37,19 +39,71 @@
     <div class="card">
         <h2><%= title %></h2>
         <h5>Title description, Sep 2, 2017</h5>
-        <div class="fakeimg" style="height:200px;">Image</div>
+        <div class="w3-container" style="width:30%" >
+            <div class="w3-panel w3-pale-red w3-leftbar w3-border-red">
+              <p>計時:06:00
+             </p>
+            </div>
+            <div class="w3-panel w3-pale-blue w3-leftbar w3-border-blue">
+              <p>圈數:100
+              </p>
+            </div>
+            <div class="w3-panel w3-pale-green w3-leftbar w3-border-green">
+              <p>資料量:8887
+             </p>
+            </div>
+          </div>
+        <div class="fakeimg" style="height:500px;width:500px" >
+        <img src="https://www.donkeycar.com/uploads/7/8/1/7/7817903/donkey-car-graphic_orig.jpg" alt="圖片描述" style="max-width: 100%; max-height: 100%;">
+        </div>
         <br>
         <% for (let index = 0; index < fileChins.length; index++) { %>
         <input type="button" id=<%= "mod" +index %> class="btn" value=<%= fileChins[index] %>>
         <script>
             $("<%- '#mod' + index %>").click(function () {
-                socket.emit('prc', <%= index %>);
+                socket.emit('prc', "<%= index %>");
                 console.log("<%- 'html 執行 ' + fileChins[index] %>");
             });
         </script>
         <% } %>
-        <p><a class="btn" id="btn0">關閉所有程式</a></p>
-        <p><a class="btn" id="btn00">關閉網站</a></p>
+        <table>
+            <thead>
+              <tr>
+                <th>表頭 1</th>
+                <th>表頭 2</th>
+                <th>表頭 3</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>資料 1</td>
+                <td>資料 2</td>
+                <td>資料 3</td>
+              </tr>
+              <tr>
+                <td>資料 4</td>
+                <td>資料 5</td>
+                <td>資料 6</td>
+              </tr>
+              <tr>
+                <td>資料 7</td>
+                <td>資料 8</td>
+                <td>資料 9</td>
+              </tr>
+            </tbody>
+          </table>
+
+
+          <table>
+            <thead>
+              <tr>
+                <th><p><a class="btn" id="btn0">關閉所有程式</a></p></th>
+                <th><p><a class="btn" id="btn00">關閉網站</a></p></th>
+              </tr>
+            </thead>
+          </table>
+       
+        
     </div>
 
 </div>
