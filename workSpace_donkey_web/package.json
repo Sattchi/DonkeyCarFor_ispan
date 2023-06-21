@@ -8,5 +8,19 @@
     "ejs-locals": "^1.0.2",
     "express": "^4.18.2",
     "express-session": "^1.17.3"
-  }
+  },
+  "name": "workspace_donkey_web",
+  "description": "1. node ejs00.js\r 2. open welcome.html",
+  "version": "1.0.0",
+  "main": "ejs00.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node ejs00.js"
+  },
+  "keywords": [
+    "donkey",
+    "web"
+  ],
+  "author": "ohayowu314 <48574669+ohayowu314@users.noreply.github.com>",
+  "license": "ISC"
 }
