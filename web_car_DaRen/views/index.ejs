@@ -56,41 +56,23 @@
                 <img src="https://www.donkeycar.com/uploads/7/8/1/7/7817903/donkey-car-graphic_orig.jpg" alt="圖片描述" style="max-width: 100%; max-height: 100%;">
             </div>
             <br>
-            <% for (let index = 0; index < fileChins.length; index++) { %>
-            <input type="button" id=<%= "mod" +index %> class="btn" value=<%= fileChins[index] %>>
-            <script>
-                $("<%- '#mod' + index %>").click(function() {
-                    socket.emit('prc', "<%= index %>");
-                    console.log("<%- 'html 執行 ' + fileChins[index] %>");
-                });
-            </script>
+            <% if (fileChins.length>0) { index = 0 %>
+                <table>
+                    <% fileChins.forEach(chinRow => { %>
+                        <tr>
+                            <% chinRow.forEach(element => { %>
+                                <td><input type="button" id=<%= "mod" +index %> class="btn" value=<%= element %>></td>
+                                <script>
+                                    $("<%- '#mod' + index %>").click(function() {
+                                        socket.emit('prc', "<%= index %>");
+                                        console.log("<%- 'html 執行 ' + element %>");
+                                    });
+                                </script>
+                            <% index++}) %>
+                        </tr>                 
+                    <% }) %>
+                </table>
             <% } %>
-            <table>
-                <thead>
-                    <tr>
-                        <th>表頭 1</th>
-                        <th>表頭 2</th>
-                        <th>表頭 3</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>資料 1</td>
-                        <td>資料 2</td>
-                        <td>資料 3</td>
-                    </tr>
-                    <tr>
-                        <td>資料 4</td>
-                        <td>資料 5</td>
-                        <td>資料 6</td>
-                    </tr>
-                    <tr>
-                        <td>資料 7</td>
-                        <td>資料 8</td>
-                        <td>資料 9</td>
-                    </tr>
-                </tbody>
-            </table>
             <table>
                 <thead>
                     <tr>
@@ -105,8 +87,6 @@
             </table>
         </div>
     </div>
-
-
 </body>
 
 <script>

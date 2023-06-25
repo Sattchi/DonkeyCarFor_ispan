@@ -18,7 +18,7 @@ app.set('views', './views');
 // 用 EJS 引擎跑模板
 app.set("view engine", "ejs");
 
-// 調用靜待資料夾檔案
+// 調用靜態資料夾檔案
 app.use(express.static(__dirname + '/www'));
 
 // socket.io 連結一切
@@ -52,14 +52,30 @@ readTextFile("www/json/autoModel.json", function(text){
     fileChins = Object.values(modelData).map(item => item.chinName);
 });
 
+const newfileChins = []
+while (fileChins.length){
+    newfileChins.push(fileChins.splice(0,3))
+}
+console.log(newfileChins)
+
+// 查看用戶代理IP
+app.use(function (req, res, next){
+    console.log("用戶IP位址: "+req.connection.remoteAddress);
+    console.log("用戶IP位址: "+(req.connection || req.socket || req).remoteAddress);
+    next();
+});
+
 app.get("/", function (req, res, next) {
-    res.render('index', { "title": "控制台", "fileChins": fileChins });
+    res.render('index', { "title": "控制台", "fileChins": newfileChins });
 });
 
 
 // 路由控制
-var server = app.listen(6543, function () {
-    console.log('伺服器在6543埠口開工了。');
+port = 6543;
+host = "127.0.0.1";
+var server = app.listen(port, function () {
+    console.log(`伺服器在$(port)埠口開工了。`);
+    console.log(`http://$(host):$(port)/`);
 });
 
 

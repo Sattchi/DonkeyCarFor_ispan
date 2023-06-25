@@ -16,7 +16,6 @@ var checkLoginStatus = function (req, res) {
     isLogin = false;
 };
 
-//post get用
 //使用session
 var cookieParser = require('cookie-parser');
 app.use(cookieParser('123456789'));// sign for cookie
@@ -32,10 +31,29 @@ app.set('views', './views');
 // 用 EJS 引擎跑模板
 app.set('view engine', 'ejs');
 
-//調用靜待資料夾檔案
+//調用靜態資料夾檔案
 app.use(express.static(__dirname + '/donkeyCar_html')); //Serves resources from public folder
 
+function readTextFile(file, callback) {
+    fs.readFile(file, function (err, text) {
+        callback(text);
+    });
+}
+
+readTextFile("donkeyCar_html/json/net.json", function(text){
+    netData = JSON.parse(text);
+    console.log(netData);
+});
+
+// 查看用戶代理IP
+app.use(function (req, res, next){
+    console.log("用戶IP位址: "+req.connection.remoteAddress);
+    console.log("用戶IP位址: "+(req.connection || req.socket || req).remoteAddress);
+    next();
+});
+
 //路由控制
+//get 控制
 app.get('/', function (req, res) {
     /*
     res.cookie('name', 'lulu', {
@@ -72,7 +90,11 @@ app.get('/resign1.html', function (req, res) {
 
 app.get('/control.html', function (req, res) {
     res.render('control', {
-        'title': '控制台'
+        'title': '控制台',
+        // 'ctrWeb': 'http://192.168.52.94:6543/',
+        // 'carWeb': 'http://192.168.52.94:8887/drive'
+        'ctrWeb': netData["0"].car1.ctrWeb,
+        'carWeb': netData["0"].car1.carWeb
     });
 });
 
@@ -89,7 +111,7 @@ app.get('/login.html', function (req, res) {
 });
 
 //路由控制
-//get post 控制
+//post 控制
 app.post('/regist', function (req, res) {
 
     var uc = req.body.uc;
@@ -149,12 +171,11 @@ app.post('/login', function (req, res) {
     console.log(' USER login:.' + uc);
 });
 
-
-//get post 控制
-let port = 3000;
 //設定port位置
-app.listen(port);
+let port = 3000;
+host = "127.0.0.1";
 // 監聽 port
-
-
-console.log('http://localhost:3000/')
+app.listen(port, function () {
+    console.log(`伺服器在$(port)埠口開工了。`);
+    console.log(`http://$(host):$(port)/`);
+});
