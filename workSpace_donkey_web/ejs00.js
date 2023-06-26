@@ -4,7 +4,7 @@ var fs = require("fs");
 // 系統參數解析器
 const { program, Option } = require('commander');
 program.version('1.0.1')
-    .addOption(new Option("-w, --web <place>", "choose the place of web").default("0", "302 wifi").choices(["0", "1", "302", "F15", "F3", "C302", "f15", "f3", "c302"]))
+    .addOption(new Option("-w, --web <place>", "choose the place of web").default("0", "302 wifi").choices(["0", "1","2", "302", "F15", "F3", "C302", "f15", "f3", "c302"]))
     .addOption(new Option("--set-host <host>", "set the host of web"))
     .addOption(new Option("-t, --set-ctrWeb <url>", "set the url of control website").conflicts(["setHost"]))
     .addOption(new Option("-c, --set-carWeb <url>", "set the url of donkeycar website").conflicts(["setHost"]))
@@ -63,6 +63,9 @@ readTextFile("donkeyCar_html/json/net.json", function (text) {
     } else if (options.web === "1" || options.web.toUpperCase() === "F15") {
         ctrWeb = netData["1"].car1.ctrWeb;
         carWeb = netData["1"].car1.carWeb;
+    } else if (options.web === "2") {
+        ctrWeb = netData["2"].car1.ctrWeb;
+        carWeb = netData["2"].car1.carWeb;
     } else {
         ctrWeb = netData["0"].car1.ctrWeb;
         carWeb = netData["0"].car1.carWeb;
@@ -78,8 +81,8 @@ readTextFile("donkeyCar_html/json/net.json", function (text) {
         ctrWeb = options.setCtrWeb
         ctrWeb = options.setCarWeb
     }
-    // console.log("control    url: " + ctrWeb);
-    // console.log("donkey car url: " + carWeb);
+    console.log("control    url: " + ctrWeb);
+    console.log("donkey car url: " + carWeb);
 });
 
 // 查看用戶代理IP
@@ -126,8 +129,8 @@ app.get('/resign1.html', function (req, res) {
 });
 
 app.get('/control.html', function (req, res) {
-    console.log("control    url: " + ctrWeb);
-    console.log("donkey car url: " + carWeb);
+    // console.log("control    url: " + ctrWeb);
+    // console.log("donkey car url: " + carWeb);
     res.render('control', {
         'title': '控制台',
         // 'ctrWeb': 'http://192.168.52.94:6543/',

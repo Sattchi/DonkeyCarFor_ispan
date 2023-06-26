@@ -23,5 +23,13 @@
             "name": "DaRen"
         },
         "connection": "cell"
+    },
+    "2": {
+        "car1": {
+            "ctrWeb": "http://192.168.52.143:6543/",
+            "carWeb": "http://192.168.52.143:8887/drive",
+            "name": "DaRen"
+        },
+        "connection": "cell"
     }
 }
