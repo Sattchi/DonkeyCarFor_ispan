@@ -74,8 +74,8 @@ app.get("/", function (req, res, next) {
 port = 6543;
 host = "127.0.0.1";
 var server = app.listen(port, function () {
-    console.log(`伺服器在$(port)埠口開工了。`);
-    console.log(`http://$(host):$(port)/`);
+    console.log(`伺服器在${port}埠口開工了。`);
+    console.log(`http://${host}:${port}/`);
 });
 
 

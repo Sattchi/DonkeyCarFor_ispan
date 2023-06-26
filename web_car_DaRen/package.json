@@ -1,29 +1,29 @@
 {
-  "devDependencies": {
-    "@types/node": "^20.1.0",
-    "eslint": "^8.43.0",
-    "mocha": "^10.2.0"
-  },
-  "dependencies": {
-    "cookie-parser": "^1.4.6",
-    "ejs": "^3.1.9",
-    "ejs-locals": "^1.0.2",
-    "express": "^4.18.2",
-    "express-session": "^1.17.3",
-    "socket.io": "^2.4.0"
-  },
-  "name": "web_car_daren",
-  "version": "1.0.0",
-  "description": "放到車上 控制模型用",
-  "main": "index.js",
-  "scripts": {
-    "lint": "eslint .",
-    "test": "mocha --require test/env",
-    "start": "node index.js"
-  },
-  "keywords": [
-    "carDonkey"
-  ],
-  "author": "ohayowu314",
-  "license": "ISC"
+    "devDependencies": {
+        "@types/node": "^20.1.0",
+        "eslint": "^8.43.0",
+        "mocha": "^10.2.0"
+    },
+    "dependencies": {
+        "cookie-parser": "^1.4.6",
+        "ejs": "^3.1.9",
+        "ejs-locals": "^1.0.2",
+        "express": "^4.18.2",
+        "express-session": "^1.17.3",
+        "socket.io": "^2.4.0"
+    },
+    "name": "web_car_daren",
+    "version": "1.0.0",
+    "description": "放到車上 控制模型用",
+    "main": "index.js",
+    "scripts": {
+        "lint": "eslint .",
+        "test": "mocha --require test/env",
+        "start": "node index.js"
+    },
+    "keywords": [
+        "carDonkey"
+    ],
+    "author": "ohayowu314 <48574669+ohayowu314@users.noreply.github.com>",
+    "license": "ISC"
 }

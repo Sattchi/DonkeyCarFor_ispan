@@ -1,6 +1,20 @@
 // 檔案讀取
 var fs = require("fs");
 
+// 系統參數解析器
+const { program, Option } = require('commander');
+program.version('1.0.1')
+    .addOption(new Option("-w, --web <place>", "choose the place of web").default("0", "302 wifi").choices(["0", "1", "302", "F15", "F3", "C302", "f15", "f3", "c302"]))
+    .addOption(new Option("--set-host <host>", "set the host of web"))
+    .addOption(new Option("-t, --set-ctrWeb <url>", "set the url of control website").conflicts(["setHost"]))
+    .addOption(new Option("-c, --set-carWeb <url>", "set the url of donkeycar website").conflicts(["setHost"]))
+    .parse();
+
+// console.log(program.options);
+console.log(program.opts());
+// console.log(program.getOptionValue('web'));
+const options = program.opts();
+
 // 載入express模組
 let express = require('express');
 // 使用express
@@ -40,15 +54,38 @@ function readTextFile(file, callback) {
     });
 }
 
-readTextFile("donkeyCar_html/json/net.json", function(text){
+readTextFile("donkeyCar_html/json/net.json", function (text) {
     netData = JSON.parse(text);
-    console.log(netData);
+    // console.log(netData);
+    if (options.web === "0" || options.web === "302" || options.web.toUpperCase() === "F3" || options.web.toUpperCase() === "C302") {
+        ctrWeb = netData["0"].car1.ctrWeb;
+        carWeb = netData["0"].car1.carWeb;
+    } else if (options.web === "1" || options.web.toUpperCase() === "F15") {
+        ctrWeb = netData["1"].car1.ctrWeb;
+        carWeb = netData["1"].car1.carWeb;
+    } else {
+        ctrWeb = netData["0"].car1.ctrWeb;
+        carWeb = netData["0"].car1.carWeb;
+    }
+
+    if (options.setHost) {
+        // http://192.168.52.94:6543/
+        // http://192.168.52.94:8887/drive
+        ctrWeb = "http://" + options.setHost + ":6543/"
+        ctrWeb = "http://" + options.setHost + ":8887/drive"
+    }
+    if (options.setCtrWeb || options.setCarWeb) {
+        ctrWeb = options.setCtrWeb
+        ctrWeb = options.setCarWeb
+    }
+    // console.log("control    url: " + ctrWeb);
+    // console.log("donkey car url: " + carWeb);
 });
 
 // 查看用戶代理IP
-app.use(function (req, res, next){
-    console.log("用戶IP位址: "+req.connection.remoteAddress);
-    console.log("用戶IP位址: "+(req.connection || req.socket || req).remoteAddress);
+app.use(function (req, res, next) {
+    console.log("用戶IP位址: " + req.connection.remoteAddress);
+    console.log("用戶IP位址: " + (req.connection || req.socket || req).remoteAddress);
     next();
 });
 
@@ -89,12 +126,16 @@ app.get('/resign1.html', function (req, res) {
 });
 
 app.get('/control.html', function (req, res) {
+    console.log("control    url: " + ctrWeb);
+    console.log("donkey car url: " + carWeb);
     res.render('control', {
         'title': '控制台',
         // 'ctrWeb': 'http://192.168.52.94:6543/',
         // 'carWeb': 'http://192.168.52.94:8887/drive'
-        'ctrWeb': netData["0"].car1.ctrWeb,
-        'carWeb': netData["0"].car1.carWeb
+        // 'ctrWeb': netData["0"].car1.ctrWeb,
+        // 'carWeb': netData["0"].car1.carWeb
+        'ctrWeb': ctrWeb,
+        'carWeb': carWeb
     });
 });
 
@@ -176,6 +217,6 @@ let port = 3000;
 host = "127.0.0.1";
 // 監聽 port
 app.listen(port, function () {
-    console.log(`伺服器在$(port)埠口開工了。`);
-    console.log(`http://$(host):$(port)/`);
+    console.log(`伺服器在${port}埠口開工了。`);
+    console.log(`http://${host}:${port}/`);
 });
