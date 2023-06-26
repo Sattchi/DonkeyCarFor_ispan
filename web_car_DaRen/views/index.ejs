@@ -11,6 +11,8 @@
     <script>
         console.log("html 000");
         var socket = io();
+        var timer = 0;
+        var intervalID;
     </script>
     <title>
         <%= title %>
@@ -39,9 +41,9 @@
         <div class="card">
             <h2><%= title %></h2>
             <h5>Title description, Sep 2, 2017</h5>
-            <div class="w3-container" style="width:30%">
+            <div class="w3-container" style="width:60%;min-width: 200px;">
                 <div class="w3-panel w3-pale-red w3-leftbar w3-border-red">
-                    <p>計時:06:00
+                    <p>計時:<span id="timer"> 00s</span>
                     </p>
                 </div>
                 <div class="w3-panel w3-pale-blue w3-leftbar w3-border-blue">
@@ -58,21 +60,34 @@
             </div>
             <br>
             <% if (fileChins.length>0) { index = 0 %>
-                <table>
-                    <% fileChins.forEach(chinRow => { %>
-                        <tr>
-                            <% chinRow.forEach(element => { %>
-                                <td><input type="button" id=<%= "mod" +index %> class="btn" value=<%= element %>></td>
-                                <script>
-                                    $("<%- '#mod' + index %>").click(function() {
-                                        socket.emit('prc', "<%= index %>");
-                                        console.log("<%- 'html 執行 ' + element %>");
-                                    });
-                                </script>
-                            <% index++}) %>
-                        </tr>                 
-                    <% }) %>
-                </table>
+            <table>
+                <% fileChins.forEach(chinRow => { %>
+                <tr>
+                    <% chinRow.forEach(element => { %>
+                    <td><input type="button" id=<%= "mod" +index %> class="btn" value=<%= element %>></td>
+                    <script>
+                        $("<%- '#mod' + index %>").click(function() {
+                            socket.emit('prc', "<%= index %>");
+                            console.log("<%- 'html 執行 ' + element %>");
+                            if (intervalID) {
+                                clearInterval(intervalID);
+                            }
+                            intervalID = setInterval(function() {
+                                timer += 1
+                                if (timer < 60) {
+                                    $("#timer").html(` ${timer} s`);
+                                } else if (timer < 3600) {
+                                    $("#timer").html(` ${Math.floor(timer/60)} m ${timer%60} s`);
+                                } else {
+                                    $("#timer").html(` ${Math.floor(timer/3600)} h ${Math.floor(timer/60)%60} m ${timer%60} s`);
+                                }
+                            }, 1000);
+                        });
+                    </script>
+                    <% index++}) %>
+                </tr>
+                <% }) %>
+            </table>
             <% } %>
             <table>
                 <thead>
@@ -94,11 +109,17 @@
     $('#btn0').on('click', function() {
         socket.emit("stop");
         // $('#btn2').hide();
+        if (intervalID) {
+            clearInterval(intervalID);
+        }
         console.log("html stop");
     });
     $('#btn00').on('click', function() {
         socket.emit("exit");
         // $('#btn2').hide();
+        if (intervalID) {
+            clearInterval(intervalID);
+        }
         console.log("html exit");
     });
 </script>
