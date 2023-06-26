@@ -1,10 +1,21 @@
 <% layout('layout') %>
 <style>
-  #myw {
-    max-width: 2000px;
-  }
+    #myw {
+        max-width: 2000px;
+    }
 </style>
-<div style="padding:1px 16px;height:1000px;">
-    <iframe src=<%= ctrWeb %> name="left" frameborder="0" width="25%" height="100%">等等</iframe>
-    <iframe src=<%= carWeb %> name="right" frameborder="0" width="70%" height="100%">等等</iframe>
+<!-- <input type="button" id="btnNew" value="刷新"> -->
+<div style="padding:1px 16px;height:1000px;width:2000px">
+    <iframe src=<%= ctrWeb %> name="left" id="left" frameborder="0" width="30%" height="100%">等等</iframe>
+    <iframe src=<%= carWeb %> name="right" id="right" frameborder="0" width="45%" height="100%">等等</iframe>
 </div>
+<script>
+    $("#btnNew").click(function(){
+        $('#right').attr('src', $('#right').attr('src'));
+        console.log("刷新");
+    })
+    setInterval(()=>{
+        $('#right').attr('src', $('#right').attr('src'));
+        console.log("刷新");
+    },5000)
+</script>

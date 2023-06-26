@@ -17,14 +17,15 @@
     </title>
     <style type="text/css">
         .btn {
-            font-family: "微軟正黑體", "黑體-繁", sans-serif;
+            margin: 2px;
+            border: solid 1px #20538D;
+            border-radius: 4px;
+            width: 130px;
             padding: 10px 15px;
             background: #4479BA;
             color: #FFF;
-            border-radius: 4px;
-            border: solid 1px #20538D;
+            font-family: "微軟正黑體", "黑體-繁", sans-serif;
             text-decoration: none;
-            margin: 2px;
         }
 
         .btn:hover {
@@ -76,12 +77,12 @@
             <table>
                 <thead>
                     <tr>
-                        <th>
-                            <p><a class="btn" id="btn0">關閉所有程式</a></p>
-                        </th>
-                        <th>
-                            <p><a class="btn" id="btn00">關閉網站</a></p>
-                        </th>
+                        <td>
+                            <p><input type="button" id="btn0" class="btn" value="關閉所有程式"></p>
+                        </td>
+                        <td>
+                            <p><input type="button" id="btn00" class="btn" value="關閉網站"></p>
+                        </td>
                     </tr>
                 </thead>
             </table>

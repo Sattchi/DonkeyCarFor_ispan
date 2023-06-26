@@ -75,11 +75,11 @@ readTextFile("donkeyCar_html/json/net.json", function (text) {
         // http://192.168.52.94:6543/
         // http://192.168.52.94:8887/drive
         ctrWeb = "http://" + options.setHost + ":6543/"
-        ctrWeb = "http://" + options.setHost + ":8887/drive"
+        carWeb = "http://" + options.setHost + ":8887/drive"
     }
     if (options.setCtrWeb || options.setCarWeb) {
         ctrWeb = options.setCtrWeb
-        ctrWeb = options.setCarWeb
+        carWeb = options.setCarWeb
     }
     console.log("control    url: " + ctrWeb);
     console.log("donkey car url: " + carWeb);

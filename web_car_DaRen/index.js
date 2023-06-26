@@ -45,18 +45,17 @@ function readTextFile(file, callback) {
         callback(text);
     });
 }
+const newfileChins = []
 
-readTextFile("www/json/autoModel.json", function(text){
+readTextFile("www/json/autoModel.json", function (text) {
     modelData = JSON.parse(text);
     console.log(modelData);
-    fileChins = Object.values(modelData).map(item => item.chinName);
+    var fileChins = Object.values(modelData).map(item => item.chinName);
+    while (fileChins.length) {
+        newfileChins.push(fileChins.splice(0, 3))
+    }
+    console.log(newfileChins)
 });
-
-const newfileChins = []
-while (fileChins.length){
-    newfileChins.push(fileChins.splice(0,3))
-}
-console.log(newfileChins)
 
 // 查看用戶代理IP
 // app.use(function (req, res, next){
