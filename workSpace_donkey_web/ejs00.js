@@ -83,11 +83,11 @@ readTextFile("donkeyCar_html/json/net.json", function (text) {
 });
 
 // 查看用戶代理IP
-app.use(function (req, res, next) {
-    console.log("用戶IP位址: " + req.connection.remoteAddress);
-    console.log("用戶IP位址: " + (req.connection || req.socket || req).remoteAddress);
-    next();
-});
+// app.use(function (req, res, next) {
+//     console.log("用戶IP位址: " + req.connection.remoteAddress);
+//     console.log("用戶IP位址: " + (req.connection || req.socket || req).remoteAddress);
+//     next();
+// });
 
 //路由控制
 //get 控制

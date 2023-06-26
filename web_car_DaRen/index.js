@@ -59,11 +59,11 @@ while (fileChins.length){
 console.log(newfileChins)
 
 // 查看用戶代理IP
-app.use(function (req, res, next){
-    console.log("用戶IP位址: "+req.connection.remoteAddress);
-    console.log("用戶IP位址: "+(req.connection || req.socket || req).remoteAddress);
-    next();
-});
+// app.use(function (req, res, next){
+//     console.log("用戶IP位址: "+req.connection.remoteAddress);
+//     console.log("用戶IP位址: "+(req.connection || req.socket || req).remoteAddress);
+//     next();
+// });
 
 app.get("/", function (req, res, next) {
     res.render('index', { "title": "控制台", "fileChins": newfileChins });
