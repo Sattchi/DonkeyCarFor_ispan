@@ -13,7 +13,8 @@ npm install ejs --save
 npm install ejs-locals --save
  
 # 介紹
-![](figure/index.png)
-![](figure/login.png)
-![](figure/register.png)
-![](figure/controll.jpg)
+![](figure/index.jpg)
+![](figure/login.jpg)
+![](figure/resign.jpg)
+![](figure/about.jpg)
+<!-- ![](figure/controll.jpg) -->
