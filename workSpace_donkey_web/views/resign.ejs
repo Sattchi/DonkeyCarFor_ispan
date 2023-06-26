@@ -1,10 +1,14 @@
 <% layout('layout') %>
-<div style="margin-left:25%;padding:1px 16px;height:1000px;">
+
 
     <div class="card">
-        <h2><%= title %></h2>
+        <h2>
+            <%= title %>
+        </h2>
         <h5>Title description, Sep 2, 2017</h5>
-        <div class="fakeimg" style="height:200px;">Image</div>
+        <div class="fakeimg" style="background-color: #FFD382;">
+            <p class="fw-bold" style="font-size:5vw">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
+        </div>
         <br>
         <form method="post" action="/regist">
             <label for="fname">帳號:</label>
@@ -13,8 +17,7 @@
             <input type="text" id="lname" name="passWord"><br><br>
             <label for="lname">暱稱:</label>
             <input type="text" id="lname" name="customName"><br><br>
-            <input type="submit" value="確認">
+            <input class="btn btn-primary" type="submit" value="確認">
         </form>
 
     </div>
-</div>

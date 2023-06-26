@@ -1,26 +1,39 @@
-<% layout('layout') %> //ejs共用主體
+<% layout('layout') %>
 
-<div style="margin-left:25%;padding:1px 16px;height:1000px;">
-    <% if (loginStatus) { %>
-        <tr>
-            <td><a href="/logout">登出</a></td>
-        </tr>
-    <% } else{ %>
-        <tr>
-            <td><a href="/login.html">登入</a></td>
-            <td><a href="/resign1.html">註冊</a></td>
-        </tr>
-    <% } %>
     <div class="card">
+        <h1>
+            <%= title %>
+        </h1>
+        <div class="fakeimg" style="background-color: #FFD382;">
+            <p class="fw-bold" style="font-size:5vw">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
+        </div>
 
-        <h2>DonkeyCar</h2>
-        <h2>歡迎<%- titleH2 %></h2>
+        <h2>歡迎
+            <%- titleH2 %>
+        </h2>
         <h5>Title description, Sep 2, 2017</h5>
-        <img src="https://ricelee.s3.ap-northeast-1.amazonaws.com/wp-content/uploads/2021/07/23201103/donkey-car-graphic_orig-600x535.jpg"
-             style="width:100px;height:100px;">
+
         <p>Donkey Car 是一個開源機器學習的自走車專案，車上唯一的感測器就是相機。Donkey Car 使用樹莓派和 Python，利用 Keras 深度學習框架實現自動駕駛。</p>
-        <h1><%= title %></h1>
+
+        <% if (loginStatus) { %>
+            <center>
+                <div class="card" style="width: 18rem;">
+                    <tr>
+                        <td><a class="btn btn-primary" href="/logout">登出</a></td>
+                    </tr>
+                </div>
+            </center>
+            <% } else{ %>
+                <center>
+                    <div class="card" style="width: 18rem;">
+                        <tr>
+                            <td><a class="btn btn-primary" href="/login.html">登入</a></td>
+                            <br>
+                            <td><a class="btn btn-primary" href="/resign1.html">註冊</a></td>
+                        </tr>
+                    </div>
+                </center>
+                <% } %>
 
 
     </div>
-</div>
