@@ -16,21 +16,30 @@
         #myw {
             max-width: 1000px;
         }
+
+        .img_layout{
+            width: 100%;
+            object-fit: cover;
+            max-width: 250px;
+            aspect-ratio: auto;
+        }
     </style>
+
 </head>
 
 <body>
     <ul>
-        <li><a href="/">首頁</a></li>
+        <li><img src="img/logo.png"  class="img_layout"></li>
+        <li><a class="active" href="/" style="color: rgb(255, 119, 0);font-size: 110%; font-weight:bold;">RUN RUN CAR</a></li>
         <li><a href="resign1.html">註冊</a></li>
         <li><a href="login.html">登入</a></li>
         <li><a href="about.html">DonkeyCar介紹</a></li>
         <li><a href="#contact">貨量車系統</a></li>
         <li><a href="#about">倉儲系統</a></li>
         <li><a href="#about">異常紀錄</a></li>
-        <li><a class="active" href="control.html">控制台</a></li>
+        <li><a href="control.html">控制台</a></li>
     </ul>
-    <div style="margin-left:25%;padding:1px 16px;height:1000px;">
+    <div style="margin-left:15%;padding:1px 16px;height:1000px;">
         <% if (title === "控制台") { %>
             <%- body %>
         <% } else { %>
