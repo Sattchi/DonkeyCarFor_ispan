@@ -10,9 +10,9 @@ ul {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    width: 25%;
-    min-width: 200px;
-    max-width: 250px;
+    width: 15%;
+    min-width:200px;
+    max-width:250px;
     background-color: #f1f1f1;
     position: fixed;
     height: 100%;
@@ -48,7 +48,10 @@ li a:hover:not(.active) {
 /* Fake image */
 
 .fakeimg {
-    background-color: #aaa;
+    background-color:#301335;;
     width: 100%;
     padding: 20px;
+}
+.run_run_text {
+    color: rgb(255, 119, 0);
 }
