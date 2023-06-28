@@ -23,5 +23,15 @@
         "web"
     ],
     "author": "ohayowu314 <48574669+ohayowu314@users.noreply.github.com>",
+    "contributors": [
+        {
+            "name": "ohayowu314",
+            "email": "48574669+ohayowu314@users.noreply.github.com"
+        },
+        {
+            "name": "",
+            "email": ""
+        }
+    ],
     "license": "ISC"
 }
