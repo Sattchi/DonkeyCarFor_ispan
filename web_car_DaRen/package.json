@@ -24,6 +24,13 @@
     "keywords": [
         "carDonkey"
     ],
-    "author": "ohayowu314 <48574669+ohayowu314@users.noreply.github.com>",
+    "author": "Jack Wu <ohayowuohayowu@gmail.com>",
+    "contributors": [
+        {
+            "name": "Jack Wu",
+            "email": "ohayowuohayowu@gmail.com"
+        },
+        "Jack Wu <ohayowuohayowu@gmail.com>"
+    ],
     "license": "ISC"
 }
