@@ -11,8 +11,6 @@ ul {
     margin: 0;
     padding: 0;
     width: 25%;
-    min-width: 200px;
-    max-width: 250px;
     background-color: #f1f1f1;
     position: fixed;
     height: 100%;
