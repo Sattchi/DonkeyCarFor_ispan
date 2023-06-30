@@ -46,4 +46,4 @@ npm install
 ## 介紹頁
 ![](figure/about.jpg)
 ## 模型控制頁
-![](figure/controll.jpg)
+![](figure/control.jpg)
