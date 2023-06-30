@@ -34,13 +34,30 @@
             background: #356094;
         }
     </style>
+     <script>
+        //這裡是時間
+        function showDateTime() {
+      var date = new Date();
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var seconds = date.getSeconds();
+      
+      var dateTime = year + "-" + month + "-" + day + " " + hours + ":" + minutes + ":" + seconds;
+      
+      document.getElementById("current-date-time").textContent = dateTime;
+      
+      setTimeout(showDateTime, 1000); // 每秒更新日期和時間
+    }
+      </script>
 </head>
 
-<body>
+<body onload="showDateTime()">
     <div style="padding:1px 16px;height:1000px;">
         <div class="card">
             <h2><%= title %></h2>
-            <h5>Title description, Sep 2, 2017</h5>
             <div class="w3-container" style="width:60%;min-width: 200px;">
                 <div class="w3-panel w3-pale-red w3-leftbar w3-border-red">
                     <p>計時:<span id="timer"> 00s</span>
@@ -55,10 +72,7 @@
                     </p>
                 </div>
             </div>
-            <div class="fakeimg" style="height:500px;width:500px">
-                <img src="https://www.donkeycar.com/uploads/7/8/1/7/7817903/donkey-car-graphic_orig.jpg" alt="圖片描述" style="max-width: 100%; max-height: 100%;">
-            </div>
-            <br>
+            <P>演算法列表:</P>
             <% if (fileChins.length>0) { index = 0 %>
             <table>
                 <% fileChins.forEach(chinRow => { %>
