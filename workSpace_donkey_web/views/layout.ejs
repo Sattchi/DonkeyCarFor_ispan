@@ -17,26 +17,41 @@
             max-width: 1000px;
         }
 
-        .img_layout{
+        .img_layout {
             width: 100%;
             object-fit: cover;
             max-width: 250px;
             aspect-ratio: auto;
         }
 
-        body{
-        background-image:url(img/bg1.jpg);}
-        #myo{
-        /*margin-left:15%;padding:1px 16px;height:1000px;*/
-        opacity:75%;
+        body {
+            background-image: url(img/bg1.jpg);
+        }
+
+        #myo {
+            /*margin-left:15%;padding:1px 16px;height:1000px;*/
+            opacity: 75%;
         }
     </style>
-
+    <script>
+        const labelDict = {
+            "首頁": 0,
+            "註冊新人員": 1,
+            "登入": 2,
+            "關於": 3,
+            "控制台": 7
+        };
+        $('document').ready(() => {
+            if ('<%- title %>' in labelDict & labelDict['<%- title %>'] != 0) {
+                $('ul a')[labelDict['<%- title %>']].classList.add('now')
+            }
+        })
+    </script>
 </head>
 
 <body>
     <ul>
-        <li><img src="img/logo.png"  class="img_layout"></li>
+        <li><img src="img/logo.png" class="img_layout"></li>
         <li><a class="active" href="/" style="color: rgb(255, 119, 0);font-size: 110%; font-weight:bold;"><i class='bx bx-home-alt-2'></i>&nbsp;&nbsp;RUN RUN CAR</a></li>
         <li><a href="resign1.html"><i class='bx bx-spreadsheet'></i>&nbsp;&nbsp;註冊</a></li>
         <li><a href="login.html"><i class='bx bxs-party'></i>&nbsp;&nbsp;登入</a></li>
@@ -45,17 +60,17 @@
         <li><a href="#about"><i class='bx bx-package'></i>&nbsp;&nbsp;倉儲系統</a></li>
         <li><a href="#about"><i class='bx bxs-skull'></i>&nbsp;&nbsp;異常紀錄</a></li>
         <li><a href="control.html"><i class='bx bxs-joystick'></i>&nbsp;&nbsp;控制台</a></li>
-        
+
     </ul>
     <div style="margin-left:15%;padding:1px 16px;height:1000px;opacity:85%">
         <% if (title === "控制台") { %>
-            <%- body %>
+        <%- body %>
         <% } else { %>
-            <center>
-                <div id="myw">
-                    <%- body %>
-                </div>
-            </center>
+        <center>
+            <div id="myw">
+                <%- body %>
+            </div>
+        </center>
         <% } %>
     </div>
     <script src="script/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
