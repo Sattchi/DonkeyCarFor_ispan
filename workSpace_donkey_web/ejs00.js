@@ -16,7 +16,7 @@ console.log(program.opts());
 const options = program.opts();
 
 // 載入express模組
-let express = require('express');
+const express = require('express');
 // 使用express
 let app = express();
 
@@ -48,42 +48,200 @@ app.set('view engine', 'ejs');
 //調用靜態資料夾檔案
 app.use(express.static(__dirname + '/donkeyCar_html')); //Serves resources from public folder
 
-function readTextFile(file, callback) {
-    fs.readFile(file, function (err, text) {
-        callback(text);
-    });
+// 額外連結設定檔部分
+// function readTextFile(file, callback) {
+//     fs.readFile(file, function (err, text) {
+//         callback(text);
+//     });
+// }
+
+// readTextFile("donkeyCar_html/json/net.json", function (text) {
+//     netData = JSON.parse(text);
+//     // console.log(netData);
+//     if (options.web === "0" || options.web === "302" || options.web.toUpperCase() === "F3" || options.web.toUpperCase() === "C302") {
+//         ctrWeb = netData["0"].car1.ctrWeb;
+//         carWeb = netData["0"].car1.carWeb;
+//     } else if (options.web === "1" || options.web.toUpperCase() === "F15") {
+//         ctrWeb = netData["1"].car1.ctrWeb;
+//         carWeb = netData["1"].car1.carWeb;
+//     } else if (options.web === "2") {
+//         ctrWeb = netData["2"].car1.ctrWeb;
+//         carWeb = netData["2"].car1.carWeb;
+//     } else {
+//         ctrWeb = netData["0"].car1.ctrWeb;
+//         carWeb = netData["0"].car1.carWeb;
+//     }
+
+//     if (options.setHost) {
+//         // http://192.168.52.94:6543/
+//         // http://192.168.52.94:8887/drive
+//         ctrWeb = "http://" + options.setHost + ":6543/"
+//         carWeb = "http://" + options.setHost + ":8887/drive"
+//     }
+//     if (options.setCtrWeb || options.setCarWeb) {
+//         ctrWeb = options.setCtrWeb
+//         carWeb = options.setCarWeb
+//     }
+//     // console.log("control    url: " + ctrWeb);
+//     // console.log("donkey car url: " + carWeb);
+// });
+
+const netData = require('./config/net')
+let ctrWeb;
+let carWeb;
+if (options.web === "0" || options.web === "302" || options.web.toUpperCase() === "F3" || options.web.toUpperCase() === "C302") {
+    ctrWeb = netData["0"].car1.ctrWeb;
+    carWeb = netData["0"].car1.carWeb;
+} else if (options.web === "1" || options.web.toUpperCase() === "F15") {
+    ctrWeb = netData["1"].car1.ctrWeb;
+    carWeb = netData["1"].car1.carWeb;
+} else if (options.web === "2") {
+    ctrWeb = netData["2"].car1.ctrWeb;
+    carWeb = netData["2"].car1.carWeb;
+} else {
+    ctrWeb = netData["0"].car1.ctrWeb;
+    carWeb = netData["0"].car1.carWeb;
 }
 
-readTextFile("donkeyCar_html/json/net.json", function (text) {
-    netData = JSON.parse(text);
-    // console.log(netData);
-    if (options.web === "0" || options.web === "302" || options.web.toUpperCase() === "F3" || options.web.toUpperCase() === "C302") {
-        ctrWeb = netData["0"].car1.ctrWeb;
-        carWeb = netData["0"].car1.carWeb;
-    } else if (options.web === "1" || options.web.toUpperCase() === "F15") {
-        ctrWeb = netData["1"].car1.ctrWeb;
-        carWeb = netData["1"].car1.carWeb;
-    } else if (options.web === "2") {
-        ctrWeb = netData["2"].car1.ctrWeb;
-        carWeb = netData["2"].car1.carWeb;
-    } else {
-        ctrWeb = netData["0"].car1.ctrWeb;
-        carWeb = netData["0"].car1.carWeb;
-    }
+if (options.setHost) {
+    // http://192.168.52.94:6543/
+    // http://192.168.52.94:8887/drive
+    ctrWeb = "http://" + options.setHost + ":6543/"
+    carWeb = "http://" + options.setHost + ":8887/drive"
+}
+if (options.setCtrWeb || options.setCarWeb) {
+    ctrWeb = options.setCtrWeb
+    carWeb = options.setCarWeb
+}
+// console.log("control    url: " + ctrWeb);
+// console.log("donkey car url: " + carWeb);
 
-    if (options.setHost) {
-        // http://192.168.52.94:6543/
-        // http://192.168.52.94:8887/drive
-        ctrWeb = "http://" + options.setHost + ":6543/"
-        carWeb = "http://" + options.setHost + ":8887/drive"
+
+// 資料庫部分
+const dbConfig = require("./config/fileDB");
+
+const MongoClient = require("mongodb").MongoClient;
+const GridFSBucket = require("mongodb").GridFSBucket;
+
+const url = dbConfig.url;
+// console.log(url);
+
+const baseUrl = "http://localhost:3000/modelList/files/";
+
+const mongoClient = new MongoClient(url);
+// console.log(mongoClient)
+
+const upload = require('./middleware/upload')
+const uploadFiles = async (req, res) => {
+    try {
+        // 使用 upload 中間件函數 處理上傳的文件
+        await upload(req, res);
+        if (req.file == undefined) {
+            return res.status(400).send({ message: "請選擇要上傳的文件" });
+        }
+        return res.status(200).send({
+            message: "文件上傳成功" + req.file.originalname,
+        });
+    } catch (error) {
+        // 使用 Multer 捕獲相關錯誤
+        console.log(error);
+        if (error.code == "LIMIT_FILE_SIZE") {
+            return res.status(500).send({
+                message: "文件大小不能超過 2MB",
+            });
+        }
+        return res.status(500).send({
+            message: `無法上傳文件:, ${error}`
+        });
     }
-    if (options.setCtrWeb || options.setCarWeb) {
-        ctrWeb = options.setCtrWeb
-        carWeb = options.setCarWeb
+};
+
+// getListFiles: 函數主要是獲取 photos.files,返回 url， name
+const getListFiles = async (req, res) => {
+    try {
+        // console.log('0');
+        // console.log(mongoClient);
+        await mongoClient.connect();
+        // console.log('1');
+
+        const database = mongoClient.db(dbConfig.database);
+        const files = database.collection(dbConfig.filesBucket + ".files");
+        // console.log(files);
+        let fileInfos = [];
+
+        if ((await files.estimatedDocumentCount()) === 0) {
+            fileInfos = []
+        }
+
+        let cursor = files.find({})
+        await cursor.forEach((doc) => {
+            fileInfos.push({
+                fileId: doc._id,
+                name: doc.filename,
+                url: baseUrl + doc.filename,
+                length: doc.length,
+                chunkSize: doc.chunkSize,
+                uploadDate: doc.uploadDate,
+                contentType: doc.contentType
+            });
+        });
+
+        // console.log(fileInfos);
+
+        // if (req.accepts('json')) {
+        //     return res.status(200).send(fileInfos);
+        //   } else {
+            return res.status(200).render('modelList', {
+                    'title': '自駕模型列表',
+                    'user': true,
+                    'baseUrl': req.baseUrl,
+                    'listModels': fileInfos,
+                });
+        //   };
+    } catch (error) {
+        console.log('error');
+        console.error(error);
+        return res.status(500).send({
+            message: error.message,
+        });
     }
-    console.log("control    url: " + ctrWeb);
-    console.log("donkey car url: " + carWeb);
-});
+};
+
+// download(): 接收文件 name 作為輸入參數，從 mongodb 內置打開下載流 GridFSBucket，然後 response.write(chunk) API 將文件傳輸到客戶端。
+const download = async (req, res) => {
+    try {
+        await mongoClient.connect();
+        const database = mongoClient.db(dbConfig.database);
+        const bucket = new GridFSBucket(database, {
+            bucketName: dbConfig.filesBucket,
+        });
+
+        let downloadStream = bucket.openDownloadStreamByName(req.params.name);
+        downloadStream.on("data", function (data) {
+            return res.status(200).write(data);
+        });
+
+        downloadStream.on("error", function (err) {
+            return res.status(404).send({ message: "無法獲取文件" });
+        });
+
+        downloadStream.on("end", () => {
+            return res.end();
+        });
+    } catch (error) {
+        return res.status(500).send({
+            message: error.message,
+        });
+    }
+};
+
+// const getListFiles2 = async (req, res) => {
+//     console.log('req.originalUrl: ' + req.originalUrl);
+//     console.log('req.baseUrl: ' + req.baseUrl);
+//     console.log('req.path: ' + req.path);
+//     console.log('req.url: ' + req.url);
+//     return getListFiles(req, res);
+// }
 
 // 查看用戶代理IP
 // app.use(function (req, res, next) {
@@ -128,6 +286,39 @@ app.get('/resign1.html', function (req, res) {
     });
 });
 
+app.get('/login.html', function (req, res) {
+    res.render('login', {
+        'title': '登入'
+    });
+});
+
+app.get('/about.html', function (req, res) {
+    res.render('about', {
+        'title': '關於'
+    });
+});
+
+// app.use('/modelList', (req, res)=>{
+    // console.log('req.originalUrl: ' + req.originalUrl);
+    // console.log('req.baseUrl: ' + req.baseUrl);
+    // console.log('req.path: ' + req.path);
+    // console.log('req.url: ' + req.url);
+    // getListFiles(req, res);
+    // res.render('modelList', {
+    //     'title': '自駕模型列表',
+    //     'baseUrl': req.baseUrl,
+    //     'listModels': ""
+    // });
+// });
+const router = express.Router();
+router.get('/', getListFiles);
+router.get('/list', getListFiles);
+router.post('/upload', uploadFiles);
+router.get('/files/:name', download);
+router.get('/delete', getListFiles);
+
+app.use('/modelList', router);
+
 app.get('/control.html', function (req, res) {
     // console.log("control    url: " + ctrWeb);
     // console.log("donkey car url: " + carWeb);
@@ -142,22 +333,9 @@ app.get('/control.html', function (req, res) {
     });
 });
 
-app.get('/about.html', function (req, res) {
-    res.render('about', {
-        'title': '關於'
-    });
-});
-
-app.get('/login.html', function (req, res) {
-    res.render('login', {
-        'title': '登入'
-    });
-});
-
-//路由控制
 //post 控制
+//註冊
 app.post('/regist', function (req, res) {
-
     var uc = req.body.uc;
     var pw = req.body.passWord;
     var cn = req.body.customName;
@@ -190,9 +368,9 @@ app.post('/regist', function (req, res) {
                 console.log('new USER .' + uc);
         });
     });
-
-    //帳號登入
 });
+
+//帳號登入
 app.post('/login', function (req, res) {
 
     var uc = req.body.uc;
