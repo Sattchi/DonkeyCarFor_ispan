@@ -22,7 +22,9 @@
         "start": "node index.js"
     },
     "keywords": [
-        "carDonkey"
+        "donkey",
+        "car",
+        "web"
     ],
     "author": "Jack Wu <ohayowuohayowu@gmail.com>",
     "contributors": [
@@ -30,10 +32,13 @@
             "name": "Jack Wu",
             "email": "ohayowuohayowu@gmail.com"
         },
-        "Jack Wu <ohayowuohayowu@gmail.com>",
         {
             "name": "Ben Lu",
             "email": "ispanaiml302@gmail.com"
+        },
+        {
+            "name": "Daren Wu",
+            "email": "jasonsf799@gmail.com"
         }
     ],
     "license": "ISC"

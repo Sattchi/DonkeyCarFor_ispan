@@ -23,6 +23,7 @@
     },
     "keywords": [
         "donkey",
+        "car",
         "web"
     ],
     "author": "Jack Wu <ohayowuohayowu@gmail.com>",
@@ -31,10 +32,13 @@
             "name": "Jack Wu",
             "email": "ohayowuohayowu@gmail.com"
         },
-        "Jack Wu <ohayowuohayowu@gmail.com>",
         {
             "name": "Ben Lu",
             "email": "ispanaiml302@gmail.com"
+        },
+        {
+            "name": "Daren Wu",
+            "email": "jasonsf799@gmail.com"
         }
     ],
     "license": "ISC"
