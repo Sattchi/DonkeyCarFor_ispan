@@ -11,8 +11,10 @@ module.exports =[
         },
         "para": [
             "drive",
-            "--model ./models/mypilot_forward_only.h5",
-            "--myconfig ./myconfig1.py"
+            "--model",
+            "./models/mypilot_forward_only.h5",
+            "--myconfig",
+            "./myconfig1.py"
         ]
     },
     {
@@ -27,8 +29,10 @@ module.exports =[
         },
         "para": [
             "drive",
-            "--model ./models/mypilot_forward_only.h5",
-            "--myconfig ./myconfig1.py"
+            "--model",
+            "./models/mypilot_backward.h5",
+            "--myconfig",
+            "./myconfig1.py"
         ]
     },
     {
@@ -43,8 +47,10 @@ module.exports =[
         },
         "para": [
             "drive",
-            "--model ./models/mypilot_forward_only.h5",
-            "--myconfig ./myconfig1.py"
+            "--model",
+            "./models/mypilot_reverse.h5",
+            "--myconfig",
+            "./myconfig1.py"
         ]
     },
     {
@@ -59,8 +65,10 @@ module.exports =[
         },
         "para": [
             "drive",
-            "--model ./models/mypilot_forward_only.h5",
-            "--myconfig ./myconfig1.py"
+            "--model",
+            "./models/mypilot_backward_reverse.h5",
+            "--myconfig",
+            "./myconfig1.py"
         ]
     },
     {
@@ -75,8 +83,10 @@ module.exports =[
         },
         "para": [
             "drive",
-            "--model ./models/mypilot_forward_only.h5",
-            "--myconfig ./myconfig1.py"
+            "--model",
+            "./models/mypilot_yellow_3800.h5",
+            "--myconfig",
+            "./myconfig1.py"
         ]
     },
     {
@@ -91,8 +101,10 @@ module.exports =[
         },
         "para": [
             "drive",
-            "--model ./models/mypilot_forward_only.h5",
-            "--myconfig ./myconfig1.py"
+            "--model",
+            "./models/mypilot_yellow_6500.h5",
+            "--myconfig",
+            "./myconfig1.py"
         ]
     }
 ]

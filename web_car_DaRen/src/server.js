@@ -91,7 +91,8 @@ app.get("/control", function (req, res) {
     res.render('control', {
         "title": "控制台",
         "fileChins": newfileChins,
-        "carWeb": "http://127.0.0.1:8887/drive"
+        "baseUrl": "http://192.168.52.94:6543",
+        "carWeb": "http://192.168.52.94:8887"
     });
 });
 
@@ -145,25 +146,26 @@ function doProcess(num) {
     // const filePara = fileParas[num];
     // const para = (!filePara) ? [fileName] : [fileName].concat(filePara);
     // const fileOption = fileOptions[num];
+    console.log(process.argv)
+    if (process.argv[2] != '1') {
+        const fileName = modelData[num].fileName;
+        const filePara = modelData[num].para;
+        const para = (!filePara) ? [fileName] : [fileName].concat(filePara);
+        const fileOption = modelData[num].option;
+        console.log("想執行 Python 檔案: " + fileName);
+        console.log("必選參數: " + para);
+        console.log("可選參數: ");
+        console.log(fileOption);
+        // // python manage.py drive --model ~/mycar2/models/mypilot.h5
+        subprocess = spawn("python", para, fileOption);
+        console.log("非同步!");
+        console.log(`Spawned child pid: ${subprocess.pid}`);
+        console.log("已經執行 Python 檔案: " + fileName);
+    } else {
+        const commands = ['conda activate donkey', 'python C:\\workspace_final\\mysim\\manage.py drive --model C:\\workspace_final\\mysim\\models\\mypilot_forward_only.h5 --myconfig ./myconfig1.py']
+        subprocess = exec(commands.join(' & '))
+    }
 
-    const fileName = modelData[num].fileName;
-    const filePara = modelData[num].para;
-    const para = (!filePara) ? [fileName] : [fileName].concat(filePara);
-    const fileOption = modelData[num].option;
-    console.log("想執行 Python 檔案: " + fileName);
-    console.log("必選參數: " + para);
-    console.log("可選參數: ");
-    console.log(fileOption);
-    // // python manage.py drive --model ~/mycar2/models/mypilot.h5
-    subprocess = spawn("python", para, fileOption);
-    console.log("非同步!");
-    console.log(`Spawned child pid: ${subprocess.pid}`);
-    console.log("已經執行 Python 檔案: " + fileName);
-    
-    // const commands = ['conda activate donkey','python C:\\workspace_final\\mysim\\manage.py drive --model C:\\workspace_final\\mysim\\models\\mypilot_forward_only.h5 --myconfig ./myconfig1.py']
-
-    // subprocess = exec(commands.join(' & '))
-    
     subprocess.stdout.on('data', (data) => {
         console.log(`stdout: ${data}`);
     });

@@ -261,7 +261,9 @@ app.get('/', function (req, res) {
     res.render('index', {
         'title': '首頁',
         'titleH2': req.cookies.name,
-        'loginStatus': isLogin //登入狀態
+        'loginStatus': isLogin, //登入狀態
+        'ctrWeb': ctrWeb,
+        'carWeb': carWeb
     });
 
     //console.log(req.cookies);
@@ -282,19 +284,25 @@ app.get('/logout', function (req, res) {
 
 app.get('/resign1.html', function (req, res) {
     res.render('resign', {
-        'title': '註冊新人員'
+        'title': '註冊新人員',
+        'ctrWeb': ctrWeb,
+        'carWeb': carWeb
     });
 });
 
 app.get('/login.html', function (req, res) {
     res.render('login', {
-        'title': '登入'
+        'title': '登入',
+        'ctrWeb': ctrWeb,
+        'carWeb': carWeb
     });
 });
 
 app.get('/about.html', function (req, res) {
     res.render('about', {
-        'title': '關於'
+        'title': '關於',
+        'ctrWeb': ctrWeb,
+        'carWeb': carWeb
     });
 });
 
@@ -324,7 +332,7 @@ app.get('/control.html', function (req, res) {
     // console.log("donkey car url: " + carWeb);
     res.render('control', {
         'title': '控制台',
-        // 'ctrWeb': 'http://192.168.52.94:6543/',
+        // 'ctrWeb': 'http://192.168.52.94:6543',
         // 'carWeb': 'http://192.168.52.94:8887/drive'
         // 'ctrWeb': netData["0"].car1.ctrWeb,
         // 'carWeb': netData["0"].car1.carWeb
