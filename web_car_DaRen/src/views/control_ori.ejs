@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/styles/main.css" rel="stylesheet" type="text/css" />
+    <script src="/script/jquery-3.1.1.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <script>
+        console.log("html 000");
+        var socket = io();
+        var timer = 0;
+        var intervalID;
+    </script>
+    <title>
+        <%= title %>
+    </title>
+    <style type="text/css">
+        .btn {
+            margin: 2px;
+            border: solid 1px #20538D;
+            border-radius: 4px;
+            width: 130px;
+            padding: 10px 15px;
+            background: #4479BA;
+            color: #FFF;
+            font-family: "微軟正黑體", "黑體-繁", sans-serif;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            background: #356094;
+        }
+    </style>
+</head>
+
+<body>
+    <div style="padding:1px 16px;height:1000px;">
+        <div class="card">
+            <h2><%= title %></h2>
+            <div class="w3-container" style="width:60%;min-width: 200px;">
+                <div class="w3-panel w3-pale-red w3-leftbar w3-border-red">
+                    <p>計時:<span id="timer"> 00s</span>
+                    </p>
+                </div>
+                <div class="w3-panel w3-pale-blue w3-leftbar w3-border-blue">
+                    <p>圈數:100
+                    </p>
+                </div>
+                <div class="w3-panel w3-pale-green w3-leftbar w3-border-green">
+                    <p>資料量:8887
+                    </p>
+                </div>
+            </div>
+            <P>演算法列表:</P>
+            <% if (fileChins.length>0) { index = 0 %>
+            <table>
+                <% fileChins.forEach(chinRow => { %>
+                <tr>
+                    <% chinRow.forEach(element => { %>
+                    <td><input type="button" id=<%= "mod" +index %> class="btn" value=<%= element %>></td>
+                    <script>
+                        $("<%- '#mod' + index %>").click(function() {
+                            socket.emit('prc', "<%= index %>");
+                            console.log("<%- 'html 執行 ' + element %>");
+                            if (intervalID) {
+                                clearInterval(intervalID);
+                            }
+                            intervalID = setInterval(function() {
+                                timer += 1
+                                if (timer < 60) {
+                                    $("#timer").html(` ${timer} s`);
+                                } else if (timer < 3600) {
+                                    $("#timer").html(` ${Math.floor(timer/60)} m ${timer%60} s`);
+                                } else {
+                                    $("#timer").html(` ${Math.floor(timer/3600)} h ${Math.floor(timer/60)%60} m ${timer%60} s`);
+                                }
+                            }, 1000);
+                        });
+                    </script>
+                    <% index++}) %>
+                </tr>
+                <% }) %>
+            </table>
+            <% } %>
+            <table>
+                <thead>
+                    <tr>
+                        <td>
+                            <p><input type="button" id="btn0" class="btn" value="關閉所有程式"></p>
+                        </td>
+                        <td>
+                            <p><input type="button" id="btn00" class="btn" value="關閉網站"></p>
+                        </td>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+</body>
+
+<script>
+    $('#btn0').on('click', function() {
+        socket.emit("stop");
+        // $('#btn2').hide();
+        if (intervalID) {
+            clearInterval(intervalID);
+        }
+        console.log("html stop");
+    });
+    $('#btn00').on('click', function() {
+        socket.emit("exit");
+        // $('#btn2').hide();
+        if (intervalID) {
+            clearInterval(intervalID);
+        }
+        console.log("html exit");
+    });
+</script>
+
+</html>

@@ -41,7 +41,7 @@ app.use(cookieParser('123456789'));// sign for cookie
 let engine = require('ejs-locals');
 app.engine('ejs', engine);
 // 讀取 EJS 檔案位置
-app.set('views', './views');
+app.set('views',  __dirname + '/views');
 // 用 EJS 引擎跑模板
 app.set('view engine', 'ejs');
 
@@ -193,7 +193,7 @@ const getListFiles = async (req, res) => {
         //   } else {
             return res.status(200).render('modelList', {
                     'title': '自駕模型列表',
-                    'user': true,
+                    'user': false,
                     'baseUrl': req.baseUrl,
                     'listModels': fileInfos,
                 });

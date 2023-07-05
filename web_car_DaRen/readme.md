@@ -20,4 +20,4 @@ npm install
 - views/index.ejs 控制台主頁
 
 # 介紹
-![](figure/index.jpg)
+![](src/figure/index.jpg)
