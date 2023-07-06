@@ -14,13 +14,13 @@ var storage = new GridFsStorage({
         const match = ["image/png", "image/jpeg", "image/gif", "application/octet-stream"];
         // 我們還檢查文件是否為圖像 file.mimetype。
         if (match.indexOf(file.mimetype) === -1) {
-            const filename = `${Date.now()}-zhijianqiu-${file.originalname}`;
+            const filename = `${Date.now()}-donkey-${file.originalname}`;
             return filename;
         }
         return {
             // bucketName 表示文件將存儲在 photos.chunks 和 photos.files 集合中。photos 是資料表的名稱
             bucketName: dbConfig.filesBucket,
-            filename: `${Date.now()}-zhijianqiu-${file.originalname}`
+            filename: `${Date.now()}-donkey-${file.originalname}`
         };
     }
 });

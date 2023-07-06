@@ -14,12 +14,12 @@
         "multer-gridfs-storage": "^5.0.2"
     },
     "name": "workspace_donkey_web",
-    "description": "1. node ejs00.js\r 2. open welcome.html",
+    "description": "1. node src/server.js\r 2. open welcome.html",
     "version": "1.0.0",
-    "main": "ejs00.js",
+    "main": "src/server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node ejs00.js"
+        "start": "node src/server.js"
     },
     "keywords": [
         "donkey",

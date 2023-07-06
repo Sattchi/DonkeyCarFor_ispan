@@ -1,2 +1,2 @@
 cd "%~dp0"
-node index.js
+node src/server.js

@@ -1,0 +1,25 @@
+<% layout('layout') %>
+
+
+    <div class="card">
+       
+        
+        <div class="fakeimg">
+            <p class="fw-bold run_run_text" style="font-size:5vw;">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
+        </div>
+        <br>
+        <h2>
+            <%= title %>
+        </h2>
+        <br>
+        <form method="post" action="/regist">
+            <label for="fname">帳號:</label>
+            <input type="text" id="fname" name="uc"><br><br>
+            <label for="lname">密碼:</label>
+            <input type="text" id="lname" name="passWord"><br><br>
+            <label for="lname">暱稱:</label>
+            <input type="text" id="lname" name="customName"><br><br>
+            <input class="btn btn-primary" type="submit" value="確認">
+        </form>
+
+    </div>

@@ -48,6 +48,30 @@
           </p>
         </div>
       </div>
+      <p><input type="button" id="joy" class="btn" value=<%= joyChin %>></p>
+      <script>
+        $("#joy").click(function() {
+          socket.emit('prc', "-1");
+          console.log("html 執行 joy");
+          if (timerIntervalID) {
+            clearInterval(timerIntervalID);
+          }
+          timerIntervalID = setInterval(function() {
+            timer += 1
+            if (timer < 60) {
+              $("#timer").html(` ${timer} s`);
+            } else if (timer < 3600) {
+              $("#timer").html(` ${Math.floor(timer/60)} m ${timer%60} s`);
+            } else {
+              $("#timer").html(` ${Math.floor(timer/3600)} h ${Math.floor(timer/60)%60} m ${timer%60} s`);
+            }
+          }, 1000);
+          iframeIntervalID = setInterval(() => {
+            $('#rightFrame').attr('src', $('#rightFrame').attr('src'));
+            console.log("刷新");
+          }, 2500);
+        });
+      </script>
       <P>演算法列表:</P>
       <% if (fileChins.length>0) { index = 0 %>
       <table>
@@ -74,7 +98,6 @@
               }, 1000);
               iframeIntervalID = setInterval(() => {
                 $('#rightFrame').attr('src', $('#rightFrame').attr('src'));
-                
                 console.log("刷新");
               }, 2500);
             });

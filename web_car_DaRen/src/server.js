@@ -58,6 +58,8 @@ const exec = require('child_process').exec;
 //     console.log(newfileChins)
 // });
 
+const joystick = require('./config/joystick');
+
 const modelData = require('./config/autoModel');
 console.log(modelData);
 // const fileChins = Object.values(modelData).map(item => item.chinName);
@@ -81,7 +83,7 @@ app.get('/', function (req, res) {
         maxAge: 10000, // 只存在n秒，n秒後自動消失
         httpOnly: true // 僅限後端存取，無法使用前端document.cookie取得
     })*/
-    res.redirect('http://127.0.0.1:3000/')
+    res.redirect('http://127.0.0.1:3000')
 
     //console.log(req.cookies);
     //console.log(req.cookies.name); //找單個cookies
@@ -90,6 +92,7 @@ app.get('/', function (req, res) {
 app.get("/control", function (req, res) {
     res.render('control', {
         "title": "控制台",
+        "joyChin": joystick.chinName,
         "fileChins": newfileChins,
         "baseUrl": "http://192.168.52.94:6543",
         "carWeb": "http://192.168.52.94:8887"
@@ -125,7 +128,18 @@ sio.on('connection', function (socket) {
     //     process.exit();
     // });
     socket.on('prc', function (num) {
-        doProcess(num)
+        if (num == -1) {
+            // console.log(num);
+            // console.log(joystick);
+            doProcess(joystick);
+        } else if ((num >= 0) & (num < modelData.length)) {
+            // console.log(num);
+            // console.log(modelData[num]);
+            doProcess(modelData[num]);
+        } else {
+            console.log('模有這個編號');
+        }
+        
     });
     socket.on("stop", function () {
         stopProcess();
@@ -140,7 +154,7 @@ process.on("exit", function () {
     stopProcess();
 });
 
-function doProcess(num) {
+function doProcess(obj) {
     stopProcess();
     // const fileName = fileNames[num];
     // const filePara = fileParas[num];
@@ -148,10 +162,10 @@ function doProcess(num) {
     // const fileOption = fileOptions[num];
     console.log(process.argv)
     if (process.argv[2] != '1') {
-        const fileName = modelData[num].fileName;
-        const filePara = modelData[num].para;
+        const fileName = obj.fileName;
+        const filePara = obj.para;
         const para = (!filePara) ? [fileName] : [fileName].concat(filePara);
-        const fileOption = modelData[num].option;
+        const fileOption = obj.option;
         console.log("想執行 Python 檔案: " + fileName);
         console.log("必選參數: " + para);
         console.log("可選參數: ");

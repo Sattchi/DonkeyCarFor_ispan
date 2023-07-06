@@ -12,12 +12,12 @@ npm install
 ```
 
 # Run
-- `node index.js`
+- `node src/server.js`
 
 # edit
-- index.js 網站總管
-- www/json/autoModel.json 模型名稱放這
-- views/index.ejs 控制台主頁
+- src/server.js 網站總管
+- src/www/json/autoModel.json 模型名稱放這
+- src/views/index.ejs 控制台主頁
 
 # 介紹
 ![](src/figure/index.jpg)

@@ -1,2 +1,2 @@
 cd "%~dp0"
-node ejs00.js -w f15
+node src/server.js -w f15
