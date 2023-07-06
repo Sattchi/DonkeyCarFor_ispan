@@ -1,0 +1,344 @@
+<% layout('layout') %>
+<%
+function getFormattedDate(date) {
+  var year = date.getFullYear();
+  var month = (1 + date.getMonth()).toString();
+  month = month.length > 1 ? month : '0' + month;
+  var day = date.getDate().toString();
+  day = day.length > 1 ? day : '0' + day;
+  var hour = date.getHours();
+  apm = hour < 12 ? 'AM' : 'PM';
+  hour = hour % 12 || 12;
+  var minute = date.getMinutes().toString();
+  minute = minute.length > 1 ? minute : '0' + minute;
+  return year + '/' + month + '/' + day + ' ' + hour.toString() + ':' + minute + ' ' + apm;
+}
+function shortName(name) {
+  return name.slice(name.lastIndexOf('-')+1)
+}
+%>
+<%
+const isAdmin = (!!user)
+%>
+
+<body>
+  <style>
+    /*new new new new new new */
+    .ag-format-container {
+      width: auto;
+      margin: 0 auto;
+
+    }
+
+
+
+    .ag-courses_box {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+
+      padding: 50px 0;
+    }
+
+    .ag-courses_item {
+      -ms-flex-preferred-size: calc(33.33333% - 30px);
+      flex-basis: calc(33.33333% - 30px);
+      box-shadow: 2px 2px 2px rgba(190, 190, 190, 0.9);
+      /*框的陰影色*/
+      margin: 0 15px 30px;
+
+      overflow: hidden;
+
+      border-radius: 28px;
+    }
+
+    .ag-courses-item_link {
+      display: block;
+      padding: 30px 20px;
+      background-color: #121212;
+
+      overflow: hidden;
+
+      position: relative;
+    }
+
+    .ag-courses-item_link:hover,
+    .ag-courses-item_link:hover .ag-courses-item_date {
+      text-decoration: none;
+      color: #FFF;
+    }
+
+    .ag-courses-item_link:hover .ag-courses-item_bg {
+      -webkit-transform: scale(10);
+      -ms-transform: scale(10);
+      transform: scale(10);
+    }
+
+    .ag-courses-item_title {
+      min-height: 87px;
+      margin: 0 0 25px;
+
+      overflow: hidden;
+
+      font-weight: bold;
+      font-size: 30px;
+      color: #FFF;
+
+      z-index: 2;
+      position: relative;
+    }
+
+    .ag-courses-item_date-box {
+      font-size: 18px;
+      color: #FFF;
+
+      z-index: 2;
+      position: relative;
+    }
+
+    .ag-courses-item_date {
+      font-weight: bold;
+      color: #f9b234;
+
+      -webkit-transition: color .5s ease;
+      -o-transition: color .5s ease;
+      transition: color .5s ease
+    }
+
+    .ag-courses-item_bg {
+      height: 128px;
+      width: 128px;
+      background-color: #f9b234;
+
+      z-index: 1;
+      position: absolute;
+      top: -75px;
+      right: -75px;
+
+      border-radius: 50%;
+
+      -webkit-transition: all .5s ease;
+      -o-transition: all .5s ease;
+      transition: all .5s ease;
+    }
+
+    .ag-courses_item:nth-child(2n) .ag-courses-item_bg {
+      background-color: #3ecd5e;
+    }
+
+    .ag-courses_item:nth-child(3n) .ag-courses-item_bg {
+      background-color: #e44002;
+    }
+
+    .ag-courses_item:nth-child(4n) .ag-courses-item_bg {
+      background-color: #952aff;
+    }
+
+    .ag-courses_item:nth-child(5n) .ag-courses-item_bg {
+      background-color: #cd3e94;
+    }
+
+    .ag-courses_item:nth-child(6n) .ag-courses-item_bg {
+      background-color: #4c49ea;
+    }
+
+
+
+    @media only screen and (max-width: 979px) {
+      .ag-courses_item {
+        -ms-flex-preferred-size: calc(50% - 30px);
+        flex-basis: calc(50% - 30px);
+      }
+
+      .ag-courses-item_title {
+        font-size: 24px;
+      }
+    }
+
+    @media only screen and (max-width: 767px) {
+      .ag-format-container {
+        width: 96%;
+      }
+
+    }
+
+    @media only screen and (max-width: 639px) {
+      .ag-courses_item {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+      }
+
+      .ag-courses-item_title {
+        min-height: 72px;
+        line-height: 1;
+
+        font-size: 24px;
+      }
+
+      .ag-courses-item_link {
+        padding: 22px 40px;
+      }
+
+      .ag-courses-item_date-box {
+        font-size: 16px;
+      }
+    }
+
+
+    .mycard0 {
+      border: 1px green solid;
+      padding-top: 30px;
+      background-image: linear-gradient(to top left, #008b8b, #ffff00);
+      box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
+      border-radius: 20px;
+      width: 95%;
+
+    }
+
+    .tbox {
+      border-width: 3px;
+      border-style: solid;
+      width: 30%;
+      height: auto;
+      border-color: rgb(255, 172, 85);
+      padding: 5px;
+      text-align: center;
+      background-color: rgb(41, 105, 176, 0.7);
+      border-radius: 20px;
+      color: white;
+      box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.9);
+    }
+  </style>
+  <!-- <nav class="navbar navbar-expand-md navbar-dark" style="background-color: rgba(255, 99, 71, 0.469)">
+    <div class="navbar-nav">
+      <a href="<%-baseUrl%>/list" class="nav-link">Models</a>
+    </div>
+  </nav> -->
+  <div class="card">
+        
+    <div class="fakeimg" >
+        <p class="fw-bold run_run_text" style="font-size:5vw;">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
+    </div>
+    <br>
+    <!-- <div class="alert alert-success" *ngIf='message'>{{message}}</div> -->
+    <div class="container mycard0">
+      <div class="tbox">
+        <h3 class="text-center"><%- title %></h3>
+      </div>
+
+      <hr>
+      <!-- <div class="container text-left">
+        <a href="<%-baseUrl%>/upload" class="btn btn-success">Upload New File</a>
+      </div> -->
+      <div class="row my-3">
+        <div class="col-8">
+          <label class="btn btn-success">
+            <input type="file" name="upfile" id="upfile" multiple />
+          </label>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-success" id="btnUp" disabled="true">
+            上傳
+          </button>
+        </div>
+      </div>
+      <br>
+      <div class="ag-format-container">
+        <div class="ag-courses_box">
+          <% listModels.forEach(element => { %>
+          <div class="ag-courses_item">
+            <a href="<%-baseUrl%>/files/<%= element.name %>" class="ag-courses-item_link">
+              <div class="ag-courses-item_bg"></div>
+
+              <div class="ag-courses-item_title">
+                <img src="<%-baseUrl%>/files/<%= element.name %>" alt="" onerror="defaultImg(this)" width="130px">
+              </div>
+
+              <div class="ag-courses-item_title">
+                <%= shortName(element.name) %>
+              </div>
+
+              <div class="ag-courses-item_date-box">
+                Update time:
+                <span class="ag-courses-item_date">
+                  <%= getFormattedDate(element.uploadDate) %>
+                </span>
+              </div>
+            </a>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  <script>
+    function defaultImg(element){
+      element.src = '/img/IMG_0560.PNG'
+    }
+    $(function() {
+      var selectedFiles = undefined;
+      const progressInfos = {
+        val: []
+      };
+      var message = [];
+      var fileInfos = [];
+      $('#upfile').change((event) => {
+        //console.log($('#upfile'));
+        console.log(event.target.files)
+        selectedFiles = event.target.files;
+        progressInfos.val = [];
+        $('#btnUp').attr('disabled', !(selectedFiles.length > 0));
+      });
+      $('#btnUp').click((event) => {
+        const files = Array.from(selectedFiles);
+        const uploadPromises = files.map((file, i) => upload(i, file));
+        Promise.all(uploadPromises)
+          .then(() => {
+            $(location).prop("href", location.href);
+          });
+        message = []
+      });
+      const upload = (idx, file) => {
+        return _upload(file, (event) => {
+          console.log('嘗試上傳中');
+        }).then(() => {
+          message.push("文件上傳成功: " + file.name);
+        }).catch(() => {
+          message.push("不能上傳文件: " + file.name);
+        })
+      }
+      const _upload = (file, onUploadProgress) => {
+        let formData = new FormData();
+        formData.append("file", file);
+        // return $.post("/upload", formData, {
+        //     headers: {
+        //         "Content-Type": "multipart/form-data",
+        //     },
+        //     onUploadProgress,
+        // });
+        return $.ajax({
+          "type": "post",
+          "url": "<%-baseUrl%>/upload",
+          "data": formData,
+          "processData": false, // tell jQuery not to process the data
+          "contentType": false, // tell jQuery not to set contentType
+          "success": function(result, status, xhr) {
+            console.log(result);
+            //alert(result);
+          },
+          "error": (xhr, status, error) => {
+            console.log(error);
+            //alert(error);
+          }
+        })
+      };
+    });
+  </script>
+  <!-- <script src="/script/UploadFiles.js"></script> -->
+</body>

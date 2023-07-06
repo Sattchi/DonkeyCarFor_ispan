@@ -15,11 +15,11 @@
     "name": "web_car_daren",
     "version": "1.0.0",
     "description": "放到車上 控制模型用",
-    "main": "index.js",
+    "main": "src/server.js",
     "scripts": {
         "lint": "eslint .",
-        "test": "mocha --require test/env",
-        "start": "node index.js"
+        "test": "mocha --require src/test/env",
+        "start": "node src/server.js"
     },
     "keywords": [
         "donkey",

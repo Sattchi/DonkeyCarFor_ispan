@@ -1,0 +1,35 @@
+module.exports = {
+    "0": {
+        "car1": {
+            "ctrWeb": "http://192.168.52.94:6543",
+            "carWeb": "http://192.168.52.94:8887/drive",
+            "name": "DaRen"
+        },
+        "car2": {
+            "ctrWeb": "http://192.168.52.143:6543",
+            "carWeb": "http://192.168.52.143:8887/drive",
+            "name": "HanChung"
+        },
+        "cv": {
+            "ctrWeb": "http://192.168.52.78:6543",
+            "name": "HuYen"
+        },
+        "connection": "wifi"
+    },
+    "1": {
+        "car1": {
+            "ctrWeb": "http://172.20.10.6:6543",
+            "carWeb": "http://172.20.10.6:8887/drive",
+            "name": "DaRen"
+        },
+        "connection": "cell"
+    },
+    "2": {
+        "car1": {
+            "ctrWeb": "http://192.168.52.143:6543",
+            "carWeb": "http://192.168.52.143:8887/drive",
+            "name": "DaRen"
+        },
+        "connection": "cell"
+    }
+}
