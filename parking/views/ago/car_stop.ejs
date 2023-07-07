@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <!--
+body::-webkit-scrollbar
+隱藏滾動條
+-->
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+        
+        body {
+            margin: 0;
+        }
+        
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            width: 25%;
+            background-color: #f1f1f1;
+            position: fixed;
+            height: 100%;
+            overflow: auto;
+        }
+        
+        li a {
+            display: block;
+            color: #000;
+            padding: 8px 0 8px 16px;
+            text-decoration: none;
+        }
+        
+        li a.active {
+            background-color: #4CAF50;
+            color: white;
+        }
+        
+        li a:hover:not(.active) {
+            background-color: #555;
+            color: white;
+        }
+		        }
+        /* Add a card effect for articles */
+        
+        .card {
+            background-color: white;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        /* Clear floats after the columns */
+		        /* Fake image */
+        
+        .fakeimg {
+            background-color: #aaa;
+            width: 100%;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+<form action="/give_money" method="post">
+	<center>
+	            <div class="card">
+                <h2>DonkeyCar 停車場繳費</h2>
+           
+                
+                <img src="<%= car_img_path %>" />
+				
+				<h1>車牌號碼:<br><%= license_plate %></h1>
+				
+
+		
+				<h1>停放位置:<%= space_id %></h1>
+				
+				<% if(confirm) { %>
+				 <h1>已繳費完成</h1>
+				<% } else { %>
+				<h1>繳費金額:<%= money %></h1>
+				<%} %>
+			
+				
+			
+				<h1>入場時間:<br><%= enter_time %></h1>
+			
+				<h1>停放時間:<br>30分鐘</h1>
+				
+               </div>
+			   		<% if(confirm) { %>
+				<% } else { %>
+				<label for="fname">投入金額:</label>
+				  <input type="text" id="enter_money" name="enter_money"><br><br>
+        <input type="hidden" id="money" name="money" value="<%= money %>">
+		 <input type="hidden" id="license_plate" name="license_plate" value="<%= license_plate %>">
+			<input type="submit" value="確定">
+				<%} %>
+			      <div id="timeBox"></div>
+			</center>
+</form>
+   
+ 
+
+<br>
+<br>
+ 	
+    
+
+    </div>
+
+</body>
+<Script>
+// 設定秒數
+var count = 60;
+function countDown(){
+	// 將秒數寫在指定元素中
+	document.getElementById("timeBox").innerHTML= count;
+	// 每次執行就減1
+	count -= 1;
+	// 當 count = 0 時跳轉頁面
+	if (count == 0){
+		location.href="/";
+	}
+	// 設定每秒執行1次
+	setTimeout("countDown()",1000);
+}
+// 執行 countDown
+countDown();
+</Script>
+
+</html>

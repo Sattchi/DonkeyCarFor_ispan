@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>停車場管理</title>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+    <script type="text/javascript" src="keyboard.js"></script>
+</head>
+
+<style>
+body::-webkit-scrollbar {
+    display: none;
+}
+@import url("https://fonts.googleapis.com/css?family=Open+Sans");
+html {
+  font-family: Arial;
+  font-size: 16px;
+  background: #5e42a6;
+}
+
+.sidebar {
+  position: fixed;
+  width: 15%;
+  height: 100vh;
+  background: #312450;
+  font-size: 0.65em;
+}
+
+.nav {
+  position: relative;
+  margin: 0 15%;
+  text-align: right;
+  top: 50%;
+  transform: translateY(-50%);
+  font-weight: bold;
+}
+
+.nav ul {
+  list-style: none;
+}
+.nav ul li {
+  position: relative;
+  margin: 3.2em 0;
+}
+.nav ul li a {
+  line-height: 5em;
+  text-transform: uppercase;
+  text-decoration: none;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.35);
+  display: block;
+  transition: all ease-out 300ms;
+}
+.nav ul li.active a {
+  color: white;
+}
+.nav ul li:not(.active)::after {
+  opacity: 0.2;
+}
+.nav ul li:not(.active):hover a {
+  color: rgba(255, 255, 255, 0.75);
+}
+.nav ul li::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 0.2em;
+  background: black;
+  left: 0;
+  bottom: 0;
+  background-image: linear-gradient(to right, #5e42a6, #b74e91);
+}
+
+.twitter {
+  position: relative;
+  width: 75%;
+  float: right;
+  height: 10vh;
+}
+.twitter .container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+.twitter a {
+  position: relative;
+}
+.twitter a img {
+  width:
+}
+.myline {
+	display:inline-block;
+}
+.mybbb {
+   width: 10em;
+    height: 5ex;
+    background-color: gold;
+}
+
+</style>
+<body>
+
+<main class="main">
+  <aside class="sidebar">
+    <nav class="nav">
+      <ul>
+        <li class="active"><a href="#">Welcome</a></li>
+        <li><a href="#">車輛查詢</a></li>
+        <li><a href="#">停車場地圖</a></li>
+        <li><a href="#">車輛資料庫</a></li>
+      </ul>
+    </nav>
+  </aside>
+  <section class="twitter">
+    <div class="container">
+<%- body %>
+  </section>
+</main>
+</body>

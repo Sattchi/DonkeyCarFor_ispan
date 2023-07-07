@@ -1,0 +1,145 @@
+<style>
+body{
+background: rgb(176, 190, 197)
+}
+.myline {
+	display:inline-block;
+}
+.card {
+  display: grid;
+  grid-template-columns: 300px;
+  grid-template-rows: 210px 210px 80px;
+  grid-template-areas: "image" "text" "stats";
+
+  border-radius: 18px;
+  background: white;
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.9);
+  font-family: roboto;
+  text-align: center;
+  width:300px;
+  
+}
+.card-image {
+  grid-area: image;
+}
+.card-text {
+  grid-area: text;
+}
+.card-stats {
+  grid-area: stats; 
+}
+.card-image {
+  grid-area: image;
+
+);
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  background-size: cover;
+}
+.card-text {
+  grid-area: text;
+  margin: 25px;
+}
+.card-text .date {
+  color: rgb(255, 7, 110);
+  font-size:13px;
+}
+.card-text p {
+  color: grey;
+  font-size:15px;
+  font-weight: 300;
+}
+.card-text h2 {
+  margin-top:0px;
+  font-size:28px;
+}
+.card-stats {
+  grid-area: stats; 
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr;
+
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+  background: rgb(249, 168, 37)
+}
+.card-stats .stat {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+
+  color: white;
+  padding:10px;
+}
+.card:hover {
+transition-duration:2s; 
+  transform: scale(1.10);
+  box-shadow: 5px 5px 15px rgba(0,0,0,0.6);
+}
+.card {
+
+  transition: 0.5s ease;
+  cursor: pointer;
+  margin:30px;
+}
+
+</style>
+<center>
+<div id="timeBox"></div>
+    <% for(var i=0; i< all_rows.length; i++){ %>
+        <td></td>
+		<td></td>
+		<td></td>
+    
+<div class="myline">
+<div class="card">
+  <div class="card-image" style="background-image: url('<%-all_rows[i]["car_img_path"] %>');">
+
+
+  </div>
+  <div class="card-text">
+    <h1><%-all_rows[i]["license_plate"] %></h1>
+    <h3>停車位置<br><%-all_rows[i]["space_id"] %></h3>
+	<span class="date">入場時間:<%-all_rows[i]["enter_time"] %></span>
+  </div>
+  <div class="card-stats">
+    <div class="stat border">
+      <div class="value"></div>
+      <div class="type"></div>
+    </div>
+	    <div class="stat border">
+		<a href="/check?tel=<%-all_rows[i]["id"] %>" 
+      <div class="value">編號:<%-all_rows[i]["id"] %></div>
+	  </a>
+      <div class="type"></div>
+    </div>
+	    <div class="stat border">
+      <div class="value"></div>
+      <div class="type"></div>
+    </div>
+	
+  </div>
+</div>
+</div>
+<% } %>
+
+</center>
+<Script>
+// 設定秒數
+var count = 60;
+function countDown(){
+	// 將秒數寫在指定元素中
+	document.getElementById("timeBox").innerHTML= count;
+	// 每次執行就減1
+	count -= 1;
+	// 當 count = 0 時跳轉頁面
+	if (count == 0){
+		location.href="/";
+	}
+	// 設定每秒執行1次
+	setTimeout("countDown()",1000);
+}
+// 執行 countDown
+countDown();
+</Script>
