@@ -1,4 +1,4 @@
-<% layout('layout') %>
+<% layout('layout_ori') %>
 <%
 function getFormattedDate(date) {
   var year = date.getFullYear();
@@ -13,13 +13,9 @@ function getFormattedDate(date) {
   minute = minute.length > 1 ? minute : '0' + minute;
   return year + '/' + month + '/' + day + ' ' + hour.toString() + ':' + minute + ' ' + apm;
 }
-function shortName(name) {
-  return name.slice(name.lastIndexOf('-')+1)
-}
 %>
 <%
-const isAdmin = (username.indexOf('admin') >= 0 && auth == 'admin') ||(username.indexOf('root') >= 0 && auth == 'root')
-const isUser = (username.indexOf('訪客') < 0) && (auth !== 'visitor')
+const isAdmin = true
 %>
 
 <body>
@@ -28,7 +24,6 @@ const isUser = (username.indexOf('訪客') < 0) && (auth !== 'visitor')
     .ag-format-container {
       width: auto;
       margin: 0 auto;
-
     }
 
     .ag-courses_box {
@@ -195,8 +190,6 @@ const isUser = (username.indexOf('訪客') < 0) && (auth !== 'visitor')
       background-image: linear-gradient(to top left, #008b8b, #ffff00);
       box-shadow: 5px 5px 15px rgba(0, 0, 0, 0.9);
       border-radius: 20px;
-      width: 95%;
-
     }
 
     .tbox {
@@ -233,7 +226,6 @@ const isUser = (username.indexOf('訪客') < 0) && (auth !== 'visitor')
       <!-- <div class="container text-left">
         <a href="<%-baseUrl%>/upload" class="btn btn-success">Upload New File</a>
       </div> -->
-      <% if (isAdmin) { %>
       <div class="row my-3">
         <div class="col-8">
           <label class="btn btn-success">
@@ -247,40 +239,64 @@ const isUser = (username.indexOf('訪客') < 0) && (auth !== 'visitor')
         </div>
       </div>
       <br>
-      <% } %>
-      <div class="ag-format-container">
-        <div class="ag-courses_box">
-          <% listModels.forEach(element => { %>
-          <div class="ag-courses_item">
-            <a <%= (isUser) ? 'href=' + baseUrl +'/files/' + element.name :'' %> class="ag-courses-item_link">
-              <div class="ag-courses-item_bg"></div>
-
-              <div class="ag-courses-item_title">
-                <img src="<%-baseUrl%>/files/<%= element.name %>" alt="" onerror="defaultImg(this)" width="130px">
-              </div>
-
-              <div class="ag-courses-item_title">
-                <%= shortName(element.name) %>
-              </div>
-
-              <div class="ag-courses-item_date-box">
-                Update time:
-                <span class="ag-courses-item_date">
-                  <%= getFormattedDate(element.uploadDate) %>
-                </span>
-              </div>
-            </a>
-          </div>
-          <% }) %>
-        </div>
+      <div class="table-responsive-xl">
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark">
+            <tr>
+              <% if (isAdmin) { %>
+              <th scope="col">ID</th>
+              <% } %>
+              <th scope="col">File Name</th>
+              <% if (isAdmin) { %>
+              <th scope="col">Length</th>
+              <th scope="col">Chunk Size</th>
+              <% } %>
+              <th scope="col">Upload Date</th>
+              <% if (isAdmin) { %>
+              <th scope="col">Content Type</th>
+              <th scope="col">Action</th>
+              <% } %>
+            </tr>
+          </thead>
+          <tbody>
+            <!--   for (Todo todo: todos) {  -->
+            <% listModels.forEach(element => { %>
+            <tr>
+              <% if (isAdmin) { %>
+              <th scope="row">
+                <%= element.fileId %>
+              </th>
+              <% } %>
+              <td>
+                <a href="<%-baseUrl%>/files/<%= element.name %>"><%= element.name %></a>
+              </td>
+              <% if (isAdmin) { %>
+              <td>
+                <%= element.length %>
+              </td>
+              <td>
+                <%= element.chunkSize %>
+              </td>
+              <% } %>
+              <td>
+                <%= getFormattedDate(element.uploadDate) %>
+              </td>
+              <% if (isAdmin) { %>
+              <td>
+                <%= element.contentType %>
+              </td>
+              <td><a href="<%-baseUrl%>/files/<%= element.name %>">Download</a>
+                &nbsp;&nbsp;&nbsp;&nbsp; <a href="<%-baseUrl%>/delete/<%= element.name %>">Delete</a></td>
+              <% } %>
+            </tr>
+            <% }) %>
+            <!-- } -->
+          </tbody>
+        </table>
       </div>
-
     </div>
   </div>
   <script>
-    function defaultImg(element) {
-      element.src = '/img/IMG_0560.PNG'
-    }
     $(function() {
       var selectedFiles = undefined;
       const progressInfos = {

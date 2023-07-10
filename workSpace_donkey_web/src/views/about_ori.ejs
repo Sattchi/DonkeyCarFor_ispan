@@ -1,0 +1,247 @@
+<% layout('layout_ori') %>
+    <style>
+        P,
+        p,
+        h5 {
+            font-family: "微軟正黑體";
+            font-weight: bold;
+        }
+        
+        #innerbox {
+            width: 500px;
+            /* or whatever width you want. */
+            max-width: 500px;
+            /* or whatever width you want. */
+            display: inline-block;
+        }
+        
+        .expa {
+            width: 100px;
+            height: 80px;
+            border: 1px solid #F00
+        }
+        
+        .expb {
+            width: 200px;
+            height: 120px;
+            border: 1px solid #00F
+        }
+        
+        .expc {
+            width: 500px;
+            height: 300px;
+            border: 1px;
+            padding: 15px;
+        }
+        
+        .img_about {
+            width: 100%;
+            aspect-ratio: 16/9;
+            /* 額外確保圖片縮放時會有最好的效果 */
+            object-fit: cover;
+        }
+
+        #mybox {
+            background-color: #301335;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0%;
+            border-width: 15px;
+            border-style: solid;
+            border-color: #FFFFFF
+        }
+        
+        #myboxH {
+            background-color: #1e5492;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 0%;
+            border-width: 15px;
+            border-style: solid;
+            border-color: #FFFFFF;
+            height: 150px;
+        }
+    </style>
+
+    <body>
+        <!-- 編輯位置 -->
+
+
+
+
+        <div class="card">
+            <div id="mybox">
+
+                <p class="fw-bold" style="font-size:5vw; color: rgb(255, 119, 0);">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
+
+            </div>
+            <!--Star 範圍框架-->
+            <div id="mybox">
+                <div class="expc">
+                    <div id="innerbox">
+                        <!--Star 輪播圖-->
+                        <div id="carouselExampleCaptions" class="carousel slide">
+                            <div class="carousel-indicators">
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                                <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            </div>
+                            <div class="carousel-inner">
+                                <div class="carousel-item active">
+
+                                    <img src="/img/don_car.jpg" class="d-block w-100 img_about" alt="..."  >
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5></h5>
+                                        <p></p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="/img/CAR.jpg" class="d-block w-100 img_about" alt="...">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5></h5>
+                                        <p></p>
+                                    </div>
+                                </div>
+                                <div class="carousel-item">
+                                    <img src="/img/joystick.jpg" class="d-block w-100 img_about" alt="...">
+                                    <div class="carousel-caption d-none d-md-block">
+                                        <h5></h5>
+                                        <p></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Previous</span>
+  </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="visually-hidden">Next</span>
+  </button>
+                        </div>
+                    </div>
+                    <!--END 輪播圖 -->
+                </div>
+                <!--END 範圍框架-->
+                <div class="badge  text-wrap text-light fs-3" style="width: 40rem; ">
+                    <p class="lh-1">DonkeyCar 學習駕駛你的自動車</p>
+                </div>
+            </div>
+            <!--star 範圍框架-->
+            <div id="mybox">
+
+                <!-- Star建議中三排-->
+                <div class="d-flex justify-content-evenly">
+                    <!-- Star一個卡片樣式-->
+                    <div class="card" style="width: 18rem;">
+                        <img src="/img/CAE03.webp" class="card-img-top img_about" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">配備無刷馬達 防水電變（25A）</h5>
+                            <p class="card-text"></p>
+
+                        </div>
+                    </div>
+                    <!-- END一個卡片樣式-->
+                    <!-- Star一個卡片樣式-->
+                    <div class="card" style="width: 18rem;">
+                        <img src="/img/CAR.jpg" class="card-img-top img_about" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">HSP 1/16 大腳遙控車</h5>
+                            <p class="card-text"></p>
+
+                        </div>
+                    </div>
+                    <!-- END一個卡片樣式-->
+                    <!-- Star一個卡片樣式-->
+                    <div class="card" style="width: 18rem;">
+                        <img src="/img/CAR02.jpg" class="card-img-top img_about" alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">全車四輪滾珠軸承</h5>
+                            <p class="card-text"></p>
+
+                        </div>
+                    </div>
+                    <!-- END一個卡片樣式-->
+                </div>
+                <!-- END建議三排-->
+                <div class="badge  text-wrap text-light fs-3" style="width: 40rem;">
+                    <p class="lh-1">DonkeyCar 學習駕駛你的自動車</p>
+                </div>
+            </div>
+
+            <!--END 範圍框架-->
+            <div id="mybox">
+                <!-- 編輯位置-->
+
+
+                <div class="card mb-3">
+                    <img src="/img/donkey_map_full.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+
+                        <p class="card-text text-success fs-1 "></p>
+                        <h5 class="card-title text-success fs-1 ">賽道規劃</h5>
+                        <p class="card-text text-success fs-1 "><small></small></p>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">實際賽道</h5>
+                        <p class="card-text">擁有2個休息站，及一個L彎的環形賽道</p>
+                        <p class="card-text"><small class="text-body-secondary"></small></p>
+                    </div>
+                    <img src="/img/donkey_map_reall.jpg" class="card-img-bottom" alt="...">
+                </div>
+            </div>
+            <!-- 編輯位置-->
+            <div id="mybox">
+                <!-- 編輯位置-->
+                <div class="row row-cols-1 row-cols-md-2 g-4">
+                    <div class="col">
+                        <div class="card">
+                            <img src="/img/Raspberry_Pi_4_Model_B_-_Side.jpg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">Raspberry Pi 4 Model B</h5>
+                                <p class="card-text">基於 ARM 架構，採用 Linux 系統，大小只有一張信用卡大。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="/img/PCA.jpg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">PCA9685</h5>
+                                <p class="card-text">16路舵機控制擴展板，實現多自由度機械臂，六足機器人，多軸控制等應用。</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="/img/fish-camera.jpeg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">魚眼鏡頭</h5>
+                                <p class="card-text">視角接近或等於180°的鏡頭</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="card">
+                            <img src="/img/RPi_UPSPack_v2-3-1.jpg" class="card-img-top" alt="...">
+                            <div class="card-body">
+                                <h5 class="card-title">UPS 鋰電池擴充板</h5>
+                                <p class="card-text">專為樹莓派設計的 UPS 鋰電池擴充板。</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- 編輯位置-->
+            </div>
+            <div id="mybox">
+                <div class="btn-group  btn-group-lg" role="group" aria-label="Basic example">
+                    <button type="button" class="btn btn-primary">GO</button>
+                    <button type="button" class="btn btn-primary">開始你的DonkeyCar</button>
+                    <button type="button" class="btn btn-primary">TO RUN</button>
+                </div>
+            </div>
+
+        </div>
+        <br>
