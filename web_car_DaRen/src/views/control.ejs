@@ -32,7 +32,7 @@
   </style>
   <% const waa = 35 %>
   <div style="padding:1px 16px;height:1000px;display:flex">
-    <span class="card" style="width:<%- waa %>%;margin-right:10px">
+    <span class="card" style="<%= 'width:' + waa + '%;margin-right:10px' %>">
       <h2><%= title %></h2>
       <div class="w3-container" style="width:60%;min-width: 200px;">
         <div class="w3-panel w3-pale-red w3-leftbar w3-border-red">
@@ -96,10 +96,13 @@
                   $("#timer").html(` ${Math.floor(timer/3600)} h ${Math.floor(timer/60)%60} m ${timer%60} s`);
                 }
               }, 1000);
+              //console.log('刷新前 iframeIntervalID: ' + iframeIntervalID)
               iframeIntervalID = setInterval(() => {
                 $('#rightFrame').attr('src', $('#rightFrame').attr('src'));
                 console.log("刷新");
+                //console.log('刷新中 iframeIntervalID: ' + iframeIntervalID)
               }, 2500);
+              //console.log('刷新後 iframeIntervalID: ' + iframeIntervalID)
             });
           </script>
           <% index++}) %>
@@ -123,8 +126,8 @@
         </thead>
       </table>
     </span>
-    <span class="card" style="width:<%- 100-waa %>%">
-      <iframe src='<%= carWeb+"/drive" %>' name="rightFrame" id="rightFrame" frameborder="0" width="100%" height="100%" onload="checkAlready()">等等</iframe></span>
+    <span class="card" style="<%= 'width:' + (100-waa) + '%' %>">
+      <iframe src='<%= carWeb+"/drive" %>' title="donkey drive" name="rightFrame" id="rightFrame" frameborder="0" width="100%" height="100%" onload="checkAlready()">等等</iframe></span>
   </div>
 </body>
 
@@ -137,12 +140,6 @@
   });
   $('#btn0').on('click', function() {
     sendMessage('stopPrc');
-    socket.emit("stop");
-    // $('#btn2').hide();
-    if (timerIntervalID) {
-      clearInterval(timerIntervalID);
-    }
-    console.log("html stop");
   });
   $('#btn00').on('click', function() {
     sendMessage('stopPrc');
@@ -164,7 +161,7 @@
       console.log(e);
       var data = e.originalEvent.data;  // Should work.
       console.log(data);
-      if (data === 'document ready!' & iframeIntervalID) {
+      if (data === 'document ready!' && iframeIntervalID) {
           clearInterval(iframeIntervalID);
           console.log('清除刷新');
       }
@@ -172,28 +169,48 @@
   });
   */
 
-  function checkAlready(){
+  function checkAlready() {
     sendMessage('areYouReady');
   }
 
-  function sendMessage(sttr){
+  function sendMessage(sttr) {
     window.frames["rightFrame"].postMessage(sttr, "<%= carWeb %>");
   }
-  
+
   window.addEventListener("message", function(e) {
     console.log(e.origin);
     // 加強安全性 判斷數據發送方是否為可靠的網域; 不安全的網域不處理
-    if ((e.origin).indexOf("<%= carWeb %>") < 0 | e.data.indexOf('already') < 0) {
-        console.log("錯誤進入")
+    if ((e.origin).indexOf("<%= carWeb %>") < 0) {
+      console.log("錯誤進入")
       return;
     }
     // 彈跳訊息框顯示回傳的筆數
     //var data = e.data;
     //alert(data);
+    console.log('control get: ' + e.data);
 
-    if (iframeIntervalID) {
-        clearInterval(iframeIntervalID);
-        console.log('清除刷新');
+    if ((e.data.indexOf('already') >= 0) && iframeIntervalID) {
+      /*
+      console.log('& := ' + (e.data.indexOf('already') >= 0 & iframeIntervalID))
+      console.log('& := ' + (e.data.indexOf('already') >= 0 && iframeIntervalID))
+      console.log('()& := ' + ((e.data.indexOf('already') >= 0) & iframeIntervalID))
+      console.log('()&& := ' + ((e.data.indexOf('already') >= 0) && iframeIntervalID))
+      console.log('清除刷新前 iframeIntervalID: ' + iframeIntervalID);
+      */
+      clearInterval(iframeIntervalID);
+      console.log('清除刷新');
+    }
+
+    if (e.data.indexOf('stopByUser') >= 0) {
+      setTimeout(() => {
+        socket.emit("stop");
+        console.log("html stop");
+      }, 10 * 1000)
+
+      // $('#btn2').hide();
+      if (timerIntervalID) {
+        clearInterval(timerIntervalID);
+      }
     }
   });
 </script>

@@ -197,9 +197,10 @@ app.get('/add', function (req, res) {
 });
 // 監聽 port
 
-const port = process.env.port || 3000;
+const port = process.env.port || 3020;
+// console.log(process.env)
 app.listen(port)
-console.log('127.0.0.1:3000');
-console.log('127.0.0.1:3000/gate 門檻');
-console.log('127.0.0.1:3000/all 查所有車牌');
-console.log('127.0.0.1:3000/add?tel=X 新增車牌');
+console.log(`http://127.0.0.1:${port}`);
+console.log(`http://127.0.0.1:${port}/gate 門檻`);
+console.log(`http://127.0.0.1:${port}/all 查所有車牌`);
+console.log(`http://127.0.0.1:${port}/add?tel=X 新增車牌`);

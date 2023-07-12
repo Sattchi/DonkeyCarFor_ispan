@@ -1,0 +1,61 @@
+{
+    "0": {
+        "com1": {
+            "host": "192.168.32.50",
+            "comPort": "3000",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Com"
+        },
+        "car1": {
+            "host": "192.168.52.94",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "DaRen Rpi"
+        },
+        "car2": {
+            "host": "192.168.52.143",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Rpi"
+        },
+        "cv": {
+            "host": "192.168.52.78",
+            "ownPort": "6543",
+            "name": "HuYen Rpi"
+        },
+        "connection": "wifi"
+    },
+    "1": {
+        "com1": {
+            "host": "172.",
+            "comPort": "3000",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HuYen Com"
+        },
+        "car1": {
+            "host": "172.20.10.6",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "DaRen Rpi"
+        },
+        "connection": "cell"
+    },
+    "2": {
+        "com1": {
+            "host": "192.168.0.11",
+            "comPort": "3000",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HuYen Com"
+        },
+        "car1": {
+            "host": "192.168.52.143",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Rpi"
+        },
+        "connection": "cell"
+    }
+}

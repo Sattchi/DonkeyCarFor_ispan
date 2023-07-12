@@ -1,4 +1,4 @@
-<% layout('layout') %>
+<% layout('layout_ori') %>
 
 <div class="card">
   <div class="fakeimg">
@@ -6,12 +6,13 @@
   </div>
   <br>
   <h2>歡迎
-    <%- username || '訪客' %>
+    <%- titleH2 || '訪客' %>
   </h2>
   <br>
+
   <p>Donkey Car 是一個開源機器學習的自走車專案，車上唯一的感測器就是相機。Donkey Car 使用樹莓派和 Python，利用 Keras 深度學習框架實現自動駕駛。</p>
 
-  <% if (typeof username !== 'undefined' && username !== '訪客') { %>
+  <% if (loginStatus) { %>
   <center>
     <div class="card" style="width: 18rem;">
       <tr>
@@ -23,17 +24,11 @@
   <center>
     <div class="card" style="width: 18rem;">
       <tr>
-        <td><a class="btn btn-primary" href="/login">登入</a></td>
+        <td><a class="btn btn-primary" href="/login.html">登入</a></td>
         <br>
-        <td><a class="btn btn-primary" href="/resign">註冊</a></td>
+        <td><a class="btn btn-primary" href="/resign1.html">註冊</a></td>
       </tr>
     </div>
   </center>
   <% } %>
-  <script>
-    var error = '' + '<%- error %>';
-    var warning = '' + '<%- warning %>';
-    var message = '' + '<%- message %>';
-    var success = '' + '<%- success %>';
-  </script>
 </div>
