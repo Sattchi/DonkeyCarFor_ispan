@@ -252,7 +252,7 @@ const isUser = (username.indexOf('訪客') < 0) && (auth !== 'visitor')
         <div class="ag-courses_box">
           <% listModels.forEach(element => { %>
           <div class="ag-courses_item">
-            <a <%= (isUser) ? 'href=' + baseUrl +'/files/' + element.name :'' %> class="ag-courses-item_link">
+            <a <%- (isUser) ? 'href=' + baseUrl +'/files/' + element.name :'onclick="alert(\'只開放用戶下載\\n請先登入\')"' %> class="ag-courses-item_link">
               <div class="ag-courses-item_bg"></div>
 
               <div class="ag-courses-item_title">

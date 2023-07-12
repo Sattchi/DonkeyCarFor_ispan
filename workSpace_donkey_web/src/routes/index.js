@@ -7,7 +7,7 @@ let routes = (app, fcn) => {
     router.get("/resign", baseController.resign(fcn));
     router.get("/login", baseController.login(fcn));
     router.get("/about", baseController.about(fcn));
-    router.post("/resigt", baseController.resigt);
+    router.post("/regist", baseController.regist);
     router.post("/loging", baseController.loging);
     router.get("/logout", baseController.logout);
     return app.use("/", router);

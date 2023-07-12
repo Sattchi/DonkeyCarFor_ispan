@@ -1,3 +1,7 @@
+// 顯示 PID
+console.log(`process id: ${process.pid}`);
+console.log(`parent process id: ${process.ppid}`);
+
 // 檔案讀取
 const fs = require("fs");
 
@@ -178,6 +182,8 @@ function doProcess(obj) {
     } else {
         const commands = ['conda activate donkey', 'python C:\\workspace_final\\mysim\\manage.py drive --model C:\\workspace_final\\mysim\\models\\mypilot_forward_only.h5 --myconfig ./myconfig1.py']
         subprocess = exec(commands.join(' & '))
+        console.log("非同步!");
+        console.log(`Spawned child pid: ${subprocess.pid}`);
     }
 
     subprocess.stdout.on('data', (data) => {

@@ -9,7 +9,6 @@
     <%- username || '訪客' %>
   </h2>
   <br>
-
   <p>Donkey Car 是一個開源機器學習的自走車專案，車上唯一的感測器就是相機。Donkey Car 使用樹莓派和 Python，利用 Keras 深度學習框架實現自動駕駛。</p>
 
   <% if (typeof username !== 'undefined' && username !== '訪客') { %>
@@ -31,4 +30,10 @@
     </div>
   </center>
   <% } %>
+  <script>
+    var error = '' + '<%- error %>';
+    var warning = '' + '<%- warning %>';
+    var message = '' + '<%- message %>';
+    var success = '' + '<%- success %>';
+  </script>
 </div>

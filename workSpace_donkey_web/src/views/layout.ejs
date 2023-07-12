@@ -2,61 +2,86 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="/styles/main.css" rel="stylesheet" type="text/css" />
-    <!-- <link href="/styles/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
-    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    <script src="/script/jquery-3.1.1.min.js"></script>
-    <title>
-        <%= title %>
-    </title>
-    <style>
-        #myw {
-            max-width: 1100px;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="/styles/main.css" rel="stylesheet" type="text/css" />
+  <!-- <link href="/styles/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous"> -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <script src="/script/jquery-3.1.1.min.js"></script>
+  <title>
+    <%= title %>
+  </title>
+  <style>
+    #myw {
+      max-width: 1100px;
+    }
 
-        .img_layout {
-            width: 100%;
-            object-fit: cover;
-            max-width: 250px;
-            aspect-ratio: auto;
-        }
+    .img_layout {
+      width: 100%;
+      object-fit: cover;
+      max-width: 250px;
+      aspect-ratio: auto;
+    }
 
-        body {
-            background-image: url(/img/bg1.jpg);
-        }
+    body {
+      background-image: url(/img/bg1.jpg);
+    }
 
-        #myo {
-            /*margin-left:15%;padding:1px 16px;height:1000px;*/
-            opacity: 75%;
-        }
-    </style>
+    #myo {
+      /*margin-left:15%;padding:1px 16px;height:1000px;*/
+      opacity: 75%;
+    }
+  </style>
 </head>
 
 <body>
-    <ul>
-        <li><img src="/img/logo.png" class="img_layout"></li>
+    <script>
+        error = ''
+        warning = ''
+        message = ''
+        success = ''
+    </script>
+  <ul>
+    <li><img src="/img/logo.png" class="img_layout" alt="Donkey Car"></li>
 
-        <% toc.forEach(element => { %>
-         <li><a class="<%= element.class + ((element.pageKey === pageKey && pageKey !== 'index') ? ' now':'') %>" href="<%= element.path %>" style="<%= element.style %>"><%- element.icon %>&nbsp;&nbsp;<%= element.toc %></a></li>
-        <% }) %>
-    </ul>
-    <div style="margin-left:15%;padding:1px 16px;height:1000px;opacity:85%">
-        <% if (title === "控制台") { %>
+    <% toc.forEach(element => { %>
+    <li><a class="<%= element.class + ((element.pageKey === pageKey && pageKey !== 'index') ? ' now':'') %>" href="<%= element.path %>" style="<%= element.style %>"><%- element.icon %>&nbsp;&nbsp;<%= element.toc %></a></li>
+    <% }) %>
+  </ul>
+  <div style="margin-left:15%;padding:1px 16px;height:1000px;opacity:85%">
+    <% if (title === "控制台") { %>
+    <%- body %>
+    <% } else { %>
+    <center>
+      <div id="myw">
         <%- body %>
-        <% } else { %>
-        <center>
-            <div id="myw">
-                <%- body %>
-            </div>
-        </center>
-        <% } %>
-    </div>
-    <!-- <script src="/script/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script> -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+      </div>
+    </center>
+    <% } %>
+  </div>
+  <!-- <script src="/script/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script> -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+  <script src="/script/main.js"></script>
+  <script>
+    $().ready(() => {
+      if (error) {
+        tempAlert(title = '錯誤', msg = error, type = 'danger', duration = 5000)
+      }
 
+      if (warning) {
+        tempAlert(title = '警告', msg = warning, type = 'warning', duration = 5000)
+      }
+
+      if (message) {
+        tempAlert(title = '訊息', msg = message, type = 'primary', duration = 3000)
+      }
+
+      if (success) {
+        tempAlert(title = '成功', msg = success, type = 'success', duration = 3000)
+      }
+    })
+  </script>
 </body>
 
 </html>
