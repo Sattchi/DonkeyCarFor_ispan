@@ -16,11 +16,12 @@
     },
     "name": "workspace_donkey_web",
     "description": "1. node src/server.js\r 2. open welcome.html",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "main": "src/server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "node src/server.js"
+        "start": "node src/server.js",
+        "setNet": "node src/config/setNets.js"
     },
     "keywords": [
         "donkey",

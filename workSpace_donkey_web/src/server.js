@@ -7,11 +7,16 @@ var fs = require("fs");
 
 // 系統參數解析器
 const { program, Option } = require('commander');
-program.version('1.0.1')
-    .addOption(new Option("-w, --web <place>", "choose the place of web").default("0", "302 wifi").choices(["0", "1", "2", "302", "F15", "F3", "C302", "f15", "f3", "c302"]))
-    .addOption(new Option("--set-host <host>", "set the host of web"))
-    .addOption(new Option("-t, --set-ctrWeb <url>", "set the url of control website").conflicts(["setHost"]))
-    .addOption(new Option("-c, --set-carWeb <url>", "set the url of donkeycar website").conflicts(["setHost"]))
+program.version('2.0.0')
+    .addOption(new Option("-w, --web <place>", "choose the place of web").default("0", "302 wifi").choices(["0", "1", "2", "302", "F15", "F3", "C302", "f15", "f3", "c302", "home","HOME","h","H","Home"]))
+    .addOption(new Option("-u, --user <name>", "choose the user of computer").default("Jack", "HanChung").choices(["Jack","Ben","Jason","HanChung","HuYen","DaRen","jack","ben","jason"]))
+    .addOption(new Option("-d, --desktop", "if use desktop"))
+    .addOption(new Option("-i, --set-comHost <IP>", "set the IP of computer (default: 192.168.52.83)"))
+    .addOption(new Option("-r, --set-rpiHost <IP>", "set the IP of rpi in car (default: 192.168.52.94)"))
+    .addOption(new Option("-c, --set-comPort <url>", "set the port of main website (default: 3000)"))
+    .addOption(new Option("-o, --set-ownPort <url>", "set the port of controler website (default: 6543)"))
+    .addOption(new Option("-k, --set-carPort <url>", "set the port of donkeycar website (default: 8887)"))
+    .addOption(new Option("-s, --use-self <key>", "use your setting").conflicts(['web','user','notebook','setComHost','setRpiHost','setComPort','setOwnPort','setCarPort']))
     .parse();
 
 // 取得參數
@@ -57,8 +62,22 @@ app.set('views', __dirname + '/views');
 // 用 EJS 引擎跑模板
 app.set('view engine', 'ejs');
 
-//調用靜態資料夾檔案
+// 調用靜態資料夾檔案
 app.use(express.static(__dirname + '/www')); //Serves resources from public folder
+
+// 延長 cookie 時限
+app.use((req, res, next) => {
+    if (req.cookies.auth === "user") {
+        // req.cookies.auth.maxAge = 5*60*1000
+        res.cookie('name', req.cookies.name,{
+            maxAge: 5*60*1000,
+        })
+        res.cookie('auth', "user",{
+            maxAge: 5*60*1000,
+        })
+    }
+    next()
+})
 
 // 路由控制
 // 跟目錄的

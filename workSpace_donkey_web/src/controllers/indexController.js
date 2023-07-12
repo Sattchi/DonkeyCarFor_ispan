@@ -1,5 +1,5 @@
 const mysql = require('mysql');
-const dbConfig = require("../config/testDB");
+const dbConfig = require("../config/testDB.json");
 
 const index = (fcn) => {
     return async function (req, res) {
@@ -9,6 +9,7 @@ const index = (fcn) => {
             httpOnly: true // 僅限後端存取，無法使用前端document.cookie取得
         })*/
         console.log(req.cookies);
+        console.log(req.signedCookies);
         console.log(req.cookies.name); //找單個cookies
 
         return res.render('index', {
@@ -192,11 +193,11 @@ const loging = async function (req, res) {
 
     if (uc === 'guest' && pw === '123456') {
         res.cookie('name', '測試帳號', {
-            maxAge: 5*60 * 1000, // 只存在n秒，n秒後自動消失
-            httpOnly: false // true 僅限後端存取，無法使用前端document.cookie取得 預設為 false
+            maxAge: 3*60 * 1000, // 只存在n秒，n秒後自動消失
+            httpOnly: true // true 僅限後端存取，無法使用前端document.cookie取得 預設為 false
         })
         res.cookie('auth', 'user', {
-            maxAge: 5*60 * 1000, // 只存在n秒，n秒後自動消失
+            maxAge: 3*60 * 1000, // 只存在n秒，n秒後自動消失
             httpOnly: true, // 僅限後端存取，無法使用前端document.cookie取得
         })
         return res.redirect('/?success="測試帳號登入"')
@@ -221,8 +222,9 @@ const loging = async function (req, res) {
         if (results.length > 0) {
             // 找到用戶名稱 將用戶名稱寫到 cookie
             res.cookie('name', uc, {
-                maxAge: 100 * 1000, // 只存在n秒，n秒後自動消失
-                httpOnly: false // true 僅限後端存取，無法使用前端document.cookie取得 預設為 false
+                maxAge: 60 * 1000, // 只存在n秒，n秒後自動消失
+                httpOnly: true, // true 僅限後端存取，無法使用前端document.cookie取得 預設為 false
+                // path: "/modelList", // 寫到指定網址 預設 "/"
             })
             console.log(` found user name: ${uc} `);
 
@@ -240,8 +242,13 @@ const loging = async function (req, res) {
                 if (results2.length > 0) {
                     // 找到用戶權限 將該權限寫到 cookie
                     res.cookie('auth', results2[0].rolename, {
-                        maxAge: 100 * 1000, // 只存在n秒，n秒後自動消失
+                        maxAge: (results2[0].rolename === "root" || results2[0].rolename === "admin")? (60 * 1000):(5*60*1000), // 只存在n秒，n秒後自動消失
                         httpOnly: true, // 僅限後端存取，無法使用前端document.cookie取得
+                    })
+                    res.cookie('name', uc, {
+                        maxAge: (results2[0].rolename === "root" || results2[0].rolename === "admin")? (60 * 1000):(5*60*1000), // 只存在n秒，n秒後自動消失
+                        httpOnly: true, // true 僅限後端存取，無法使用前端document.cookie取得 預設為 false
+                        // path: "/modelList", // 寫到指定網址 預設 "/"
                     })
                     console.log(` found user auth: ${results2[0].rolename} `);
                     conn.end();
@@ -249,7 +256,7 @@ const loging = async function (req, res) {
                 } else {
                     // 沒找到用戶權限 將 visitor 當權限寫到 cookie
                     res.cookie('auth', 'visitor', {
-                        maxAge: 100 * 1000, // 只存在n秒，n秒後自動消失
+                        maxAge: 60*1000, // 只存在n秒，n秒後自動消失
                         httpOnly: true, // 僅限後端存取，無法使用前端document.cookie取得
                     })
                     console.log(` nofound user auth: visitor `);

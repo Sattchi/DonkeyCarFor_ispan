@@ -18,7 +18,8 @@ const uploadFiles = async (req, res) => {
     console.log('req.path: ' + req.path);
     console.log('req.url: ' + req.url);
     if (typeof req.cookies.auth === 'undefined' || req.cookies.auth === 'visitor' || req.cookies.auth === 'user') {
-        return res.status(403).send({ message: "權限不足" })
+        // return res.status(403).send({ message: "權限不足" })
+        return res.status(403).redirect('/modelList?warning="用戶權限不足"')
     }
     try {
         // 使用 upload 中間件函數 處理上傳的文件
@@ -81,7 +82,11 @@ const getListFiles = (fcn) => {
                 'auth': auth,
                 'baseUrl': req.baseUrl,
                 'listModels': fileInfos,
-                'toc': fcn(auth)
+                'toc': fcn(auth),
+                'error': req.query.error || '',
+                'warning': req.query.warning || '',
+                'message': req.query.message || '',
+                'success': req.query.success || '',
             }
 
             if (req.baseUrl.indexOf('Admin') >= 0 && (auth === 'root' || auth === 'admin')) {
@@ -118,7 +123,8 @@ const getListFiles = (fcn) => {
 // download(): 接收文件 name 作為輸入參數，從 mongodb 內置打開下載流 GridFSBucket，然後 response.write(chunk) API 將文件傳輸到客戶端。
 const download = async (req, res) => {
     if (typeof req.cookies.auth === 'undefined' || req.cookies.auth === 'visitor') {
-        return res.status(403).send({ message: "訪客權限不足" })
+        // return res.status(403).send({ message: "訪客權限不足" })
+        return res.status(403).redirect('/modelList?warning="訪客權限不足"')
     }
     try {
         await mongoClient.connect();

@@ -216,7 +216,7 @@ const isAdmin = true
       <p class="fw-bold run_run_text" style="font-size:5vw;">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
     </div>
     <br>
-    <!-- <div class="alert alert-success" *ngIf='message'>{{message}}</div> -->
+    <!-- <div class="alert alert-success" *ngIf='mess'>{{mess}}</div> -->
     <div class="container mycard0">
       <div class="tbox">
         <h3 class="text-center"><%- title %></h3>
@@ -302,7 +302,7 @@ const isAdmin = true
       const progressInfos = {
         val: []
       };
-      var message = [];
+      var mess = [];
       var fileInfos = [];
       $('#upfile').change((event) => {
         //console.log($('#upfile'));
@@ -318,15 +318,15 @@ const isAdmin = true
           .then(() => {
             $(location).prop("href", location.href);
           });
-        message = []
+        mess = []
       });
       const upload = (idx, file) => {
         return _upload(file, (event) => {
           console.log('嘗試上傳中');
         }).then(() => {
-          message.push("文件上傳成功: " + file.name);
+          mess.push("文件上傳成功: " + file.name);
         }).catch(() => {
-          message.push("不能上傳文件: " + file.name);
+          mess.push("不能上傳文件: " + file.name);
         })
       }
       const _upload = (file, onUploadProgress) => {
@@ -348,13 +348,19 @@ const isAdmin = true
             console.log(result);
             //alert(result);
           },
-          "error": (xhr, status, error) => {
-            console.log(error);
-            //alert(error);
+          "error": (xhr, status, err) => {
+            console.log(err);
+            //alert(err);
           }
         })
       };
     });
+  </script>
+  <script>
+    var error = '' + '<%- error %>';
+    var warning = '' + '<%- warning %>';
+    var message = '' + '<%- message %>';
+    var success = '' + '<%- success %>';
   </script>
   <!-- <script src="/script/UploadFiles.js"></script> -->
 </body>

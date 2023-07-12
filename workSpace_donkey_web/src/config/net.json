@@ -1,5 +1,5 @@
 {
-    "0": {
+    "ispan302Jack": {
         "com1": {
             "host": "192.168.32.50",
             "comPort": "3000",
@@ -26,9 +26,90 @@
         },
         "connection": "wifi"
     },
-    "1": {
+    "ispan302JackNote": {
         "com1": {
-            "host": "172.",
+            "host": "192.168.52.83",
+            "comPort": "3000",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Com"
+        },
+        "car1": {
+            "host": "192.168.52.94",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "DaRen Rpi"
+        },
+        "car2": {
+            "host": "192.168.52.143",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Rpi"
+        },
+        "cv": {
+            "host": "192.168.52.78",
+            "ownPort": "6543",
+            "name": "HuYen Rpi"
+        },
+        "connection": "wifi"
+    },
+    "ispan302Jason": {
+        "com1": {
+            "host": "???",
+            "comPort": "3000",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "DaRen Com"
+        },
+        "car1": {
+            "host": "192.168.52.94",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "DaRen Rpi"
+        },
+        "car2": {
+            "host": "192.168.52.143",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Rpi"
+        },
+        "cv": {
+            "host": "192.168.52.78",
+            "ownPort": "6543",
+            "name": "HuYen Rpi"
+        },
+        "connection": "wifi"
+    },
+    "ispan302BenNote": {
+        "com1": {
+            "host": "???",
+            "comPort": "3000",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HuYen Com"
+        },
+        "car1": {
+            "host": "192.168.52.94",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "DaRen Rpi"
+        },
+        "car2": {
+            "host": "192.168.52.143",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Rpi"
+        },
+        "cv": {
+            "host": "192.168.52.78",
+            "ownPort": "6543",
+            "name": "HuYen Rpi"
+        },
+        "connection": "wifi"
+    },
+    "ispan15BenNote": {
+        "com1": {
+            "host": "???",
             "comPort": "3000",
             "ownPort": "6543",
             "carPort": "8887",
@@ -42,20 +123,36 @@
         },
         "connection": "cell"
     },
-    "2": {
+    "ispan15JackNote": {
+        "com1": {
+            "host": "???",
+            "comPort": "3000",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Com"
+        },
+        "car1": {
+            "host": "172.20.10.6",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "DaRen Rpi"
+        },
+        "connection": "cell"
+    },
+    "homeJackNote": {
         "com1": {
             "host": "192.168.0.11",
             "comPort": "3000",
             "ownPort": "6543",
             "carPort": "8887",
-            "name": "HuYen Com"
+            "name": "HanChung Com"
         },
         "car1": {
-            "host": "192.168.52.143",
+            "host": "???",
             "ownPort": "6543",
             "carPort": "8887",
             "name": "HanChung Rpi"
         },
-        "connection": "cell"
+        "connection": "wifi"
     }
 }
