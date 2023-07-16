@@ -19,6 +19,14 @@ async function main() {
     3: ["家裡", "home", "2"],
     4: ["以上皆非"],
   }
+
+  const names = {
+    1: ["吳漢中", "Jack"],
+    2: ["呂沍諺", "Ben"],
+    3: ["吳達人", "Jason"],
+    4: ["以上皆非"],
+  }
+
   let answerNum1, place;
   const answer1 = await rl.question('接下來將查詢 IP, port 設定\n請問你網站架設地點?\n 1. 資展302; 2. 資展15樓; 3. 家裡; 4. 以上皆非 (請直接回答號碼) ');
   switch (answer1) {
@@ -43,18 +51,47 @@ async function main() {
   }
   place = places[answerNum1][1]
   console.log(`你選擇了 ${answer1} ${places[answerNum1][0]}\n`);
+
+  let answerNum1_1, cell = '';
+  if (answerNum1 == 2) {
+    const answer1_1 = await rl.question('\n因為架設地點你回答 2. 資展15樓\n請你選擇提是誰的手機供無線基地台?\n 1. 吳漢中; 2. 呂沍諺; 3. 吳達人; 4. 以上皆非 (請直接回答號碼) ')
+    switch (answer1_1) {
+      case 1:
+      case "1":
+      case "1.":
+        answerNum1_1 = 1
+        cell = names[answerNum1_1][1] + 'Cell'
+        break;
+      case 2:
+      case "2":
+      case "2.":
+        answerNum1_1 = 2
+        cell = names[answerNum1_1][1] + 'Cell'
+        break
+      case 3:
+      case "3":
+      case "3.":
+        answerNum1_1 = 3
+        cell = names[answerNum1_1][1] + 'Cell'
+        break
+      default:
+        answerNum1_1 = 4
+        break;
+    }
+    console.log(`你選擇了 ${answer1_1} ${names[answerNum1_1][0]} \n`);
+    if (answerNum1_1 == 4) {
+      const answer1_1_1 = await rl.question('\n因為電腦擁有者你回答 4. 以上皆非\n請你為無線基地台擁有者取一個簡單英文代號 (例如: John) ')
+      cell = answer1_1_1 + 'Cell'
+      console.log(`你回答了 ${answer1_1_1} 已經設定為電腦擁有者代稱\n`);
+    }
+  }
+
   if (answerNum1 == 4) {
     const answer1_1 = await rl.question('\n因為架設地點你回答 4. 以上皆非\n請你為架設地點取一個簡單英文代號 (例如: school) ')
     place = answer1_1
     console.log(`你回答了 ${answer1_1} 已經設定為網站架設地點代稱\n`);
   }
 
-  const names = {
-    1: ["吳漢中", "Jack"],
-    2: ["呂沍諺", "Ben"],
-    3: ["吳達人", "Jason"],
-    4: ["以上皆非"],
-  }
   let answerNum2, name;
   const answer2 = await rl.question('\n請問你是誰，或者說網站主機由誰的電腦架設?\n 1. 吳漢中; 2. 呂沍諺; 3. 吳達人; 4. 以上皆非 (請直接回答號碼) ');
   switch (answer2) {
@@ -80,7 +117,7 @@ async function main() {
   name = names[answerNum2][1]
   console.log(`你選擇了 ${answer2} ${names[answerNum2][0]}\n`);
   if (answerNum2 == 4) {
-    const answer2_1 = await rl.question('\n因為電腦擁有者你回答 4. 以上皆非\n請妳為電腦擁有者取一個簡單英文代號 (例如: John) ')
+    const answer2_1 = await rl.question('\n因為電腦擁有者你回答 4. 以上皆非\n請你為電腦擁有者取一個簡單英文代號 (例如: John) ')
     name = answer2_1
     console.log(`你回答了 ${answer2_1} 已經設定為電腦擁有者代稱\n`);
   }
@@ -107,11 +144,12 @@ async function main() {
   }
   console.log(`你選擇了 ${(note ? '用筆電' : '用桌電')}\n`);
 
-  const key = place + name + note;
+  const key = place + cell + name + note;
   const netData = require("./net.json")
   if (key in netData) {
     console.log(`\n你的選擇已有紀錄\n請查看\n\n ${path.join(__dirname, "net.json")}\n\n檔案，找到其中 ${key} 所對應的屬性值\ncom1 代表電腦主機、car1 代表自駕車Rpi、car2 代表第二輛自駕車、cv 代表物件辨識的Rpi\n如果有???請填寫對應的 IP`)
-    console.log(`\n請複製並執行以下命令\n\n node src/server.js -w ${places[answerNum1][2]} -u ${name} ${(answerNum3)?'-d':''}\n\n套用此項 IP, port 設置`)
+    console.log(`\n主網站 和 架設在 Rpi 上的個人網站\n請複製並執行以下命令\n\n node src/server.js -w ${places[answerNum1][2]} -u ${name} ${(answerNum3)?'-d':''} ${(cell)?`-b ${names[answerNum1_1][1]}`:''}\n\n套用此項 IP, port 設置`)
+    console.log(`\n如果個人網站架設在電腦上\n請複製並執行以下命令\n\n node src/server.js -w ${places[answerNum1][2]} -u ${name} ${(answerNum3)?'-d':''} ${(cell)?`-b ${names[answerNum1_1][1]}`:''} 1\n\n套用此項 IP, port 設置`)
     rl.close()
     return
   }
@@ -126,7 +164,9 @@ async function main() {
   const ownPort = (await rl.question('接著設定用戶個人 port (預設 6543): ')) || '6543'
   const carPort = (await rl.question('接著設定Donkeycar port (預設 8887): ')) || '8887'
   console.log(`你設定的主網 port ${comPort} 、用戶個人 port ${ownPort} 、Donkeycar port ${carPort}\n`);
-  console.log(`\n請複製並執行以下命令\n\n node src/server.js --set-comHost ${comhost} --set-rpiHost ${rpihost} --set-comPort ${comPort} --set-ownPort ${ownPort} --set-carPort ${carPort}\n\n套用以上 IP, port 設置\n`)
+  console.log(`\n主網站請複製並執行以下命令\n\n node src/server.js --set-comHost ${comhost} --set-rpiHost ${rpihost} --set-comPort ${comPort} --set-ownPort ${ownPort} --set-carPort ${carPort}\n\n套用以上 IP, port 設置\n`)
+  console.log(`\n如果個人網站架設在 Rpi 上\n請複製並執行以下命令\n\n node src/server.js -i ${comhost} -r ${rpihost} -c ${comPort} -o ${ownPort} -k ${carPort}\n\n套用以上 IP, port 設置\n`)
+  console.log(`\n如果個人網站架設在電腦上\n請複製並執行以下命令\n\n node src/server.js -i ${comhost} -r ${rpihost} -c ${comPort} -o ${ownPort} -k ${carPort} 1\n\n套用以上 IP, port 設置\n`)
 
   const answer4 = await rl.question('\n重複輸入指令令人煩躁\n如果你選擇同意，我們會將這些 IP, port 設置寫入設定檔\n 1. 同意; 2. 不同意 (請直接回答號碼) ')
   if ([1,"1","1."].includes(answer4)) {

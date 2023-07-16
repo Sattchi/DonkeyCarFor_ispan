@@ -2,7 +2,7 @@
 
 <body>
   <script src="/socket.io/socket.io.js"></script>
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
   <script>
     console.log("html 000");
     var socket = io();
@@ -16,12 +16,12 @@
   <style type="text/css">
     .btn {
       margin: 2px;
-      border: solid 1px #20538D;
+      /* border: solid 1px #20538D; */
       border-radius: 4px;
       width: 130px;
       padding: 10px 15px;
-      background: #4479BA;
-      color: #FFF;
+      /* background: #4479BA; */
+      /* color: #FFF; */
       font-family: "微軟正黑體", "黑體-繁", sans-serif;
       text-decoration: none;
     }
@@ -48,28 +48,29 @@
           </p>
         </div>
       </div>
-      <p><input type="button" id="joy" class="btn" value=<%= joyChin %>></p>
+      <p><input type="button" id="joy" class="btn btn-primary" value=<%= joyChin %>></p>
       <script>
         $("#joy").click(function() {
-          socket.emit('prc', "-1");
-          console.log("html 執行 joy");
-          if (timerIntervalID) {
-            clearInterval(timerIntervalID);
-          }
-          timerIntervalID = setInterval(function() {
-            timer += 1
-            if (timer < 60) {
-              $("#timer").html(` ${timer} s`);
-            } else if (timer < 3600) {
-              $("#timer").html(` ${Math.floor(timer/60)} m ${timer%60} s`);
-            } else {
-              $("#timer").html(` ${Math.floor(timer/3600)} h ${Math.floor(timer/60)%60} m ${timer%60} s`);
-            }
-          }, 1000);
-          iframeIntervalID = setInterval(() => {
-            $('#rightFrame').attr('src', $('#rightFrame').attr('src'));
-            console.log("刷新");
-          }, 2500);
+          const yes = tempConfirm()
+          // socket.emit('prc', "-1");
+          // console.log("html 執行 joy");
+          // if (timerIntervalID) {
+          //   clearInterval(timerIntervalID);
+          // }
+          // timerIntervalID = setInterval(function() {
+          //   timer += 1
+          //   if (timer < 60) {
+          //     $("#timer").html(` ${timer} s`);
+          //   } else if (timer < 3600) {
+          //     $("#timer").html(` ${Math.floor(timer/60)} m ${timer%60} s`);
+          //   } else {
+          //     $("#timer").html(` ${Math.floor(timer/3600)} h ${Math.floor(timer/60)%60} m ${timer%60} s`);
+          //   }
+          // }, 1000);
+          // iframeIntervalID = setInterval(() => {
+          //   $('#rightFrame').attr('src', $('#rightFrame').attr('src'));
+          //   console.log("刷新");
+          // }, 2500);
         });
       </script>
       <P>演算法列表:</P>
@@ -78,7 +79,7 @@
         <% fileChins.forEach(chinRow => { %>
         <tr>
           <% chinRow.forEach(element => { %>
-          <td><input type="button" id=<%= "mod" +index %> class="btn" value=<%= element %>></td>
+          <td><input type="button" id=<%= "mod" +index %> class="btn btn-primary" value=<%= element %>></td>
           <script>
             $("<%- '#mod' + index %>").click(function() {
               socket.emit('prc', "<%= index %>");
@@ -114,13 +115,13 @@
         <thead>
           <tr>
             <td>
-              <p><input type="button" id="btnR" class="btn" value="關閉刷新"></p>
+              <p><input type="button" id="btnR" class="btn btn-primary" value="關閉刷新"></p>
             </td>
             <td>
-              <p><input type="button" id="btn0" class="btn" value="關閉所有程式"></p>
+              <p><input type="button" id="btn0" class="btn btn-primary" value="關閉所有程式"></p>
             </td>
             <td>
-              <p><input type="button" id="btn00" class="btn" value="關閉網站"></p>
+              <p><input type="button" id="btn00" class="btn btn-primary" value="關閉網站"></p>
             </td>
           </tr>
         </thead>

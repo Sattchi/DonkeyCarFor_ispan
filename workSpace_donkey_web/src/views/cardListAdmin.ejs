@@ -1,0 +1,185 @@
+<% layout('layout') %>
+<%
+const isAdmin = (auth == 'admin') || (auth == 'root')
+%>
+
+<body>
+  <!-- <nav class="navbar navbar-expand-md navbar-dark" style="background-color: rgba(255, 99, 71, 0.469)">
+    <div class="navbar-nav">
+      <a href="<%-baseUrl%>/list" class="nav-link">Cars</a>
+    </div>
+  </nav> -->
+  <div class="card">
+    <div class="fakeimg">
+      <p class="fw-bold run_run_text" style="font-size:5vw;">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
+    </div>
+    <br>
+    <!-- <div class="alert alert-success" *ngIf='mess'>{{mess}}</div> -->
+    <div class="container mycard0">
+      <div class="tbox">
+        <h3 class="text-center"><%- title %></h3>
+      </div>
+
+      <hr>
+      <% if (isAdmin) { %>
+      <div class="container text-left">
+        <a href="<%-baseUrl%>/new" class="btn btn-success">New Car</a>
+      </div>
+      <% } %>
+      <% if (isAdmin) { %>
+      <div class="row my-3">
+        <div class="col-8">
+          <label class="btn btn-success">
+            <input type="file" name="upfile" id="upfile" multiple />
+          </label>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-success" id="btnUp" disabled="true">
+            上傳
+          </button>
+        </div>
+      </div>      
+      <% } %>
+      <br>
+      <div class="table-responsive-xl">
+        <table class="table table-bordered table-hover">
+          <thead class="table-dark">
+            <tr>
+              <% if (isAdmin) { %>
+              <th scope="col">ID</th>
+              <% } %>
+              <th scope="col">License</th>
+              <th scope="col">Parking number</th>
+              <th scope="col">Enter time</th>
+              <th scope="col">Out time</th>
+              <th scope="col">Money had paid</th>
+              <th scope="col">Paid off</th>
+              <th scope="col">Paid time</th>
+              <th scope="col">Car img</th>
+              <% if (isAdmin) { %>
+              <th scope="col">Image Type</th>
+              <th scope="col">Image Size</th>
+              <th scope="col">Action</th>
+              <% } %>
+            </tr>
+          </thead>
+          <tbody>
+            <!--   for (Todo todo: todos) {  -->
+            <% lists.forEach(element => { %>
+            <tr>
+              <% if (isAdmin) { %>
+              <th scope="row">
+                <%= element.carid %>
+              </th>
+              <% } %>
+              <td>
+                <%= element.license %>
+              </td>
+              <td>
+                <%= element.space_id %>
+              </td>
+              <td>
+                <%= element.enter_time %>
+              </td>
+              <td>
+                <%= element.out_time %>
+              </td>
+              <td>
+                <%= element.had_paid %>
+              </td>
+              <td>
+                <%= (element.paid_off)?'Yes':'No' %>
+              </td>
+              <td>
+                <%= element.paid_time %>
+              </td>
+              <td>
+                <a href="<%-baseUrl%>/files/<%= element.carid %>">
+                <img width="200px" src="data:<%- element.car_img_type %>;base64, <%-Buffer.from(element.car_img).toString('base64')%>" alt="<%= element.license %>"></a>
+              </td>
+              <% if (isAdmin) { %>
+              <td>
+                <%= element.car_img_type %>
+              </td>
+              <td>
+                <%= element.car_img_size %>
+              </td>
+              <td><a href="<%-baseUrl%>/edit?id=<%= element.carid %>">Edit</a>
+                &nbsp;&nbsp;&nbsp;&nbsp; <a href="<%-baseUrl%>/delete?id=<%= element.carid %>">Delete</a></td>
+              <% } %>
+            </tr>
+            <% }) %>
+            <!-- } -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(function() {
+      var selectedFiles = undefined;
+      const progressInfos = {
+        val: []
+      };
+      var mess = [];
+      var fileInfos = [];
+      $('#upfile').change((event) => {
+        //console.log($('#upfile'));
+        console.log(event.target.files)
+        selectedFiles = event.target.files;
+        progressInfos.val = [];
+        $('#btnUp').attr('disabled', !(selectedFiles.length > 0));
+      });
+      $('#btnUp').click((event) => {
+        const files = Array.from(selectedFiles);
+        const uploadPromises = files.map((file, i) => upload(i, file));
+        Promise.all(uploadPromises)
+          .then(() => {
+            $(location).prop("href", location.href);
+          });
+        mess = []
+      });
+      const upload = (idx, file) => {
+        return _upload(file, (event) => {
+          console.log('嘗試上傳中');
+        }).then(() => {
+          mess.push("文件上傳成功: " + file.name);
+        }).catch(() => {
+          mess.push("不能上傳文件: " + file.name);
+        })
+      }
+      const _upload = (file, onUploadProgress) => {
+        let formData = new FormData();
+        formData.append("file", file);
+        // return $.post("/upload", formData, {
+        //     headers: {
+        //         "Content-Type": "multipart/form-data",
+        //     },
+        //     onUploadProgress,
+        // });
+        return $.ajax({
+          "type": "post",
+          "url": "<%-baseUrl%>/upload",
+          "data": formData,
+          "processData": false, // tell jQuery not to process the data
+          "contentType": false, // tell jQuery not to set contentType
+          "success": function(result, status, xhr) {
+            console.log(result);
+            //alert(result);
+          },
+          "error": (xhr, status, err) => {
+            console.log(err);
+            //alert(err);
+          }
+        })
+      };
+    });
+  </script>
+  <script>
+    var error = '' + '<%- error %>';
+    var warning = '' + '<%- warning %>';
+    var message = '' + '<%- message %>';
+    var success = '' + '<%- success %>';
+  </script>
+  <!-- <script src="/script/UploadFiles.js"></script> -->
+</body>

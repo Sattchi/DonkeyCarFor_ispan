@@ -7,18 +7,22 @@ module.exports = function (options) {
     let payPort = "3020";
     let carPort;
 
-    const place = (options.web === "0" || options.web === "302" || options.web.toUpperCase() === "F3" || options.web.toUpperCase() === "C302")?'ispan302':((options.web === "1" || options.web.toUpperCase() === "F15")?'ispan15':((options.web === "2" || options.web.toUpperCase() === "H" || options.web.toUpperCase() === "HOME" )?'home':'ispan302'))
+    const place = (options.web === "0" || options.web === "302" || options.web.toUpperCase() === "F3" || options.web.toUpperCase() === "C302") ? 'ispan302' : ((options.web === "1" || options.web.toUpperCase() === "F15") ? 'ispan15' : ((options.web === "2" || options.web.toUpperCase() === "H" || options.web.toUpperCase() === "HOME") ? 'home' : 'ispan302'))
 
     console.log(place)
 
-    const name = (options.user.toUpperCase() === "JACK" || options.user.toUpperCase() === "HanChung".toUpperCase())?'Jack':((options.user.toUpperCase() === "BEN" || options.user.toUpperCase() === "HuYen".toUpperCase())?'Ben':((options.user.toUpperCase() === "JASON" || options.user.toUpperCase() === "DaRen".toUpperCase())?'Jason':'Jack'))
+    const cell = (options.cell) ? (((options.cell.toUpperCase() === "JACK" || options.cell.toUpperCase() === "HanChung".toUpperCase()) ? 'Jack' : ((options.cell.toUpperCase() === "BEN" || options.cell.toUpperCase() === "HuYen".toUpperCase()) ? 'Ben' : ((options.cell.toUpperCase() === "JASON" || options.cell.toUpperCase() === "DaRen".toUpperCase()) ? 'Jason' : 'Jack'))) + 'Cell') : ''
+
+    console.log(cell)
+
+    const name = (options.user.toUpperCase() === "JACK" || options.user.toUpperCase() === "HanChung".toUpperCase()) ? 'Jack' : ((options.user.toUpperCase() === "BEN" || options.user.toUpperCase() === "HuYen".toUpperCase()) ? 'Ben' : ((options.user.toUpperCase() === "JASON" || options.user.toUpperCase() === "DaRen".toUpperCase()) ? 'Jason' : 'Jack'))
 
     console.log(name);
 
-    const note = (options.desktop)?'':'Note'
+    const note = (options.desktop) ? '' : 'Note'
     console.log(note);
 
-    const key = place + name + note
+    const key = place + cell + name + note
 
     if (key in netData) {
         comhost = netData[key].com1.host;
@@ -52,7 +56,7 @@ module.exports = function (options) {
     if (options.useSelf) {
         const selfKey = options.useSelf
         console.log(`使用自訂鑰匙 ${selfKey}`);
-        if (selfKey in netData){
+        if (selfKey in netData) {
             comhost = netData[selfKey].com1.host;
             rpihost = netData[selfKey].car1.host;
             ownPort = netData[selfKey].car1.ownPort;

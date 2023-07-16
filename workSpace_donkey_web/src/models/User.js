@@ -6,6 +6,10 @@ class User {
 }
 
 if (typeof require !== 'undefined' && require.main === module) {
-    cat = new User("jack")
+    cat = new User("jack",445,98)
     console.log(cat)
+    console.log(cat.name)
+    console.log(cat.email)
 }
+
+module.exports = User

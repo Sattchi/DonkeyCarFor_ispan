@@ -3,8 +3,60 @@
   body::-webkit-scrollbar {
     display: none;
   }
+
+  /* The alert message box */
+  .alert {
+    position: absolute;
+    top: 10%;
+    left: 50%;
+    width: 200px;
+    height: 100px;
+    padding: 20px;
+    background-color: #ff9800;
+  opacity: 1;
+  transition: opacity 0.6s; /* 600ms to fade out */
+    /* Red */
+    color: white;
+    margin-bottom: 15px;
+  }
+
+  /* The close button */
+  .closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+
+  /* When moving the mouse over the close button */
+  .closebtn:hover {
+    color: black;
+  }
 </style>
 </head>
+<% 
+function getFormattedDate(date) {
+  var year = date.getFullYear();
+  var month = (1 + date.getMonth()).toString();
+  month = month.length > 1 ? month : '0' + month;
+  var day = date.getDate().toString();
+  day = day.length > 1 ? day : '0' + day;
+  var hour = date.getHours();
+  apm = hour < 12 ? 'AM' : 'PM';
+  hour = hour % 12 || 12;
+  var minute = date.getMinutes().toString();
+  minute = minute.length > 1 ? minute : '0' + minute;
+  return year + '/' + month + '/' + day + ' ' + hour.toString() + ':' + minute + ' ' + apm;
+}
+function getMIME(img_type) {
+if (img_type === 'png') return 'png'
+if (img_type === 'jpg' || img_type === 'jpeg') return 'jpeg'
+}
+%>
 
 <body>
 
@@ -16,7 +68,7 @@
         <h2>停車場繳費</h2>
 
         <br>
-        <img src="<%= car_img_path %>" />
+        <img width="600px" src="data:image/<%- getMIME(car_img_type) %>;base64, <%-Buffer.from(car_img).toString('base64')%>" />
 
         <h1>車牌號碼:<br>
           <div class="tbox"><%= license_plate %></div>
@@ -26,27 +78,31 @@
 
         <h1>停放位置:<%= space_id %></h1>
 
-        <% if(confirm) { %>
+
+        <h1>入場時間:<br><%= getFormattedDate(enter_time) %></h1>
+
+        <h1>停放時間: <%= duration %></h1>
+
+
+        <% if(paid_off) { %>
         <h1 style="color:red;">已繳費完成</h1>
         <% } else { %>
-        <h1>繳費金額:<%= money %></h1>
+        <h1>應繳金額: <%= cost %></h1>
+        <h1>已繳金額: <%= had_paid %></h1>
+        <h1>尚須支付: <%= more_money %></h1>
         <%} %>
 
 
 
-        <h1>入場時間:<br><%= enter_time %></h1>
 
-        <h1>停放時間:<br>30分鐘</h1>
-
-
-        <% if(confirm) { %>
-        <% } else { %>
+        <% if(!paid_off) { %>
         <label for="fname">投入金額:</label>
         <input type="text" id="enter_money" name="enter_money"><br><br>
-        <input type="hidden" id="money" name="money" value="<%= money %>">
-        <input type="hidden" id="license_plate" name="license_plate" value="<%= license_plate %>">
+        <input type="hidden" id="had_paid" name="had_paid" value="<%= had_paid %>">
+        <input type="hidden" id="more_money" name="more_money" value="<%= more_money %>">
+        <input type="hidden" id="carid" name="carid" value="<%= car_id %>">
         <input style="width:140px;height:50px;" type="submit" value="確定">
-        <%} %>
+        <% } %>
 
       </div>
     </center>
@@ -63,6 +119,24 @@
 
 </body>
 <Script>
+  var error = '<%- error %>';
+
+  function tempAlert(msg, duration) {
+    var el = document.createElement("div");
+    $(el).addClass("alert")
+    el.innerHTML = '<span class="closebtn" onclick="this.parentElement.style.display=\'none\';">&times;</span>'+msg;
+    setTimeout(function() {
+      el.parentNode.removeChild(el);
+    }, duration);
+    document.body.appendChild(el);
+  }
+
+  $().ready(() => {
+    if (error) {
+      tempAlert('error: ' + error, 3000)
+    }
+  })
+
   // 設定秒數
   var count = 60;
 

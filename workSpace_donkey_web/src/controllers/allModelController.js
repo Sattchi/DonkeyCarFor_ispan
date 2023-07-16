@@ -7,19 +7,15 @@ const GridFSBucket = require("mongodb").GridFSBucket;
 const url = dbConfig.url;
 // console.log(url);
 
-const baseUrl = "http://localhost:3000/modelList/files/";
+// const baseUrl = "http://localhost:3000/modelList/files/";
 
 const mongoClient = new MongoClient(url);
 // console.log(mongoClient)
 
 const uploadFiles = async (req, res) => {
-    console.log('req.originalUrl: ' + req.originalUrl);
-    console.log('req.baseUrl: ' + req.baseUrl);
-    console.log('req.path: ' + req.path);
-    console.log('req.url: ' + req.url);
     if (typeof req.cookies.auth === 'undefined' || req.cookies.auth === 'visitor' || req.cookies.auth === 'user') {
         // return res.status(403).send({ message: "權限不足" })
-        return res.status(403).redirect('/modelList?warning="用戶權限不足"')
+        return res.status(403).redirect('/modelList?warning=用戶權限不足')
     }
     try {
         // 使用 upload 中間件函數 處理上傳的文件
@@ -32,10 +28,11 @@ const uploadFiles = async (req, res) => {
         });
     } catch (error) {
         // 使用 Multer 捕獲相關錯誤
-        console.log(error);
+        console.log('allModelController.uploadFiles Multer 捕獲錯誤');
+        console.error(error);
         if (error.code == "LIMIT_FILE_SIZE") {
             return res.status(500).send({
-                message: "文件大小不能超過 2MB",
+                message: "文件大小不能超過 15MB",
             });
         }
         return res.status(500).send({
@@ -47,10 +44,6 @@ const uploadFiles = async (req, res) => {
 // getListFiles: 函數主要是獲取 photos.files,返回 url， name
 const getListFiles = (fcn) => {
     return async (req, res) => {
-        console.log('req.originalUrl: ' + req.originalUrl);
-        console.log('req.baseUrl: ' + req.baseUrl);
-        console.log('req.path: ' + req.path);
-        console.log('req.url: ' + req.url);
         try {
             await mongoClient.connect();
 
@@ -68,7 +61,7 @@ const getListFiles = (fcn) => {
                     fileId: doc._id,
                     name: doc.filename,
                     // url: baseUrl + doc.filename,
-                    length: doc.length,
+                    filelength: doc.length,
                     chunkSize: doc.chunkSize,
                     uploadDate: doc.uploadDate,
                     contentType: doc.contentType
@@ -124,7 +117,7 @@ const getListFiles = (fcn) => {
 const download = async (req, res) => {
     if (typeof req.cookies.auth === 'undefined' || req.cookies.auth === 'visitor') {
         // return res.status(403).send({ message: "訪客權限不足" })
-        return res.status(403).redirect('/modelList?warning="訪客權限不足"')
+        return res.status(403).redirect('/modelList?warning=訪客權限不足')
     }
     try {
         await mongoClient.connect();

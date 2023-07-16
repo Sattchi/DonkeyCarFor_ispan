@@ -1,0 +1,167 @@
+<% layout('layout') %>
+<%
+const isAdmin = (auth == 'admin') || (auth == 'root')
+const isRoot = (auth == 'root')
+%>
+
+<body>
+  <div class="card">
+    <div class="fakeimg">
+      <p class="fw-bold run_run_text" style="font-size:5vw;">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
+    </div>
+    <br>
+    <div class="container col-md-5 mycard0">
+      <div class="card">
+        <div class="card-body">
+          <form action="<%-baseUrl%>/<%-(card.id)?'update':'insert'%>" method="post" enctype="multipart/form-data">
+
+            <caption>
+              <h2>
+                <% if (card.id) { %>
+                Edit Car
+                <% } else { %>
+                Add New Car
+                <% } %>
+              </h2>
+            </caption>
+
+            <% if (card.id) { %>
+            <input type="hidden" name="cardid" id="cardid" value="<%- card.id %>" />
+            <% } %>
+
+            <fieldset class="form-group">
+              <label for="license">License</label> <input type="text" value="<%- card.license %>" class="form-control" name="license" id="license" required="required">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="space_id">Parking Num</label> <input type="text" value="<%- card.space_id %>" class="form-control" name="space_id" id="space_id" required="required">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="enter_time">Enter time</label> <input type="datetime-local" value="<%- card.enter_time %>" class="form-control" name="enter_time" id="enter_time">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="out_time">Out time</label> <input type="datetime-local" value="<%- card.out_time %>" class="form-control" name="out_time" id="out_time">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="had_paid">Money Had Paid</label> <input type="text" value="<%- (card.had_paid)?card.had_paid:0 %>" class="form-control" name="had_paid" id="had_paid" required="required">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label>Paid Off</label><br>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="paid_off" id="paid_off0" value="0" <%- (((card.id) && (0 == card.paid_off))||(!card.id))?'checked':'' %>>
+                <label class="form-check-label" for="paid_off0">
+                  No
+                </label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="paid_off" id="paid_off1" value="1" <%- ((card.id) && (0 == card.paid_off))?'checked':'' %>>
+                <label class="form-check-label" for="paid_off1">
+                  Yes
+                </label>
+              </div>
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="paid_time">Paid time</label> <input type="datetime-local" value="<%- card.paid_time %>" class="form-control" name="paid_time" id="paid_time">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="car_img">Car img</label> <input type="file" value="<%- card.license %>" class="form-control" accept=".jpg, .jpeg, .png" name="car_img" id="car_img">
+            </fieldset>
+            <fieldset class="form-group">
+              <div class="preview">
+                <% if (card.id) { %>
+                <img width="100px" src="data:<%- card.car_img_type %>;base64, <%-Buffer.from(card.car_img).toString('base64')%>" alt="<%= card.license %>">
+                <% } else { %>
+                <p>No car img</p>
+                <% } %>
+              </div>
+            </fieldset>
+
+            <button type="submit" class="btn btn-success">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    window.addEventListener('load', () => {
+      var now = new Date();
+      now.setMinutes(now.getMinutes() - now.getTimezoneOffset());
+
+      /* remove second/millisecond if needed - credit ref. https://stackoverflow.com/questions/24468518/html5-input-datetime-local-default-value-of-today-and-current-time#comment112871765_60884408 */
+      now.setMilliseconds(null)
+      now.setSeconds(null)
+
+      document.getElementById('enter_time').max = now.toISOString().slice(0, -1);
+      document.getElementById('out_time').max = now.toISOString().slice(0, -1);
+      document.getElementById('paid_time').max = now.toISOString().slice(0, -1);
+
+      const car_img_file = $('#car_img')
+      const preview = $('.preview')[0]
+
+      car_img_file.change(updateImageDisplay)
+
+      function updateImageDisplay() {
+        const curFiles = car_img_file[0].files;
+        if (curFiles.length === 0) {
+          return
+        }
+        while (preview.firstChild) {
+          preview.removeChild(preview.firstChild);
+        }
+        const file = curFiles[0];
+        const para = document.createElement('p');
+        if (validFileType(file)) {
+          para.textContent = `File name ${file.name}, file size ${returnFileSize(file.size)}.`;
+          const image = document.createElement('img');
+          image.src = URL.createObjectURL(file);
+          image.style = 'width: 100px'
+          preview.appendChild(image)
+          preview.appendChild(para)
+        } else {
+          car_img_file.val('')
+          para.textContent = `File name ${file.name}: Not a valid file type. Update your selection.`;
+          preview.appendChild(para)
+        }
+      }
+
+      const fileTypes = [
+        // "image/apng",
+        // "image/bmp",
+        // "image/gif",
+        "image/jpeg",
+        // "image/pjpeg",
+        "image/png",
+        // "image/svg+xml",
+        // "image/tiff",
+        // "image/webp",
+        // "image/x-icon"
+      ];
+
+      function validFileType(file) {
+        return fileTypes.includes(file.type);
+      }
+
+      function returnFileSize(number) {
+        if (number < 1024) {
+          return `${number} bytes`;
+        } else if (number >= 1024 && number < 1048576) {
+          return `${(number / 1024).toFixed(1)} KB`;
+        } else if (number >= 1048576) {
+          return `${(number / 1048576).toFixed(1)} MB`;
+        }
+      }
+    });
+  </script>
+  <script>
+    var error = '' + '<%- error %>';
+    var warning = '' + '<%- warning %>';
+    var message = '' + '<%- message %>';
+    var success = '' + '<%- success %>';
+  </script>
+</body>
