@@ -1,0 +1,68 @@
+<% layout('layout') %>
+<%
+const isAdmin = (auth == 'admin') || (auth == 'root')
+const isRoot = (auth == 'root')
+%>
+
+<body>
+  <div class="card">
+    <div class="fakeimg">
+      <p class="fw-bold run_run_text" style="font-size:5vw;">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
+    </div>
+    <br>
+    <div class="container col-md-5 mycard0">
+      <div class="card">
+        <div class="card-body">
+          <form action="<%-baseUrl%>/<%-(user.id)?'update':'insert'%>" method="post">
+
+            <caption>
+              <h2>
+                <% if (user.id) { %>
+                Edit User
+                <% } else { %>
+                Add New User
+                <% } %>
+              </h2>
+            </caption>
+
+            <% if (user.id) { %>
+            <input type="hidden" name="userid" id="userid" value="<%- user.id %>" />
+            <% } %>
+
+            <fieldset class="form-group">
+              <label for="userName">User Name</label> <input type="text" value="<%- user.name %>" class="form-control" name="userName" id="userName" required="required">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="emailAddr">User Email</label> <input type="text" value="<%- user.email %>" class="form-control" name="emailAddr" id="emailAddr" required="required">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label for="passwd">User Password</label> <input type="password" value="<%- user.password %>" class="form-control" name="passwd" id="passwd" required="required">
+            </fieldset>
+
+            <fieldset class="form-group">
+              <label>User Role</label><br>
+              <% roles.forEach(role => { if ((!isRoot && (role.roleid == 1 || role.roleid == 2))||isRoot) { %>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="setrole" id="role<%- role.roleid %>" value="<%- role.roleid %>" <%- (((user.id) && (role.roleid == user.role))||((!user.id) && role.roleid == 2))?'checked':'' %>>
+                <label class="form-check-label" for="role<%- role.roleid %>">
+                  <%- role.rolename %>
+                </label>
+              </div>
+              <% }}) %>
+            </fieldset>
+
+            <button type="submit" class="btn btn-success">Save</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    var error = '' + '<%- error %>';
+    var warning = '' + '<%- warning %>';
+    var message = '' + '<%- message %>';
+    var success = '' + '<%- success %>';
+  </script>
+</body>

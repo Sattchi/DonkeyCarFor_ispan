@@ -3,15 +3,21 @@ console.log(`process id: ${process.pid}`);
 console.log(`parent process id: ${process.ppid}`);
 
 // 檔案讀取
-var fs = require("fs");
+const fs = require("fs");
 
 // 系統參數解析器
 const { program, Option } = require('commander');
-program.version('1.0.1')
-    .addOption(new Option("-w, --web <place>", "choose the place of web").default("0", "302 wifi").choices(["0", "1", "2", "302", "F15", "F3", "C302", "f15", "f3", "c302"]))
-    .addOption(new Option("--set-host <host>", "set the host of web"))
-    .addOption(new Option("-t, --set-ctrWeb <url>", "set the url of control website").conflicts(["setHost"]))
-    .addOption(new Option("-c, --set-carWeb <url>", "set the url of donkeycar website").conflicts(["setHost"]))
+program.version('2.1.1')
+    .addOption(new Option("-w, --web <place>", "choose the place of computer").default("0", "302 wifi").choices(["0", "F3", "f3", "302", "C302", "c302", "1", "F15", "f15", "2", "home", "HOME", "h", "H", "Home"]))
+    .addOption(new Option("-b, --cell <name>", "choose whose cellphone open wireless base station").choices(["Jack", "jack", "HanChung", "Ben", "ben", "HuYen", "Jason", "jason", "DaRen"]).implies({ "web": "f15" }))
+    .addOption(new Option("-u, --user <name>", "choose computer owner").default("Jack", "HanChung").choices(["Jack", "jack", "HanChung", "Ben", "ben", "HuYen", "Jason", "jason", "DaRen"]))
+    .addOption(new Option("-d, --desktop", "if computer is desktop"))
+    .addOption(new Option("-i, --set-comHost <IP>", "set the IP of computer (default: 192.168.52.83)"))
+    .addOption(new Option("-r, --set-rpiHost <IP>", "set the IP of rpi in car (default: 192.168.52.94)"))
+    .addOption(new Option("-c, --set-comPort <port>", "set the port of main website (default: 3000)"))
+    .addOption(new Option("-o, --set-ownPort <port>", "set the port of control website (default: 6543)"))
+    .addOption(new Option("-k, --set-carPort <port>", "set the port of donkeycar website (default: 8887)"))
+    .addOption(new Option("-s, --use-self <key>", "use your own setting").conflicts(['web', 'user', 'notebook', 'setComHost', 'setRpiHost', 'setComPort', 'setOwnPort', 'setCarPort']))
     .parse();
 
 // 取得參數
@@ -21,11 +27,10 @@ console.log(program.opts());
 const options = program.opts();
 // 取得 電腦、樹梅 IP 主網、個人、停車 port
 const [comhost, rpihost, comPort, ownPort, payPort, carPort] = require('./config/getNets')(options);
-console.log([comhost, rpihost, comPort, ownPort, payPort, carPort])
+// console.log([comhost, rpihost, comPort, ownPort, payPort, carPort])
 
+// 取得目錄
 const tocElemnt = require("./config/getTOCs")()
-// console.log("control    url: " + ctrWeb);
-// console.log("donkey car url: " + carWeb);
 console.log(tocElemnt.visitor)
 const getTocByAuth = (auth) => {
     if (typeof auth !== 'undefined' && auth !== 'visitor') {
@@ -42,14 +47,14 @@ const express = require('express');
 let app = express();
 
 // 解析器
-var bodyParser = require("body-parser");
+const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-//使用session
-var cookieParser = require('cookie-parser');
+// 使用 cookie-parser
+const cookieParser = require('cookie-parser');
 app.use(cookieParser('123456789'));// sign for cookie
 
-//使用ejs
+// 使用 ejs-locals 核心
 let engine = require('ejs-locals');
 app.engine('ejs', engine);
 // 讀取 EJS 檔案位置
@@ -57,17 +62,42 @@ app.set('views', __dirname + '/views');
 // 用 EJS 引擎跑模板
 app.set('view engine', 'ejs');
 
-//調用靜態資料夾檔案
+// 調用靜態資料夾檔案
 app.use(express.static(__dirname + '/www')); //Serves resources from public folder
 
+// 延長 cookie 時限
+app.use((req, res, next) => {
+    console.log('req.originalUrl: ' + req.originalUrl);
+    console.log('req.baseUrl: ' + req.baseUrl);
+    console.log('req.path: ' + req.path);
+    console.log('req.url: ' + req.url);
+
+    if (req.cookies.auth === "user") {
+        // req.cookies.auth.maxAge = 5*60*1000
+        res.cookie('name', req.cookies.name, {
+            maxAge: 5 * 60 * 1000,
+        })
+        res.cookie('auth', req.cookies.auth, {
+            maxAge: 5 * 60 * 1000,
+        })
+    }
+    next()
+})
+
 // 路由控制
-// 跟目錄的
+// 根目錄的
 const initRoutes = require("./routes/index");
 initRoutes(app, getTocByAuth);
 
 // 模型列表的
-const allModelRoutes = require("./routes/allModel");
+const allModelRoutes = require("./routes/allModel.js");
 allModelRoutes(app, getTocByAuth);
+// 用戶列表的
+const allUserRoutes = require("./routes/allUser.js");
+allUserRoutes(app, getTocByAuth);
+// 車牌列表的
+const allCardRoutes = require("./routes/allCard.js");
+allCardRoutes(app, getTocByAuth);
 
 // 跳轉的
 const redirectRoutes = require("./routes/redirect");

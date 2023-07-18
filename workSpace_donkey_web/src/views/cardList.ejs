@@ -1,0 +1,145 @@
+<% layout('layout') %>
+<%
+const isAdmin = (auth == 'admin') || (auth == 'root')
+const isUser = (username.indexOf('訪客') < 0) && (auth !== 'visitor')
+%>
+
+<body>
+  <!-- <nav class="navbar navbar-expand-md navbar-dark" style="background-color: rgba(255, 99, 71, 0.469)">
+    <div class="navbar-nav">
+      <a href="<%-baseUrl%>/list" class="nav-link">Cars</a>
+    </div>
+  </nav> -->
+  <div class="card">
+    <div class="fakeimg">
+      <p class="fw-bold run_run_text" style="font-size:5vw;">Run Run <span class="badge bg-secondary">DonkeyCar</span></p>
+    </div>
+    <br>
+    <!-- <div class="alert alert-success" *ngIf='mess'>{{mess}}</div> -->
+    <div class="container mycard0">
+      <div class="tbox">
+        <h3 class="text-center"><%- title %></h3>
+      </div>
+
+      <hr>
+      <!-- <div class="container text-left">
+        <a href="<%-baseUrl%>/upload" class="btn btn-success">Upload New File</a>
+      </div> -->
+      <% if (isAdmin) { %>
+      <div class="row my-3">
+        <div class="col-8">
+          <label class="btn btn-success">
+            <input type="file" name="upfile" id="upfile" multiple />
+          </label>
+        </div>
+        <div class="col-4">
+          <button class="btn btn-success" id="btnUp" disabled="true">
+            上傳
+          </button>
+        </div>
+      </div>
+      <br>
+      <% } %>
+      <div class="ag-format-container">
+        <div class="ag-courses_box">
+          <% lists.forEach(element => { %>
+          <div class="ag-courses_item">
+            <a <%- (isUser) ? 'href=' + baseUrl +'/files/' + element.cardid :'onclick="alert(\'只開放用戶下載\\n請先登入\')"' %> class="ag-courses-item_link">
+              <div class="ag-courses-item_bg"></div>
+
+              <div class="ag-courses-item_title">
+                <!-- 這種寫法需要 download 權限 -->
+                <!-- <img src="<%-baseUrl%>/files/<%= element.cardid %>" alt="<%= element.license %>" onerror="defaultImg(this)" width="130px"> -->
+                <!-- 這種寫法不需要 download 權限 -->
+                <img width="200px" src="data:<%- element.car_img_type %>;base64, <%-Buffer.from(element.car_img).toString('base64')%>" alt="<%= element.license %>">
+              </div>
+
+              <div class="ag-courses-item_title">
+                <%= element.license %>
+              </div>
+
+              <div class="ag-courses-item_date-box">
+                Enter time:
+                <span class="ag-courses-item_date">
+                  <%= element.enter_time %>
+                </span>
+              </div>
+            </a>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <script>
+    function defaultImg(element) {
+      element.src = '/img/IMG_0560.PNG'
+    }
+    $(function() {
+      var selectedFiles = undefined;
+      const progressInfos = {
+        val: []
+      };
+      var mess = [];
+      var fileInfos = [];
+      $('#upfile').change((event) => {
+        //console.log($('#upfile'));
+        console.log(event.target.files)
+        selectedFiles = event.target.files;
+        progressInfos.val = [];
+        $('#btnUp').attr('disabled', !(selectedFiles.length > 0));
+      });
+      $('#btnUp').click((event) => {
+        const files = Array.from(selectedFiles);
+        const uploadPromises = files.map((file, i) => upload(i, file));
+        Promise.all(uploadPromises)
+          .then(() => {
+            $(location).prop("href", location.href);
+          });
+        mess = []
+      });
+      const upload = (idx, file) => {
+        return _upload(file, (event) => {
+          console.log('嘗試上傳中');
+        }).then(() => {
+          mess.push("文件上傳成功: " + file.name);
+        }).catch(() => {
+          mess.push("不能上傳文件: " + file.name);
+        })
+      }
+      const _upload = (file, onUploadProgress) => {
+        let formData = new FormData();
+        formData.append("file", file);
+        // return $.post("/upload", formData, {
+        //     headers: {
+        //         "Content-Type": "multipart/form-data",
+        //     },
+        //     onUploadProgress,
+        // });
+        return $.ajax({
+          "type": "post",
+          "url": "<%-baseUrl%>/upload",
+          "data": formData,
+          "processData": false, // tell jQuery not to process the data
+          "contentType": false, // tell jQuery not to set contentType
+          "success": function(result, status, xhr) {
+            console.log(result);
+            //alert(result);
+          },
+          "error": (xhr, status, err) => {
+            console.log(err);
+            //alert(err);
+          }
+        })
+      };
+    });
+  </script>
+  <script>
+    var error = '' + '<%- error %>';
+    var warning = '' + '<%- warning %>';
+    var message = '' + '<%- message %>';
+    var success = '' + '<%- success %>';
+  </script>
+  <!-- <script src="/script/UploadFiles.js"></script> -->
+</body>

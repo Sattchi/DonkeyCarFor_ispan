@@ -1021,11 +1021,7 @@ class JoystickController(object):
     def set_throttle(self, axis_val):
         #this value is often reversed, with positive value when pulling down
         self.last_throttle_axis_val = axis_val
-        if axis_val < 0:
-            self.throttle = (self.throttle_dir * axis_val * (self.throttle_scale - 0.1))
-        else:
-            self.throttle = (self.throttle_dir * axis_val * (self.throttle_scale - 0.3))
-        # self.throttle = (self.throttle_dir * axis_val * self.throttle_scale)
+        self.throttle = (self.throttle_dir * axis_val * self.throttle_scale)
         #print("throttle", self.throttle)
         self.on_throttle_changes()
 

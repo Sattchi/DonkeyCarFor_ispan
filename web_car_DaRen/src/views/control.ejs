@@ -2,7 +2,7 @@
 
 <body>
   <script src="/socket.io/socket.io.js"></script>
-  <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+  <!-- <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css"> -->
   <script>
     console.log("html 000");
     var socket = io();
@@ -16,12 +16,12 @@
   <style type="text/css">
     .btn {
       margin: 2px;
-      border: solid 1px #20538D;
+      /* border: solid 1px #20538D; */
       border-radius: 4px;
       width: 130px;
       padding: 10px 15px;
-      background: #4479BA;
-      color: #FFF;
+      /* background: #4479BA; */
+      /* color: #FFF; */
       font-family: "微軟正黑體", "黑體-繁", sans-serif;
       text-decoration: none;
     }
@@ -35,41 +35,42 @@
     <span class="card" style="<%= 'width:' + waa + '%;margin-right:10px' %>">
       <h2><%= title %></h2>
       <div class="w3-container" style="width:60%;min-width: 200px;">
-        <div class="w3-panel w3-pale-red w3-leftbar w3-border-red">
+        <div class="bd-callout bd-callout-info">
           <p>計時:<span id="timer"> 00s</span>
           </p>
         </div>
-        <div class="w3-panel w3-pale-blue w3-leftbar w3-border-blue">
+        <div class="bd-callout bd-callout-warning">
           <p>圈數:100
           </p>
         </div>
-        <div class="w3-panel w3-pale-green w3-leftbar w3-border-green">
+        <div class="bd-callout bd-callout-danger">
           <p>資料量:8887
           </p>
         </div>
       </div>
-      <p><input type="button" id="joy" class="btn" value=<%= joyChin %>></p>
+      <p><input type="button" id="joy" class="btn btn-primary" value=<%= joyChin %>></p>
       <script>
         $("#joy").click(function() {
-          socket.emit('prc', "-1");
-          console.log("html 執行 joy");
-          if (timerIntervalID) {
-            clearInterval(timerIntervalID);
-          }
-          timerIntervalID = setInterval(function() {
-            timer += 1
-            if (timer < 60) {
-              $("#timer").html(` ${timer} s`);
-            } else if (timer < 3600) {
-              $("#timer").html(` ${Math.floor(timer/60)} m ${timer%60} s`);
-            } else {
-              $("#timer").html(` ${Math.floor(timer/3600)} h ${Math.floor(timer/60)%60} m ${timer%60} s`);
-            }
-          }, 1000);
-          iframeIntervalID = setInterval(() => {
-            $('#rightFrame').attr('src', $('#rightFrame').attr('src'));
-            console.log("刷新");
-          }, 2500);
+          const yes = tempConfirm()
+          // socket.emit('prc', "-1");
+          // console.log("html 執行 joy");
+          // if (timerIntervalID) {
+          //   clearInterval(timerIntervalID);
+          // }
+          // timerIntervalID = setInterval(function() {
+          //   timer += 1
+          //   if (timer < 60) {
+          //     $("#timer").html(` ${timer} s`);
+          //   } else if (timer < 3600) {
+          //     $("#timer").html(` ${Math.floor(timer/60)} m ${timer%60} s`);
+          //   } else {
+          //     $("#timer").html(` ${Math.floor(timer/3600)} h ${Math.floor(timer/60)%60} m ${timer%60} s`);
+          //   }
+          // }, 1000);
+          // iframeIntervalID = setInterval(() => {
+          //   $('#rightFrame').attr('src', $('#rightFrame').attr('src'));
+          //   console.log("刷新");
+          // }, 2500);
         });
       </script>
       <P>演算法列表:</P>
@@ -78,7 +79,7 @@
         <% fileChins.forEach(chinRow => { %>
         <tr>
           <% chinRow.forEach(element => { %>
-          <td><input type="button" id=<%= "mod" +index %> class="btn" value=<%= element %>></td>
+          <td><input type="button" id=<%= "mod" +index %> class="btn btn-primary" value=<%= element %>></td>
           <script>
             $("<%- '#mod' + index %>").click(function() {
               socket.emit('prc', "<%= index %>");
@@ -101,8 +102,11 @@
                 $('#rightFrame').attr('src', $('#rightFrame').attr('src'));
                 console.log("刷新");
                 //console.log('刷新中 iframeIntervalID: ' + iframeIntervalID)
-              }, 2500);
+              }, 3000);
               //console.log('刷新後 iframeIntervalID: ' + iframeIntervalID)
+              setTimeout(() => {
+                clearInterval(iframeIntervalID)
+              }, 15000)
             });
           </script>
           <% index++}) %>
@@ -114,13 +118,13 @@
         <thead>
           <tr>
             <td>
-              <p><input type="button" id="btnR" class="btn" value="關閉刷新"></p>
+              <p><input type="button" id="btnR" class="btn btn-primary" value="關閉刷新"></p>
             </td>
             <td>
-              <p><input type="button" id="btn0" class="btn" value="關閉所有程式"></p>
+              <p><input type="button" id="btn0" class="btn btn-primary" value="關閉所有程式"></p>
             </td>
             <td>
-              <p><input type="button" id="btn00" class="btn" value="關閉網站"></p>
+              <p><input type="button" id="btn00" class="btn btn-primary" value="關閉網站"></p>
             </td>
           </tr>
         </thead>
@@ -129,90 +133,91 @@
     <span class="card" style="<%= 'width:' + (100-waa) + '%' %>">
       <iframe src='<%= carWeb+"/drive" %>' title="donkey drive" name="rightFrame" id="rightFrame" frameborder="0" width="100%" height="100%" onload="checkAlready()">等等</iframe></span>
   </div>
-</body>
 
-<script>
-  $('#btnR').on('click', function() {
-    if (iframeIntervalID) {
-      clearInterval(iframeIntervalID);
-    }
-    console.log("html no refresh");
-  });
-  $('#btn0').on('click', function() {
-    sendMessage('stopPrc');
-  });
-  $('#btn00').on('click', function() {
-    sendMessage('stopPrc');
-    socket.emit("exit");
-    // $('#btn2').hide();
-    if (timerIntervalID) {
-      clearInterval(timerIntervalID);
-    }
-    console.log("html exit");
-  });
-  /*$('#rightFrame').on("load", function() {
+  <script>
+    $('#btnR').on('click', function() {
       if (iframeIntervalID) {
-          clearInterval(iframeIntervalID);
+        clearInterval(iframeIntervalID);
       }
-      console.log('清除刷新');
-  });*/
-  /*
-  $(window).on("message", function(e) {
-      console.log(e);
-      var data = e.originalEvent.data;  // Should work.
-      console.log(data);
-      if (data === 'document ready!' && iframeIntervalID) {
-          clearInterval(iframeIntervalID);
-          console.log('清除刷新');
-      }
-      console.log('有觸發');
-  });
-  */
-
-  function checkAlready() {
-    sendMessage('areYouReady');
-  }
-
-  function sendMessage(sttr) {
-    window.frames["rightFrame"].postMessage(sttr, "<%= carWeb %>");
-  }
-
-  window.addEventListener("message", function(e) {
-    console.log(e.origin);
-    // 加強安全性 判斷數據發送方是否為可靠的網域; 不安全的網域不處理
-    if ((e.origin).indexOf("<%= carWeb %>") < 0) {
-      console.log("錯誤進入")
-      return;
-    }
-    // 彈跳訊息框顯示回傳的筆數
-    //var data = e.data;
-    //alert(data);
-    console.log('control get: ' + e.data);
-
-    if ((e.data.indexOf('already') >= 0) && iframeIntervalID) {
-      /*
-      console.log('& := ' + (e.data.indexOf('already') >= 0 & iframeIntervalID))
-      console.log('& := ' + (e.data.indexOf('already') >= 0 && iframeIntervalID))
-      console.log('()& := ' + ((e.data.indexOf('already') >= 0) & iframeIntervalID))
-      console.log('()&& := ' + ((e.data.indexOf('already') >= 0) && iframeIntervalID))
-      console.log('清除刷新前 iframeIntervalID: ' + iframeIntervalID);
-      */
-      clearInterval(iframeIntervalID);
-      console.log('清除刷新');
-    }
-
-    if (e.data.indexOf('stopByUser') >= 0) {
-      setTimeout(() => {
-        socket.emit("stop");
-        console.log("html stop");
-      }, 10 * 1000)
-
+      console.log("html no refresh");
+    });
+    $('#btn0').on('click', function() {
+      sendMessage('stopPrc');
+    });
+    $('#btn00').on('click', function() {
+      sendMessage('stopPrc');
+      socket.emit("exit");
       // $('#btn2').hide();
       if (timerIntervalID) {
         clearInterval(timerIntervalID);
       }
+      console.log("html exit");
+    });
+    /*$('#rightFrame').on("load", function() {
+        if (iframeIntervalID) {
+            clearInterval(iframeIntervalID);
+        }
+        console.log('清除刷新');
+    });*/
+    /*
+    $(window).on("message", function(e) {
+        console.log(e);
+        var data = e.originalEvent.data;  // Should work.
+        console.log(data);
+        if (data === 'document ready!' && iframeIntervalID) {
+            clearInterval(iframeIntervalID);
+            console.log('清除刷新');
+        }
+        console.log('有觸發');
+    });
+    */
+
+    function checkAlready() {
+      sendMessage('areYouReady');
     }
-  });
-</script>
+
+    function sendMessage(sttr) {
+      window.frames["rightFrame"].postMessage(sttr, "<%= carWeb %>");
+    }
+
+    window.addEventListener("message", function(e) {
+      console.log(e.origin);
+      // 加強安全性 判斷數據發送方是否為可靠的網域; 不安全的網域不處理
+      if ((e.origin).indexOf("<%= carWeb %>") < 0) {
+        console.log("錯誤進入")
+        return;
+      }
+      // 彈跳訊息框顯示回傳的筆數
+      //var data = e.data;
+      //alert(data);
+      console.log('control get: ' + e.data);
+
+      if ((e.data.indexOf('already') >= 0) && iframeIntervalID) {
+        /*
+        console.log('& := ' + (e.data.indexOf('already') >= 0 & iframeIntervalID))
+        console.log('& := ' + (e.data.indexOf('already') >= 0 && iframeIntervalID))
+        console.log('()& := ' + ((e.data.indexOf('already') >= 0) & iframeIntervalID))
+        console.log('()&& := ' + ((e.data.indexOf('already') >= 0) && iframeIntervalID))
+        console.log('清除刷新前 iframeIntervalID: ' + iframeIntervalID);
+        */
+        clearInterval(iframeIntervalID);
+        console.log('清除刷新');
+      }
+
+      if (e.data.indexOf('stopByUser') >= 0) {
+        setTimeout(() => {
+          socket.emit("stop");
+          console.log("html stop");
+        }, 10 * 1000)
+
+        // $('#btn2').hide();
+        if (timerIntervalID) {
+          clearInterval(timerIntervalID);
+        }
+      }
+    });
+  </script>
+
+</body>
 
 </html>

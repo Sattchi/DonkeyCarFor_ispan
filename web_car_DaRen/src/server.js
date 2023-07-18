@@ -5,6 +5,58 @@ console.log(`parent process id: ${process.ppid}`);
 // 檔案讀取
 const fs = require("fs");
 
+const options = require('minimist')(process.argv.slice(2));
+console.log(options)
+
+const helpNote = `
+Usage: server [options]
+
+Options:
+  -V, --version            output the version number
+  1                        this program runs on computer (default: runs on rpi in car)
+  -w <place>               choose the place of computer (choices: "0", "F3", "f3", "302", "C302", "c302", "1", "F15", "f15", "2", "home", "HOME", "h", "H", "Home", default: 302 wifi)
+  -b <name>                choose whose cellphone open wireless base station (choices: "Jack", "jack", "HanChung", "Ben", "ben", "HuYen", "Jason", "jason", "DaRen")
+  -u <name>                choose computer owner (choices: "Jack", "jack", "HanChung", "Ben", "ben", "HuYen", "Jason", "jason", "DaRen", default: HanChung)
+  -d                       if computer is desktop
+  -i <IP>                  set the IP of computer (default: 192.168.52.83)
+  -r <IP>                  set the IP of rpi in car (default: 192.168.52.94)
+  -c <port>                set the port of main website (default: 3000)
+  -o <port>                set the port of control website (default: 6543)
+  -k <port>                set the port of donkeycar website (default: 8887)
+  -s <key>                 use your own setting
+  -h, --help               display help for command
+`
+if (options.h || options.help) {
+    console.log(helpNote)
+    process.exit()
+}
+
+const version = '2.1.1'
+if (options.V || options.v || options.version) {
+    console.log(version)
+    process.exit()
+}
+
+// 取得 電腦、樹梅 IP 主網、個人、停車 port
+const [comhost, rpihost, comPort, ownPort, payPort, carPort] = require('./config/getNets')(options);
+// console.log([comhost, rpihost, comPort, ownPort, payPort, carPort])
+
+// 個人網站是由 電腦架設 還是 rpi架設
+const useCom = options._[0] == 1
+console.log(`use computer ${useCom}`)
+
+// 取得目錄
+const tocElemnt = require("./config/getTOCs")()
+console.log(tocElemnt.visitor)
+const getTocByAuth = (auth) => {
+    if (typeof auth !== 'undefined' && auth !== 'visitor') {
+        if (auth === 'root') return tocElemnt.root;
+        if (auth === 'admin') return tocElemnt.admin;
+        return tocElemnt.user;
+    }
+    return tocElemnt.visitor
+}
+
 // 載入express模組
 const express = require('express');
 // 使用express
@@ -14,7 +66,11 @@ const app = express();
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({ extended: true }));
 
-// EJS 核心
+// 使用 cookie-parser
+const cookieParser = require('cookie-parser');
+app.use(cookieParser('123456789'));// sign for cookie
+
+// 使用 ejs-locals 核心
 const engine = require("ejs-locals");
 app.engine("ejs", engine);
 // 讀取 EJS 檔案位置
@@ -25,55 +81,6 @@ app.set("view engine", "ejs");
 // 調用靜態資料夾檔案
 app.use(express.static(__dirname + '/www'));
 
-// socket.io 連結一切
-const io = require('socket.io');
-
-// 子程序模組
-const spawn = require('child_process').spawn;
-const exec = require('child_process').exec;
-
-// const fileNames = ["runForever1.py", "runForever2.py"]
-// const fileNames = ["manage.py", "manage.py", "manage.py", "manage.py", "manage.py", "manage.py", "manage.py"]
-// const fileParas = [["drive", "--model", "./models/mypilot_forward_only.h5"],
-// ["drive", "--model", "./models/mypilot_backward.h5"],
-// ["drive", "--model", "./models/mypilot_reverse.h5"],
-// ["drive", "--model", "./models/mypilot_backward_reverse.h5"],
-// ["drive", "--model", "./models/mypilot_yellow_3800.h5"],
-// ["drive", "--model", "./models/mypilot_yellow_6500.h5"],
-// ["drive", "--model", "./models/mypilot_forward_only.h5"]];
-// const fileOptions = [{ cwd: "/home/pi/mycar2" }, { cwd: "/home/pi/mycar2" }, { cwd: "/home/pi/mycar2" }, { cwd: "/home/pi/mycar2" }, { cwd: "/home/pi/mycar2" }, { cwd: "/home/pi/mycar2" }, { cwd: "/home/pi/mycar2" }];
-// const fileChins = ["順時針前進", "順時針倒車","逆時針前進", "逆時針倒車", "路邊停車3800", "路邊停車6500"];
-
-
-// function readTextFile(file, callback) {
-//     fs.readFile(file, function (err, text) {
-//         callback(text);
-//     });
-// }
-// const newfileChins = []
-
-// readTextFile("./www/json/autoModel.json", function (text) {
-//     modelData = JSON.parse(text);
-//     console.log(modelData);
-//     var fileChins = Object.values(modelData).map(item => item.chinName);
-//     while (fileChins.length) {
-//         newfileChins.push(fileChins.splice(0, 3))
-//     }
-//     console.log(newfileChins)
-// });
-
-const joystick = require('./config/joystick');
-
-const modelData = require('./config/autoModel');
-console.log(modelData);
-// const fileChins = Object.values(modelData).map(item => item.chinName);
-const fileChins = modelData.map(item => item.chinName);
-const newfileChins = [];
-while (fileChins.length) {
-    newfileChins.push(fileChins.splice(0, 3))
-}
-console.log(newfileChins)
-
 // 查看用戶代理IP
 // app.use(function (req, res, next){
 //     console.log("用戶IP位址: "+req.connection.remoteAddress);
@@ -81,136 +88,54 @@ console.log(newfileChins)
 //     next();
 // });
 
-app.get('/', function (req, res) {
-    /*
-    res.cookie('name', 'lulu', {
-        maxAge: 10000, // 只存在n秒，n秒後自動消失
-        httpOnly: true // 僅限後端存取，無法使用前端document.cookie取得
-    })*/
-    res.redirect('http://127.0.0.1:3000')
-
-    //console.log(req.cookies);
-    //console.log(req.cookies.name); //找單個cookies
-});
-
-app.get("/control", function (req, res) {
-    res.render('control', {
-        "title": "控制台",
-        "joyChin": joystick.chinName,
-        "fileChins": newfileChins,
-        "baseUrl": "http://192.168.52.94:6543",
-        "carWeb": "http://192.168.52.94:8887"
-    });
-});
-
-app.get("/control_ori", function (req, res) {
-    res.render('control_ori', {
-        "title": "控制台",
-        "fileChins": newfileChins,
-        "carWeb": "http://127.0.0.1:8887/drive"
-    });
-});
-
+// 延長 cookie 時限
+app.use((req, res, next) => {
+    console.log('req.originalUrl: ' + req.originalUrl);
+    console.log('req.baseUrl: ' + req.baseUrl);
+    console.log('req.path: ' + req.path);
+    console.log('req.url: ' + req.url);
+    console.log(req.cookies) // cookie 無法跨越網域
+    // if (typeof req.cookies.auth === 'undefined' || req.cookies.auth === 'visitor') {
+    //     console.log('死在跳轉後')
+    //     return res.redirect(`http://${comhost}:${comPort}?warning=用戶方可使用個人網站<br>\\n請先登入`)
+    // }
+    if (req.cookies.auth === "user") {
+        // req.cookies.auth.maxAge = 5*60*1000
+        res.cookie('name', req.cookies.name,{
+            maxAge: 5*60*1000,
+            httpOnly: true,
+        })
+        res.cookie('auth', req.cookies.auth,{
+            maxAge: 5*60*1000,
+            httpOnly: true,
+        })
+    }
+    next()
+})
 
 // 路由控制
-port = 6543;
-host = "127.0.0.1";
-var server = app.listen(port, function () {
-    console.log(`伺服器在${port}埠口開工了。`);
+// 根目錄的
+const initRoutes = require("./routes/index");
+initRoutes(app, getTocByAuth, (useCom)?comhost:rpihost, carPort);
+
+// // 個人模型列表的
+// const ownModelRoutes = require("./routes/ownModel");
+// ownModelRoutes(app, getTocByAuth);
+
+// // 資料處理的
+// const dataProcessRoutes = require("./routes/dataProcess");
+// ownModelRoutes(app, getTocByAuth);
+
+// 跳轉的
+const redirectRoutes = require("./routes/redirect");
+redirectRoutes(app, [comhost, rpihost, comPort, ownPort, payPort, carPort]);
+
+host = (useCom)?"127.0.0.1":rpihost;
+port = ownPort;
+const server = app.listen(port, function () {
+    console.log(`個人網站在${port}埠口開工了。`);
     console.log(`http://${host}:${port}/`);
 });
 
-
-var sio = io.listen(server);
-var subprocess = null;
-
-sio.on('connection', function (socket) {
-    // socket.emit("fileUpload", fileChins);
-    // socket.on('disconnect', function () {
-    //     console.log('Bye, bye!');
-    //     stopProcess();
-    //     process.exit();
-    // });
-    socket.on('prc', function (num) {
-        if (num == -1) {
-            // console.log(num);
-            // console.log(joystick);
-            doProcess(joystick);
-        } else if ((num >= 0) & (num < modelData.length)) {
-            // console.log(num);
-            // console.log(modelData[num]);
-            doProcess(modelData[num]);
-        } else {
-            console.log('模有這個編號');
-        }
-        
-    });
-    socket.on("stop", function () {
-        stopProcess();
-    });
-    socket.on("exit", function () {
-        stopProcess();
-        process.exit();
-    });
-});
-
-process.on("exit", function () {
-    stopProcess();
-});
-
-function doProcess(obj) {
-    stopProcess();
-    // const fileName = fileNames[num];
-    // const filePara = fileParas[num];
-    // const para = (!filePara) ? [fileName] : [fileName].concat(filePara);
-    // const fileOption = fileOptions[num];
-    console.log(process.argv)
-    if (process.argv[2] != '1') {
-        const fileName = obj.fileName;
-        const filePara = obj.para;
-        const para = (!filePara) ? [fileName] : [fileName].concat(filePara);
-        const fileOption = obj.option;
-        console.log("想執行 Python 檔案: " + fileName);
-        console.log("必選參數: " + para);
-        console.log("可選參數: ");
-        console.log(fileOption);
-        // // python manage.py drive --model ~/mycar2/models/mypilot.h5
-        subprocess = spawn("python", para, fileOption);
-        console.log("非同步!");
-        console.log(`Spawned child pid: ${subprocess.pid}`);
-        console.log("已經執行 Python 檔案: " + fileName);
-    } else {
-        const commands = ['conda activate donkey', 'python C:\\workspace_final\\mysim\\manage.py drive --model C:\\workspace_final\\mysim\\models\\mypilot_forward_only.h5 --myconfig ./myconfig1.py']
-        subprocess = exec(commands.join(' & '))
-        console.log("非同步!");
-        console.log(`Spawned child pid: ${subprocess.pid}`);
-    }
-
-    subprocess.stdout.on('data', (data) => {
-        console.log(`stdout: ${data}`);
-    });
-
-    subprocess.stderr.on('data', (data) => {
-        console.error(`stderr: ${data}`);
-    });
-
-    subprocess.on('close', (code) => {
-        console.log(`child process exited with code ${code}`);
-    });
-    // setTimeout(function () {
-    //     subprocess.kill('SIGINT');
-    //     console.log("成功停止程序");
-    // }, 5000);
-    // console.log(subprocess);
-}
-
-function stopProcess() {
-    if (subprocess) {
-        // console.log(subprocess.connected);
-        console.log("停止程式!");
-        // subprocess.kill('SIGINT'); // ctrl+c -2
-        subprocess.kill('SIGTERM'); // -15
-        // subprocess.kill('SIGKILL'); // -9
-        // subprocess = null;
-    }
-}
+// socket 部分
+require('./controllers/socketBind')(server, useCom)

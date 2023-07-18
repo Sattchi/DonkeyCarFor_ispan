@@ -11,12 +11,18 @@ var storage = new GridFsStorage({
     options: { useNewUrlParser: true, useUnifiedTopology: true },
     // file: 這是控制數據庫中文件存儲的功能。該函數的返回值是一個具有以下屬性的對象：filename, metadata, chunkSize, bucketName, contentType... 
     file: (req, file) => {
-        const match = ["image/png", "image/jpeg", "image/gif", "application/octet-stream"];
+        const match = [
+            "image/png",
+            "image/jpeg",
+            "image/gif",
+            "application/octet-stream"
+        ];
         // 我們還檢查文件是否為圖像 file.mimetype。
         if (match.indexOf(file.mimetype) === -1) {
-            const filename = `${Date.now()}-donkey-${file.originalname}`;
-            return filename;
+            console.log('檔案不符合格式');
+            throw Error().message = '檔案格式錯誤';
         }
+        console.log('檔案符合格式');
         return {
             // bucketName 表示文件將存儲在 photos.chunks 和 photos.files 集合中。photos 是資料表的名稱
             bucketName: dbConfig.filesBucket,

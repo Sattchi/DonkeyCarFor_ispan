@@ -6,7 +6,11 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": 
+  {
+      "name": "Daren Wu",
+      "email": "jasonsf799@gmail.com"
+  },
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.20.2",

@@ -11,6 +11,7 @@ let routes = (app, fcn) => {
     router.post("/upload", allModelController.uploadFiles);
     router.get("/files", allModelController.getListFiles(fcn));
     router.get("/files/:name", allModelController.download);
+    router.get("/delete/:name", allModelController.deleted);
     app.use("/modelList", router);
     return app.use("/modelListAdmin", router);
 };
