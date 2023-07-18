@@ -31,7 +31,7 @@ if (options.h || options.help) {
     process.exit()
 }
 
-const version = '2.0.1'
+const version = '2.1.1'
 if (options.V || options.v || options.version) {
     console.log(version)
     process.exit()
@@ -103,9 +103,11 @@ app.use((req, res, next) => {
         // req.cookies.auth.maxAge = 5*60*1000
         res.cookie('name', req.cookies.name,{
             maxAge: 5*60*1000,
+            httpOnly: true,
         })
-        res.cookie('auth', "user",{
+        res.cookie('auth', req.cookies.auth,{
             maxAge: 5*60*1000,
+            httpOnly: true,
         })
     }
     next()

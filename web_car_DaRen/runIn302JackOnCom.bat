@@ -1,3 +1,3 @@
 cd "%~dp0"
-node src/server.js -d 1
+node src/server.js 1 -d
 pause

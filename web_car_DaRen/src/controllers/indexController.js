@@ -32,6 +32,18 @@ const index = (fcn) => {
 
 const control = (fcn, host, carPort, page) => {
     return async function (req, res) {
+        const name = (req.query.name)?req.query.name:'guest';
+        const auth = (req.query.auth)?req.query.auth:'visitor';
+
+        res.cookie('name', name, {
+            maxAge: 5*60*1000,
+            httpOnly: true,
+        })
+        res.cookie('auth', auth, {
+            maxAge: 5*60*1000,
+            httpOnly: true,
+        })
+
         return res.render(page, {
             "title": "控制台",
             'toc': fcn(req.cookies.auth),

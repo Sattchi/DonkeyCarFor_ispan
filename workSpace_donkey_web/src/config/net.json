@@ -1,4 +1,31 @@
 {
+    "ispan205JackNote": {
+        "com1": {
+            "host": "???",
+            "comPort": "3000",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Com"
+        },
+        "car1": {
+            "host": "???",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "DaRen Rpi"
+        },
+        "car2": {
+            "host": "???",
+            "ownPort": "6543",
+            "carPort": "8887",
+            "name": "HanChung Rpi"
+        },
+        "cv": {
+            "host": "???",
+            "ownPort": "6543",
+            "name": "HuYen Rpi"
+        },
+        "connection": "302 wifi"
+    },
     "ispan302Jack": {
         "com1": {
             "host": "192.168.32.50",
@@ -164,7 +191,7 @@
             "name": "HanChung Com"
         },
         "car1": {
-            "host": "???",
+            "host": "192.168.0.12",
             "ownPort": "6543",
             "carPort": "8887",
             "name": "HanChung Rpi"

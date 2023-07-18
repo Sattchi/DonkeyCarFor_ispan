@@ -35,15 +35,15 @@
     <span class="card" style="<%= 'width:' + waa + '%;margin-right:10px' %>">
       <h2><%= title %></h2>
       <div class="w3-container" style="width:60%;min-width: 200px;">
-        <div class="w3-panel w3-pale-red w3-leftbar w3-border-red">
+        <div class="bd-callout bd-callout-info">
           <p>計時:<span id="timer"> 00s</span>
           </p>
         </div>
-        <div class="w3-panel w3-pale-blue w3-leftbar w3-border-blue">
+        <div class="bd-callout bd-callout-warning">
           <p>圈數:100
           </p>
         </div>
-        <div class="w3-panel w3-pale-green w3-leftbar w3-border-green">
+        <div class="bd-callout bd-callout-danger">
           <p>資料量:8887
           </p>
         </div>
@@ -102,8 +102,11 @@
                 $('#rightFrame').attr('src', $('#rightFrame').attr('src'));
                 console.log("刷新");
                 //console.log('刷新中 iframeIntervalID: ' + iframeIntervalID)
-              }, 2500);
+              }, 3000);
               //console.log('刷新後 iframeIntervalID: ' + iframeIntervalID)
+              setTimeout(() => {
+                clearInterval(iframeIntervalID)
+              }, 15000)
             });
           </script>
           <% index++}) %>
@@ -130,90 +133,91 @@
     <span class="card" style="<%= 'width:' + (100-waa) + '%' %>">
       <iframe src='<%= carWeb+"/drive" %>' title="donkey drive" name="rightFrame" id="rightFrame" frameborder="0" width="100%" height="100%" onload="checkAlready()">等等</iframe></span>
   </div>
-</body>
 
-<script>
-  $('#btnR').on('click', function() {
-    if (iframeIntervalID) {
-      clearInterval(iframeIntervalID);
-    }
-    console.log("html no refresh");
-  });
-  $('#btn0').on('click', function() {
-    sendMessage('stopPrc');
-  });
-  $('#btn00').on('click', function() {
-    sendMessage('stopPrc');
-    socket.emit("exit");
-    // $('#btn2').hide();
-    if (timerIntervalID) {
-      clearInterval(timerIntervalID);
-    }
-    console.log("html exit");
-  });
-  /*$('#rightFrame').on("load", function() {
+  <script>
+    $('#btnR').on('click', function() {
       if (iframeIntervalID) {
-          clearInterval(iframeIntervalID);
+        clearInterval(iframeIntervalID);
       }
-      console.log('清除刷新');
-  });*/
-  /*
-  $(window).on("message", function(e) {
-      console.log(e);
-      var data = e.originalEvent.data;  // Should work.
-      console.log(data);
-      if (data === 'document ready!' && iframeIntervalID) {
-          clearInterval(iframeIntervalID);
-          console.log('清除刷新');
-      }
-      console.log('有觸發');
-  });
-  */
-
-  function checkAlready() {
-    sendMessage('areYouReady');
-  }
-
-  function sendMessage(sttr) {
-    window.frames["rightFrame"].postMessage(sttr, "<%= carWeb %>");
-  }
-
-  window.addEventListener("message", function(e) {
-    console.log(e.origin);
-    // 加強安全性 判斷數據發送方是否為可靠的網域; 不安全的網域不處理
-    if ((e.origin).indexOf("<%= carWeb %>") < 0) {
-      console.log("錯誤進入")
-      return;
-    }
-    // 彈跳訊息框顯示回傳的筆數
-    //var data = e.data;
-    //alert(data);
-    console.log('control get: ' + e.data);
-
-    if ((e.data.indexOf('already') >= 0) && iframeIntervalID) {
-      /*
-      console.log('& := ' + (e.data.indexOf('already') >= 0 & iframeIntervalID))
-      console.log('& := ' + (e.data.indexOf('already') >= 0 && iframeIntervalID))
-      console.log('()& := ' + ((e.data.indexOf('already') >= 0) & iframeIntervalID))
-      console.log('()&& := ' + ((e.data.indexOf('already') >= 0) && iframeIntervalID))
-      console.log('清除刷新前 iframeIntervalID: ' + iframeIntervalID);
-      */
-      clearInterval(iframeIntervalID);
-      console.log('清除刷新');
-    }
-
-    if (e.data.indexOf('stopByUser') >= 0) {
-      setTimeout(() => {
-        socket.emit("stop");
-        console.log("html stop");
-      }, 10 * 1000)
-
+      console.log("html no refresh");
+    });
+    $('#btn0').on('click', function() {
+      sendMessage('stopPrc');
+    });
+    $('#btn00').on('click', function() {
+      sendMessage('stopPrc');
+      socket.emit("exit");
       // $('#btn2').hide();
       if (timerIntervalID) {
         clearInterval(timerIntervalID);
       }
+      console.log("html exit");
+    });
+    /*$('#rightFrame').on("load", function() {
+        if (iframeIntervalID) {
+            clearInterval(iframeIntervalID);
+        }
+        console.log('清除刷新');
+    });*/
+    /*
+    $(window).on("message", function(e) {
+        console.log(e);
+        var data = e.originalEvent.data;  // Should work.
+        console.log(data);
+        if (data === 'document ready!' && iframeIntervalID) {
+            clearInterval(iframeIntervalID);
+            console.log('清除刷新');
+        }
+        console.log('有觸發');
+    });
+    */
+
+    function checkAlready() {
+      sendMessage('areYouReady');
     }
-  });
-</script>
+
+    function sendMessage(sttr) {
+      window.frames["rightFrame"].postMessage(sttr, "<%= carWeb %>");
+    }
+
+    window.addEventListener("message", function(e) {
+      console.log(e.origin);
+      // 加強安全性 判斷數據發送方是否為可靠的網域; 不安全的網域不處理
+      if ((e.origin).indexOf("<%= carWeb %>") < 0) {
+        console.log("錯誤進入")
+        return;
+      }
+      // 彈跳訊息框顯示回傳的筆數
+      //var data = e.data;
+      //alert(data);
+      console.log('control get: ' + e.data);
+
+      if ((e.data.indexOf('already') >= 0) && iframeIntervalID) {
+        /*
+        console.log('& := ' + (e.data.indexOf('already') >= 0 & iframeIntervalID))
+        console.log('& := ' + (e.data.indexOf('already') >= 0 && iframeIntervalID))
+        console.log('()& := ' + ((e.data.indexOf('already') >= 0) & iframeIntervalID))
+        console.log('()&& := ' + ((e.data.indexOf('already') >= 0) && iframeIntervalID))
+        console.log('清除刷新前 iframeIntervalID: ' + iframeIntervalID);
+        */
+        clearInterval(iframeIntervalID);
+        console.log('清除刷新');
+      }
+
+      if (e.data.indexOf('stopByUser') >= 0) {
+        setTimeout(() => {
+          socket.emit("stop");
+          console.log("html stop");
+        }, 10 * 1000)
+
+        // $('#btn2').hide();
+        if (timerIntervalID) {
+          clearInterval(timerIntervalID);
+        }
+      }
+    });
+  </script>
+
+</body>
 
 </html>

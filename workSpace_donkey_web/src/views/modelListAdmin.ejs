@@ -99,7 +99,9 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
                 <%= element.contentType %>
               </td>
               <td><a href="<%-baseUrl%>/files/<%= element.name %>">Download</a>
-                &nbsp;&nbsp;&nbsp;&nbsp; <a href="<%-baseUrl%>/delete/<%= element.name %>">Delete</a></td>
+                &nbsp;&nbsp;&nbsp;&nbsp;
+                <!--<a href="<%-baseUrl%>/delete/<%= element.name %>">Delete</a>--><a href="javascript:void(0)" onclick="checkDelete('<%= element.name %>')">Delete</a>
+              </td>
               <% } %>
             </tr>
             <% }) %>
@@ -110,8 +112,38 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
     </div>
   </div>
   <script>
+    function checkDelete(val) {
+      console.log(val)
+      const yes = confirm(`Are you sure to delete model ${val}`)
+      console.log(yes);
+      if (yes) {
+        var dataUrl = "<%-baseUrl%>/delete/" + val
+        $.ajax({
+          url: dataUrl,
+          method: 'GET',
+          dataType: 'json',
+          data: '',
+          async: true,
+          success: function(result, status, xhr) {
+            console.log('這就是 result ', result);
+            console.log('這就是 status ', status);
+            //alert(result);
+          },
+          error: (xhr, status, err) => {
+            console.log('這就是 err ', err);
+            console.log('這就是 status ', status);
+            //alert(err);
+          },
+          complete: (xhr, status) => {
+            $(location).prop("href", location.href);
+          },
+        });
+
+      }
+    }
     $(function() {
       var selectedFiles = undefined;
+      // progress 在來源專案的這裡是用來記錄文件上傳進度的，但我沒有寫相關程式，所以在這裡沒用處
       const progressInfos = {
         val: []
       };
@@ -121,7 +153,7 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
         //console.log($('#upfile'));
         console.log(event.target.files)
         selectedFiles = event.target.files;
-        progressInfos.val = [];
+        // progressInfos.val = [];
         $('#btnUp').attr('disabled', !(selectedFiles.length > 0));
       });
       $('#btnUp').click((event) => {
@@ -135,7 +167,7 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
       });
       const upload = (idx, file) => {
         return _upload(file, (event) => {
-          console.log('嘗試上傳中');
+          console.log('嘗試上傳中'); // 因為 onUploadProgress 沒用到 所以這些東西沒執行
         }).then(() => {
           mess.push("文件上傳成功: " + file.name);
         }).catch(() => {
@@ -158,15 +190,19 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
           "processData": false, // tell jQuery not to process the data
           "contentType": false, // tell jQuery not to set contentType
           "success": function(result, status, xhr) {
-            console.log(result);
+            console.log('這就是 result ', result); // success status 的回傳值在 result 和 xhr.responseJSON
+            console.log('這就是 status ', status);
             //alert(result);
           },
           "error": (xhr, status, err) => {
-            console.log(err);
+            console.log('這就是 err ', err);
+            console.log('這就是 status ', status);
+            // error status 的回傳值在 xhr.responseJSON
             //alert(err);
           }
         })
       };
+
     });
   </script>
   <script>

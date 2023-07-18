@@ -157,14 +157,14 @@ const insert = async (req, res) => {
     if (typeof uc === 'undefined' || typeof pw === 'undefined' || typeof em === 'undefined' || typeof sr === 'undefined' || uc.length == 0 || pw.length == 0 || em.length == 0 || sr.length == 0) {
         console.error('allUserController.insert warning: ');
         console.error(` no input name: ${uc} email: ${em} password: ${pw} role: ${sr} `)
-        return res.redirect('/userListAdmin/new?warning=請勿留空、確實輸入')
+        return res.redirect(`${req.baseUrl}/new?warning=請勿留空、確實輸入`)
     }
 
     // 非全權不能賦予用戶 後台或全權 權限
     if (req.cookies.auth !== 'root' && (sr == roles[2].roleid || sr == roles[3].roleid)) {
         console.error('allUserController.insert warning: ')
         console.error(' not root want asign admin or root ')
-        return res.status(403).redirect('/userListAdmin/new?warning=後台權限不足<br>\\n不能賦予用戶 後台 或 全權 權限')
+        return res.status(403).redirect(`${req.baseUrl}/new?warning=後台權限不足<br>\\n不能賦予用戶 後台 或 全權 權限`)
     }
 
     const conn = mysql.createConnection(dbConfig)
@@ -177,7 +177,7 @@ const insert = async (req, res) => {
             console.error('allUserController.insert 查詢同名或同信箱的用戶 error');
             console.error(error);
             conn.end();
-            return res.redirect('/userListAdmin?error=查詢用戶出現錯誤<br>\\n請稍後再嘗試');
+            return res.redirect(`${req.baseUrl}?error=查詢用戶出現錯誤<br>\\n請稍後再嘗試`);
         }
 
         // 紀錄查詢結果
@@ -191,7 +191,7 @@ const insert = async (req, res) => {
             console.log('allUserController.insert warning:')
             console.log(` USER already have name: ${results[0].name} or email: ${results[0].email} `);
             conn.end();
-            return res.redirect('/userListAdmin/new?message=用戶名稱或信箱重複<br>\\n請換一個');
+            return res.redirect(`${req.baseUrl}/new?message=用戶名稱或信箱重複<br>\\n請換一個`);
         } else {
             // 沒找到用戶名稱或用戶信箱 代表新用戶 將 用戶名稱、信箱、密碼 新增進入資料庫
             console.log('allUserController.insert:')
@@ -202,7 +202,7 @@ const insert = async (req, res) => {
                     console.error('allUserController.insert 新增用戶進入資料庫 error');
                     console.error(error1);
                     conn.end();
-                    return res.redirect('/userListAdmin?error=插入用戶出現錯誤<br>\\n請稍後再嘗試');
+                    return res.redirect(`${req.baseUrl}?error=插入用戶出現錯誤<br>\\n請稍後再嘗試`);
                 }
 
                 // 紀錄插入結果
@@ -221,7 +221,7 @@ const insert = async (req, res) => {
                             console.error('allUserController.insert 新增用戶權限進入資料庫 error');
                             console.error(error2);
                             conn.end();
-                            return res.redirect('/userListAdmin?error=插入用戶權限出現錯誤<br>\\n請稍後再嘗試');
+                            return res.redirect(`${req.baseUrl}?error=插入用戶權限出現錯誤<br>\\n請稍後再嘗試`);
                         }
 
                         // 紀錄插入結果
@@ -235,13 +235,13 @@ const insert = async (req, res) => {
                             console.log('allUserController.insert')
                             console.log(` Success: insert new user ${uc} auth ${sr} `)
                             conn.end()
-                            return res.redirect('/userListAdmin?success=插入用戶和權限成功');
+                            return res.redirect(`${req.baseUrl}?success=插入用戶和權限成功`);
                         } else {
                             // 新增新用戶的權限 失敗
                             console.log('allUserController.insert')
                             console.log(` Failure: insert new user ${uc} auth ${sr} `)
                             conn.end()
-                            return res.redirect('/userListAdmin?warning=插入用戶成功<br>\\n但設定權限失敗<br>\\n請檢查資料庫');
+                            return res.redirect(`${req.baseUrl}?warning=插入用戶成功<br>\\n但設定權限失敗<br>\\n請檢查資料庫`);
                         }
                     })
                 } else {
@@ -249,7 +249,7 @@ const insert = async (req, res) => {
                     console.log('allUserController.insert')
                     console.log(` Failure: insert new user ${uc} `)
                     conn.end()
-                    return res.redirect('/userListAdmin?warning=插入用戶失敗');
+                    return res.redirect(`${req.baseUrl}?warning=插入用戶失敗`);
                 }
             })
         }
@@ -270,7 +270,7 @@ const showEditForm = (fcn) => {
         if (userid == 1 || userid == 2) {
             console.log('allUserController.showEditForm:')
             console.log(' can\' edit jack and ohayowu')
-            return res.redirect('/userListAdmin?warning=不能編輯這個用戶')
+            return res.redirect(`${req.baseUrl}?warning=不能編輯這個用戶`)
         }
 
         const conn = mysql.createConnection(dbConfig)
@@ -282,7 +282,7 @@ const showEditForm = (fcn) => {
                 console.error('allUserController.showEditForm 查詢給定ID用戶的資料 error: ')
                 console.error(error);
                 conn.end();
-                return res.redirect('/userListAdmin?error=搜尋用戶ID出現錯誤<br>\\n請稍後再嘗試');
+                return res.redirect(`${req.baseUrl}?error=搜尋用戶ID出現錯誤<br>\\n請稍後再嘗試`);
             }
 
             // 紀錄查詢結果
@@ -297,7 +297,7 @@ const showEditForm = (fcn) => {
                     console.log('allUserController.showEditForm:')
                     console.log(' not root want edit admin or root')
                     conn.end()
-                    return res.status(403).redirect('/userListAdmin?warning=後台權限不足<br>\\n不能編輯 後台 或 全權 權限的用戶')
+                    return res.status(403).redirect(`${req.baseUrl}?warning=後台權限不足<br>\\n不能編輯 後台 或 全權 權限的用戶`)
                 }
 
                 // 紀錄 顯示修改表單 成功
@@ -324,13 +324,13 @@ const showEditForm = (fcn) => {
                 console.error('allUserController.showEditForm error:')
                 console.error(' 太多同 user id 的用戶')
                 conn.end();
-                return res.redirect('/userListAdmin?error=出現錯誤，太多同 user id 的用戶<br>\\n請檢查資料庫');
+                return res.redirect(`${req.baseUrl}?error=出現錯誤，太多同 user id 的用戶<br>\\n請檢查資料庫`);
             } else {
                 // 沒找到用戶
                 console.log('allUserController.showEditForm warning:')
                 console.log(' 沒找到此 user id 的用戶')
                 conn.end();
-                return res.redirect('/userListAdmin?warning=沒有 user id 的用戶<br>\\n請重新選擇');
+                return res.redirect(`${req.baseUrl}?warning=沒有 user id 的用戶<br>\\n請重新選擇`);
             }
         })
     }
@@ -347,21 +347,21 @@ const update = async (req, res) => {
     if (typeof uc === 'undefined' || typeof pw === 'undefined' || typeof em === 'undefined' || typeof sr === 'undefined' || uc.length == 0 || pw.length == 0 || em.length == 0 || sr.length == 0) {
         console.log('allUserController.update warning:')
         console.log(` no input name: ${uc} email: ${em} password: ${pw} role: ${sr} `)
-        return res.redirect(`/userListAdmin/edit?id=${userid}&warning=請勿留空、確實輸入`)
+        return res.redirect(`${req.baseUrl}/edit?id=${userid}&warning=請勿留空、確實輸入`)
     }
 
     // 非全權不能賦予用戶 後台或全權 權限
     if (req.cookies.auth !== 'root' && (sr == roles[2].roleid || sr == roles[3].roleid)) {
         console.log('allUserController.update warning:')
         console.log(' not root want asign admin or root')
-        return res.status(403).redirect(`/userListAdmin/edit?id=${userid}&warning=後台權限不足<br>\\n不能賦予用戶 後台 或 全權 權限`)
+        return res.status(403).redirect(`${req.baseUrl}/edit?id=${userid}&warning=後台權限不足<br>\\n不能賦予用戶 後台 或 全權 權限`)
     }
 
     // 禁止修改 jack 和 ohayowu
     if (userid == 1 || userid == 2) {
         console.log('allUserController.update warning:')
         console.log(' can\' edit jack and ohayowu')
-        return res.redirect('/userListAdmin?warning=不能編輯這個用戶')
+        return res.redirect(`${req.baseUrl}?warning=不能編輯這個用戶`)
     }
 
     const conn = mysql.createConnection(dbConfig)
@@ -373,7 +373,7 @@ const update = async (req, res) => {
             console.error('allUserController.update 查詢是否有此 id 和他的權限 error');
             console.error(error);
             conn.end();
-            return res.redirect('/userListAdmin?error=查詢用戶出現錯誤<br>\\n請稍後再嘗試');
+            return res.redirect(`${req.baseUrl}?error=查詢用戶出現錯誤<br>\\n請稍後再嘗試`);
         }
 
         // 紀錄查詢結果
@@ -386,7 +386,7 @@ const update = async (req, res) => {
             console.log('allUserController.update warning: ')
             console.log(` no user with id: ${userid} `);
             conn.end();
-            return res.redirect('/userListAdmin?warning=沒有此ID用戶<br>\\n請重新輸入');
+            return res.redirect(`${req.baseUrl}?warning=沒有此ID用戶<br>\\n請重新輸入`);
         }
 
         // - 數量超過一 錯誤 跳出 / 檢查資料庫
@@ -394,7 +394,7 @@ const update = async (req, res) => {
             console.error('allUserController.update error: ')
             console.error(` more then one users with id: ${userid} `);
             conn.end();
-            return res.redirect('/userListAdmin?error=太多同 user id 的用戶<br>\\n請檢查資料庫');
+            return res.redirect(`${req.baseUrl}?error=太多同 user id 的用戶<br>\\n請檢查資料庫`);
         }
 
         // - 數量為一 有此人 但非全權不能修改 後台或全權 權限的用戶 警告 跳出 /
@@ -402,7 +402,7 @@ const update = async (req, res) => {
             console.log('allUserController.update warning:')
             console.log(' not root want edit admin or root')
             conn.end()
-            return res.status(403).redirect(`/userListAdmin?warning=後台權限不足<br>\\n不能編輯 後台 或 全權 權限的用戶`)
+            return res.status(403).redirect(`${req.baseUrl}?warning=後台權限不足<br>\\n不能編輯 後台 或 全權 權限的用戶`)
 
         }
 
@@ -414,7 +414,7 @@ const update = async (req, res) => {
                 console.error('allUserController.update 查詢非此 id 但同名或同信箱的用戶 錯誤');
                 console.error(error1);
                 conn.end();
-                return res.redirect('/userListAdmin?error=查詢用戶出現錯誤<br>\\n請稍後再嘗試');
+                return res.redirect(`${req.baseUrl}?error=查詢用戶出現錯誤<br>\\n請稍後再嘗試`);
             }
 
             // 紀錄查詢結果
@@ -428,7 +428,7 @@ const update = async (req, res) => {
                 console.log('allUserController.update message')
                 console.log(` USER already have name: ${results1[0].name} or email: ${results1[0].email} `);
                 conn.end();
-                return res.redirect(`/userListAdmin/edit?id=${id}&message=用戶名稱或信箱重複<br>\\n請換一個`);
+                return res.redirect(`${req.baseUrl}/edit?id=${id}&message=用戶名稱或信箱重複<br>\\n請換一個`);
             }
 
             // - 數量為零 沒有重複
@@ -443,7 +443,7 @@ const update = async (req, res) => {
                     console.error('allUserController.update 更新用戶資料 錯誤');
                     console.error(error2);
                     conn.end();
-                    return res.redirect('/userListAdmin?error=更新用戶資料出現錯誤<br>\\n請稍後再嘗試');
+                    return res.redirect(`${req.baseUrl}?error=更新用戶資料出現錯誤<br>\\n請稍後再嘗試`);
                 }
 
                 // 紀錄更新結果
@@ -457,7 +457,7 @@ const update = async (req, res) => {
                     console.error('allUserController.update error: ')
                     console.error(` update more then one rows of users `);
                     conn.end();
-                    return res.redirect('/userListAdmin?error=更新太多列用戶列表<br>\\n請檢查資料庫');
+                    return res.redirect(`${req.baseUrl}?error=更新太多列用戶列表<br>\\n請檢查資料庫`);
                 }
 
                 // - 影響零列 沒成功更新用戶資料 警告
@@ -473,7 +473,7 @@ const update = async (req, res) => {
                             console.error('allUserController.update 更新用戶權限 錯誤');
                             console.error(error3);
                             conn.end();
-                            return res.redirect('/userListAdmin?error=更新用戶權限出現錯誤<br>\\n請稍後再嘗試');
+                            return res.redirect(`${req.baseUrl}?error=更新用戶權限出現錯誤<br>\\n請稍後再嘗試`);
                         }
 
                         // 紀錄更新結果
@@ -487,7 +487,7 @@ const update = async (req, res) => {
                             console.error('allUserController.update error: ')
                             console.error(` update more then one rows of userrole `);
                             conn.end();
-                            return res.redirect('/userListAdmin?error=更新太多列用戶權限列表<br>\\n請檢查資料庫');
+                            return res.redirect(`${req.baseUrl}?error=更新太多列用戶權限列表<br>\\n請檢查資料庫`);
                         }
 
                         // - 影響零列 沒成功更新用戶的權限 警告 跳出 /
@@ -496,14 +496,14 @@ const update = async (req, res) => {
                             console.log('allUserController.update warning: ')
                             console.log(` update zero row of userrole `);
                             conn.end();
-                            return res.redirect('/userListAdmin?warning=沒成功更新用戶和權限<br>\\n請重新輸入');
+                            return res.redirect(`${req.baseUrl}?warning=沒成功更新用戶和權限<br>\\n請重新輸入`);
                         }
 
                         // - 只影響一列 成功更新 成功 跳出 /
                         console.log('allUserController.update warning')
                         console.log(` Success: update user ${uc}'s auth ${sr} `)
                         conn.end()
-                        return res.redirect('/userListAdmin?warning=沒成功更新用戶資料<br>\\n但成功更新用戶權限<br>\\n請重新輸入');
+                        return res.redirect(`${req.baseUrl}?warning=沒成功更新用戶資料<br>\\n但成功更新用戶權限<br>\\n請重新輸入`);
                     })
                 }
 
@@ -518,7 +518,7 @@ const update = async (req, res) => {
                         console.error('allUserController.update 更新用戶權限 錯誤');
                         console.error(error4);
                         conn.end();
-                        return res.redirect('/userListAdmin?error=更新用戶權限出現錯誤<br>\\n請稍後再嘗試');
+                        return res.redirect(`${req.baseUrl}?error=更新用戶權限出現錯誤<br>\\n請稍後再嘗試`);
                     }
 
                     // 紀錄更新結果
@@ -532,7 +532,7 @@ const update = async (req, res) => {
                         console.error('allUserController.update error: ')
                         console.error(` update more then one rows of userrole `);
                         conn.end();
-                        return res.redirect('/userListAdmin?error=更新太多列用戶權限列表<br>\\n請檢查資料庫');
+                        return res.redirect(`${req.baseUrl}?error=更新太多列用戶權限列表<br>\\n請檢查資料庫`);
                     }
 
                     // - 影響零列 沒成功更新用戶的權限 警告 跳出 /
@@ -541,7 +541,7 @@ const update = async (req, res) => {
                         console.log('allUserController.update warning: ')
                         console.log(` Failure: update zero row of userrole `);
                         conn.end();
-                        return res.redirect('/userListAdmin?warning=成功更新用戶<br>\\n但沒成功更新用戶權限<br>\\n請重新輸入');
+                        return res.redirect(`${req.baseUrl}?warning=成功更新用戶<br>\\n但沒成功更新用戶權限<br>\\n請重新輸入`);
                     }
 
                     // - 只影響一列 成功更新 成功 跳出 /
@@ -549,7 +549,7 @@ const update = async (req, res) => {
                     console.log('allUserController.update')
                     console.log(` Success: update user ${uc}'s auth ${sr} `)
                     conn.end()
-                    return res.redirect('/userListAdmin?success=成功更新用戶資料和權限');
+                    return res.redirect(`${req.baseUrl}?success=成功更新用戶資料和權限`);
                 })
             })
 
@@ -565,7 +565,7 @@ const deleted = async (req, res) => {
     // 頭兩個用戶(ID=1,2)不能刪除
     if (userid == 1 || userid == 2) {
         console.log('allUserController.deleted can\' delete jack and ohayowu')
-        return res.redirect('/userListAdmin?warning=不能刪除這個用戶')
+        return res.redirect(`${req.baseUrl}?warning=不能刪除這個用戶`)
     }
 
     const conn = mysql.createConnection(dbConfig)
@@ -578,7 +578,7 @@ const deleted = async (req, res) => {
             console.error('allUserController.deleted 查詢是否有此ID的用戶、同時查詢此用戶的權限 error: ')
             console.error(error);
             conn.end();
-            return res.redirect('/userListAdmin?error=搜尋用戶ID出現錯誤<br>\\n請稍後再嘗試');
+            return res.redirect(`${req.baseUrl}?error=搜尋用戶ID出現錯誤<br>\\n請稍後再嘗試`);
         }
 
         // 紀錄查詢結果
@@ -592,7 +592,7 @@ const deleted = async (req, res) => {
             if (req.cookies.auth !== 'root' && (results[0].roleid == roles[2].roleid || results[0].roleid == roles[3].roleid)) {
                 console.log('allUserController.deleted not root want delete admin or root')
                 conn.end()
-                return res.status(403).redirect('/userListAdmin?warning=後台權限不足<br>\\n不能刪除 後台 或 全權 權限的用戶')
+                return res.status(403).redirect(`${req.baseUrl}?warning=後台權限不足<br>\\n不能刪除 後台 或 全權 權限的用戶`)
             }
 
             // 開始刪除用戶 為了通過外鍵檢查 先從用戶權限開始刪除
@@ -602,7 +602,7 @@ const deleted = async (req, res) => {
                     console.error('allUserController.deleted 先從用戶權限開始刪除 error: ');
                     console.error(error1);
                     conn.end();
-                    return res.redirect('/userListAdmin?error=刪除用戶權限出現錯誤<br>\\n請稍後再嘗試')
+                    return res.redirect(`${req.baseUrl}?error=刪除用戶權限出現錯誤<br>\\n請稍後再嘗試`)
                 }
 
                 // 紀錄刪除權限結果
@@ -623,54 +623,7 @@ const deleted = async (req, res) => {
                             console.error('allUserController.deleted 接著刪除用戶 error: ');
                             console.error(error2);
                             conn.end();
-                            return res.redirect('/userListAdmin?error=刪除用戶出現錯誤<br>\\n但用戶權限已刪除<br>\\n請稍後再嘗試')
-                        }
-
-                        // 紀錄刪除用戶的結果
-                        console.log('allUserController.deleted')
-                        console.log(`delete from users where id = "${userid}": `);
-                        console.log(results2);
-
-                        // 理論上應該只影響一筆資料
-                        if (results2.affectedRows == 1) {
-                            // 紀錄成功刪除用戶
-                            console.log('allUserController.deleted')
-                            console.log(`Success: delete user id = ${userid} 中文`)
-                            conn.end()
-                            return res.redirect('/userListAdmin?success=刪除用戶成功')
-                        } else if (results2.affectedRows > 1) {
-                            // 刪除超過一個用戶 錯誤
-                            console.error('allUserController.deleted error: ')
-                            console.error(`Failure: delete more then one user`)
-                            conn.end()
-                            return res.redirect('/userListAdmin?error=刪除過多用戶，錯誤<br>\\n請檢查資料庫')
-                        } else {
-                            // 沒刪除用戶 警告
-                            console.error('allUserController.deleted warning: ')
-                            console.error(`Failure: delete zero user but delete one auth`)
-                            conn.end()
-                            return res.redirect('/userListAdmin?warning=沒成功刪除用戶<br>\\n但成功刪除用戶權限<br>\\n請檢查資料庫')
-                        }
-                    })
-                } else if (results1.affectedRows > 1) {
-                    // 刪除超過一個用戶權限 錯誤
-                    console.error('allUserController.deleted error: ')
-                    console.error(`Failure: delete more then one user auth`)
-                    conn.end()
-                    return res.redirect('/userListAdmin?error=刪除過多用戶權限，錯誤<br>\\n請檢查資料庫')
-                } else {
-                    // 沒刪除用戶權限 警告
-                    console.error('allUserController.deleted warning: ')
-                    console.error(`Failure: delete zero user auth`)
-
-                    // 嘗試繼續刪除用戶
-                    conn.query('delete from users where id = ?', userid, (error2, results2) => {
-                        // 出錯跳回用戶列表
-                        if (error2) {
-                            console.error('allUserController.deleted 沒刪除用戶權限 嘗試繼續刪除用戶 error: ');
-                            console.error(error2);
-                            conn.end();
-                            return res.redirect('/userListAdmin?error=刪除用戶出現錯誤<br>\\n沒刪除用戶權限<br>\\n請稍後再嘗試')
+                            return res.redirect(`${req.baseUrl}?error=刪除用戶出現錯誤<br>\\n但用戶權限已刪除<br>\\n請稍後再嘗試`)
                         }
 
                         // 紀錄刪除用戶的結果
@@ -684,19 +637,66 @@ const deleted = async (req, res) => {
                             console.log('allUserController.deleted')
                             console.log(`Success: delete user id = ${userid}`)
                             conn.end()
-                            return res.redirect('/userListAdmin?success=刪除用戶成功')
+                            return res.redirect(`${req.baseUrl}?success=刪除用戶成功`)
                         } else if (results2.affectedRows > 1) {
                             // 刪除超過一個用戶 錯誤
                             console.error('allUserController.deleted error: ')
                             console.error(`Failure: delete more then one user`)
                             conn.end()
-                            return res.redirect('/userListAdmin?error=刪除過多用戶，錯誤<br>\\n請檢查資料庫')
+                            return res.redirect(`${req.baseUrl}?error=刪除過多用戶，錯誤<br>\\n請檢查資料庫`)
+                        } else {
+                            // 沒刪除用戶 警告
+                            console.error('allUserController.deleted warning: ')
+                            console.error(`Failure: delete zero user but delete one auth`)
+                            conn.end()
+                            return res.redirect(`${req.baseUrl}?warning=沒成功刪除用戶<br>\\n但成功刪除用戶權限<br>\\n請檢查資料庫`)
+                        }
+                    })
+                } else if (results1.affectedRows > 1) {
+                    // 刪除超過一個用戶權限 錯誤
+                    console.error('allUserController.deleted error: ')
+                    console.error(`Failure: delete more then one user auth`)
+                    conn.end()
+                    return res.redirect(`${req.baseUrl}?error=刪除過多用戶權限，錯誤<br>\\n請檢查資料庫`)
+                } else {
+                    // 沒刪除用戶權限 警告
+                    console.error('allUserController.deleted warning: ')
+                    console.error(`Failure: delete zero user auth`)
+
+                    // 嘗試繼續刪除用戶
+                    conn.query('delete from users where id = ?', userid, (error2, results2) => {
+                        // 出錯跳回用戶列表
+                        if (error2) {
+                            console.error('allUserController.deleted 沒刪除用戶權限 嘗試繼續刪除用戶 error: ');
+                            console.error(error2);
+                            conn.end();
+                            return res.redirect(`${req.baseUrl}?error=刪除用戶出現錯誤<br>\\n沒刪除用戶權限<br>\\n請稍後再嘗試`)
+                        }
+
+                        // 紀錄刪除用戶的結果
+                        console.log('allUserController.deleted')
+                        console.log(`delete from users where id = "${userid}": `);
+                        console.log(results2);
+
+                        // 理論上應該只影響一筆資料
+                        if (results2.affectedRows == 1) {
+                            // 紀錄成功刪除用戶
+                            console.log('allUserController.deleted')
+                            console.log(`Success: delete user id = ${userid}`)
+                            conn.end()
+                            return res.redirect(`${req.baseUrl}?success=刪除用戶成功`)
+                        } else if (results2.affectedRows > 1) {
+                            // 刪除超過一個用戶 錯誤
+                            console.error('allUserController.deleted error: ')
+                            console.error(`Failure: delete more then one user`)
+                            conn.end()
+                            return res.redirect(`${req.baseUrl}?error=刪除過多用戶，錯誤<br>\\n請檢查資料庫`)
                         } else {
                             // 沒刪除用戶 警告
                             console.error('allUserController.deleted warning: ')
                             console.error(`Failure: delete zero user and delete zero auth`)
                             conn.end()
-                            return res.redirect('/userListAdmin?warning=沒成功刪除用戶<br>\\也沒刪除用戶權限<br>\\n請檢查資料庫')
+                            return res.redirect(`${req.baseUrl}?warning=沒成功刪除用戶<br>\\也沒刪除用戶權限<br>\\n請檢查資料庫`)
                         }
                     })
                 }
@@ -706,13 +706,13 @@ const deleted = async (req, res) => {
             console.error('allUserController.deleted error: ')
             console.error(`Failure: find more then one user with id = "${userid}"`)
             conn.end()
-            return res.redirect('/userListAdmin?error=找到過多用戶，錯誤<br>\\n請檢查資料庫')
+            return res.redirect(`${req.baseUrl}?error=找到過多用戶，錯誤<br>\\n請檢查資料庫`)
         } else {
             // 沒找到用戶 警告
             console.error('allUserController.deleted warning: ')
             console.error(`Failure: find no user with id = "${userid}"`)
             conn.end()
-            return res.redirect('/userListAdmin?warning=沒找到用戶<br>\\n請重新輸入')
+            return res.redirect(`${req.baseUrl}?warning=沒找到用戶<br>\\n請重新輸入`)
         }
     })
 }

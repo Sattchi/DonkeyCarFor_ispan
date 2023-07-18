@@ -18,6 +18,6 @@ module.exports = (host, port, path) => {
         //     // path: `http://${host}:${port}`, // 寫到指定網址 預設 "/"
         //     domain: `${host}`,
         // })
-        return res.redirect(`http://${host}:${port}/${path}`)
+        return res.redirect(`http://${host}:${port}/${path}?name=${req.cookies.name}&auth=${req.cookies.auth}`)
     }
 }

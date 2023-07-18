@@ -63,6 +63,8 @@ npm install
 ![](figure/index.jpg)
 ## 登入頁
 ![](figure/login.jpg)
+### 登入成功
+![](figure/login_success.jpg)
 ## 註冊頁
 ![](figure/resign.jpg)
 ## 介紹頁

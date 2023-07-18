@@ -7,7 +7,7 @@ const fs = require("fs");
 
 // 系統參數解析器
 const { program, Option } = require('commander');
-program.version('2.0.1')
+program.version('2.1.1')
     .addOption(new Option("-w, --web <place>", "choose the place of computer").default("0", "302 wifi").choices(["0", "F3", "f3", "302", "C302", "c302", "1", "F15", "f15", "2", "home", "HOME", "h", "H", "Home"]))
     .addOption(new Option("-b, --cell <name>", "choose whose cellphone open wireless base station").choices(["Jack", "jack", "HanChung", "Ben", "ben", "HuYen", "Jason", "jason", "DaRen"]).implies({ "web": "f15" }))
     .addOption(new Option("-u, --user <name>", "choose computer owner").default("Jack", "HanChung").choices(["Jack", "jack", "HanChung", "Ben", "ben", "HuYen", "Jason", "jason", "DaRen"]))
@@ -77,7 +77,7 @@ app.use((req, res, next) => {
         res.cookie('name', req.cookies.name, {
             maxAge: 5 * 60 * 1000,
         })
-        res.cookie('auth', "user", {
+        res.cookie('auth', req.cookies.auth, {
             maxAge: 5 * 60 * 1000,
         })
     }

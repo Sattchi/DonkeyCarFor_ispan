@@ -44,12 +44,12 @@ const isUser = (username.indexOf('訪客') < 0) && (auth !== 'visitor')
         <div class="ag-courses_box">
           <% lists.forEach(element => { %>
           <div class="ag-courses_item">
-            <a <%- (isUser) ? 'href=' + baseUrl +'/files/' + element.carid :'onclick="alert(\'只開放用戶下載\\n請先登入\')"' %> class="ag-courses-item_link">
+            <a <%- (isUser) ? 'href=' + baseUrl +'/files/' + element.cardid :'onclick="alert(\'只開放用戶下載\\n請先登入\')"' %> class="ag-courses-item_link">
               <div class="ag-courses-item_bg"></div>
 
               <div class="ag-courses-item_title">
                 <!-- 這種寫法需要 download 權限 -->
-                <!-- <img src="<%-baseUrl%>/files/<%= element.carid %>" alt="<%= element.license %>" onerror="defaultImg(this)" width="130px"> -->
+                <!-- <img src="<%-baseUrl%>/files/<%= element.cardid %>" alt="<%= element.license %>" onerror="defaultImg(this)" width="130px"> -->
                 <!-- 這種寫法不需要 download 權限 -->
                 <img width="200px" src="data:<%- element.car_img_type %>;base64, <%-Buffer.from(element.car_img).toString('base64')%>" alt="<%= element.license %>">
               </div>

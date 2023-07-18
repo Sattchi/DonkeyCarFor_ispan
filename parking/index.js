@@ -180,7 +180,7 @@ app.post('/give_money', function (req, res) {
 
 
 
-	res.send('<center><br><br><br><br><br><br><br><br><br><br><br><br><br><br><h1>繳費完成</h1>' + ((enter_money > more_money) ? `找零 ${enter_money - more_money}` : '') + '<br><p>請於15分鐘內離場</p><div id="timeBox"></div></center>'
+	res.send('<center><br><br><br><br><br><br><br><br><br><br><br><br><br><br><h1>繳費完成</h1>' + ((enter_money > more_money) ? `找零 ${enter_money - more_money}` : '') + '<br><p>請於15分鐘內離場</p><div id="timeBox"></div>秒後跳轉首頁</center>'
 		+ '<Script>    var count = 5;  function countDown(){  	 	document.getElementById("timeBox").innerHTML= count;  		count -= 1;  		if (count == 0){  		location.href="/";  	}  		setTimeout("countDown()",1000);  }    countDown();  </Script>');
 	console.log('Happy');
 

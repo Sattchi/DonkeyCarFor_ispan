@@ -16,8 +16,8 @@
         "mysql": "^2.18.1"
     },
     "name": "workspace_donkey_web",
-    "description": "1. node src/server.js\r 2. open welcome.html",
-    "version": "2.0.1",
+    "description": "專案的主網站、伺服器",
+    "version": "2.1.1",
     "main": "src/server.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",

@@ -38,7 +38,7 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
             上傳
           </button>
         </div>
-      </div>      
+      </div>
       <% } %>
       <br>
       <div class="table-responsive-xl">
@@ -69,7 +69,7 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
             <tr>
               <% if (isAdmin) { %>
               <th scope="row">
-                <%= element.carid %>
+                <%= element.cardid %>
               </th>
               <% } %>
               <td>
@@ -94,8 +94,8 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
                 <%= element.paid_time %>
               </td>
               <td>
-                <a href="<%-baseUrl%>/files/<%= element.carid %>">
-                <img width="200px" src="data:<%- element.car_img_type %>;base64, <%-Buffer.from(element.car_img).toString('base64')%>" alt="<%= element.license %>"></a>
+                <a href="<%-baseUrl%>/files/<%= element.cardid %>">
+                  <img width="200px" src="data:<%- element.car_img_type %>;base64, <%-Buffer.from(element.car_img).toString('base64')%>" alt="<%= element.license %>"></a>
               </td>
               <% if (isAdmin) { %>
               <td>
@@ -104,8 +104,8 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
               <td>
                 <%= element.car_img_size %>
               </td>
-              <td><a href="<%-baseUrl%>/edit?id=<%= element.carid %>">Edit</a>
-                &nbsp;&nbsp;&nbsp;&nbsp; <a href="<%-baseUrl%>/delete?id=<%= element.carid %>">Delete</a></td>
+              <td><a href="<%-baseUrl%>/edit?id=<%= element.cardid %>">Edit</a>
+                &nbsp;&nbsp;&nbsp;&nbsp; <a href="<%-baseUrl%>/delete?id=<%= element.cardid %>">Delete</a></td>
               <% } %>
             </tr>
             <% }) %>
@@ -150,7 +150,7 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
       }
       const _upload = (file, onUploadProgress) => {
         let formData = new FormData();
-        formData.append("file", file);
+        formData.append("car_img", file);
         // return $.post("/upload", formData, {
         //     headers: {
         //         "Content-Type": "multipart/form-data",
@@ -165,10 +165,28 @@ const isAdmin = (auth == 'admin') || (auth == 'root')
           "contentType": false, // tell jQuery not to set contentType
           "success": function(result, status, xhr) {
             console.log(result);
+            // console.log(status);
+            // console.log(xhr);
+            // console.log(xhr.responseJSON);
+            /*
+              {message: '成功新增車牌 0713_exit_park_and_stop_2_2.png'}message: "成功新增車牌 0713_exit_park_and_stop_2_2.png"[[Prototype]]: Object
+              cardListAdmin:415 success
+              cardListAdmin:416 {readyState: 4, getResponseHeader: ƒ, getAllResponseHeaders: ƒ, setRequestHeader: ƒ, overrideMimeType: ƒ, …}
+              cardListAdmin:417 {message: '成功新增車牌 0713_exit_park_and_stop_2_2.png'}
+            */
             //alert(result);
           },
           "error": (xhr, status, err) => {
-            console.log(err);
+            // console.log(xhr);
+            console.log(xhr.responseJSON);
+            // console.log(status);
+            // console.log(err);
+            /*
+              {readyState: 4, getResponseHeader: ƒ, getAllResponseHeaders: ƒ, setRequestHeader: ƒ, overrideMimeType: ƒ, …}
+              cardListAdmin:422 {message: '無法上傳文件:, 檔案格式錯誤'}
+              cardListAdmin:423 error
+              cardListAdmin:424 Internal Server Error
+            */
             //alert(err);
           }
         })

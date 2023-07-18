@@ -41,7 +41,6 @@ function socketBind(server, useCom) {
             } else {
                 console.log('沒有這個模型編號');
             }
-
         });
         socket.on("stop", function () {
             stopProcess();
@@ -58,10 +57,6 @@ function socketBind(server, useCom) {
 
     function doProcess(obj) {
         stopProcess();
-        // const fileName = fileNames[num];
-        // const filePara = fileParas[num];
-        // const para = (!filePara) ? [fileName] : [fileName].concat(filePara);
-        // const fileOption = fileOptions[num];
         console.log(useCom)
         if (!useCom) {
             const fileName = obj.fileName;
@@ -78,7 +73,11 @@ function socketBind(server, useCom) {
             console.log(`Spawned child pid: ${subprocess.pid}`);
             console.log("已經執行 Python 檔案: " + fileName);
         } else {
-            const commands = ['conda activate donkey', 'python C:\\workspace_final\\mysim\\manage.py drive --model C:\\workspace_final\\mysim\\models\\mypilot_forward_only.h5 --myconfig ./myconfig1.py']
+            const commands = [
+                'conda activate donkey',
+                // 'python C:\\workspace_final\\mysim\\manage.py drive --model C:\\workspace_final\\mysim\\models\\mypilot_forward_only.h5 --myconfig ./myconfig1.py',
+                'python C:\\Users\\ohayo\\Documents\\workspace_final\\mysim\\manage.py drive --model C:\\Users\\ohayo\\Documents\\workspace_final\\mysim\\models\\mypilot_forward_only.h5 --myconfig ./myconfigVivo1.py',
+            ]
             subprocess = exec(commands.join(' & '))
             console.log("非同步!");
             console.log(`Spawned child pid: ${subprocess.pid}`);

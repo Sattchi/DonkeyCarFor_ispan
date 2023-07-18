@@ -15,7 +15,7 @@
     },
     "name": "web_car_daren",
     "version": "2.0.1",
-    "description": "放到車上 控制模型用",
+    "description": "客戶端: 放到車上 控制模型用",
     "main": "src/server.js",
     "scripts": {
         "lint": "eslint .",

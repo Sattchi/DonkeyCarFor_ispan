@@ -134,19 +134,6 @@ var driveHandler = new function () {
             if (e.which == 77) { toggleDriveMode() } // 'm' toggle drive mode (_M_ode)
         });
 
-        $(document).keyup(function (e) {
-            if (e.which == 32) { toggleBrake() }  // 'space'  brake
-            if (e.which == 82) { toggleRecording() }  // 'r'  toggle recording
-            if (e.which == 73) { throttleZero() }  // 'i'  throttle up
-            if (e.which == 75) { throttleZero() } // 'k'  slow down
-            if (e.which == 74) { angleZero() } // 'j' turn left
-            if (e.which == 76) { angleZero() } // 'l' turn right
-            if (e.which == 65) { updateDriveMode('local') } // 'a' turn on local mode (full _A_uto)
-            if (e.which == 85) { updateDriveMode('user') } // 'u' turn on manual mode (_U_user)
-            if (e.which == 83) { updateDriveMode('local_angle') } // 's' turn on local mode (auto _S_teering)
-            if (e.which == 77) { toggleDriveMode() } // 'm' toggle drive mode (_M_ode)
-        });
-
         $('#mode_select').on('change', function () {
             updateDriveMode($(this).val());
         });
@@ -482,31 +469,22 @@ var driveHandler = new function () {
     }
 
     var throttleUp = function () {
-        state.tele.user.throttle = limitedThrottle(Math.min(state.tele.user.throttle + 0.5, 1));
-        postDrive()
-    };
-
-    var throttleZero = function () {
-        state.tele.user.throttle = 0;
-        postDrive()
-    };
-    var angleZero = function () {
-        state.tele.user.angle = 0;
+        state.tele.user.throttle = limitedThrottle(Math.min(state.tele.user.throttle + .05, 1));
         postDrive()
     };
 
     var throttleDown = function () {
-        state.tele.user.throttle = limitedThrottle(Math.max(state.tele.user.throttle - 0.5, -1));
+        state.tele.user.throttle = limitedThrottle(Math.max(state.tele.user.throttle - .05, -1));
         postDrive()
     };
 
     var angleLeft = function () {
-        state.tele.user.angle = Math.max(state.tele.user.angle - 0.5, -1)
+        state.tele.user.angle = Math.max(state.tele.user.angle - .1, -1)
         postDrive()
     };
 
     var angleRight = function () {
-        state.tele.user.angle = Math.min(state.tele.user.angle + 0.5, 1)
+        state.tele.user.angle = Math.min(state.tele.user.angle + .1, 1)
         postDrive()
     };
 
